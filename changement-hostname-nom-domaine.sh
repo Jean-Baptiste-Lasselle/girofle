@@ -23,7 +23,7 @@ ADRESSE_IP_LINUX_NET_INTERFACE_4=192.168.1.34
 # ---------------------------------------
 # - répertoires  dans l'hôte docker
 # ---------------------------------------
-export REP_GESTION_CONTENEURS_DOCKER=/conteneurs-docker
+export REP_GESTION_CONTENEURS_DOCKER=/girofle
 ##############################################################################################################################################
 
 export NOMDEDOMAINE=prj-pms.girofle.io
@@ -42,11 +42,11 @@ sudo hostname -F /etc/hostname
 # - à ajouter en fin de fichier "/etc/hosts":
 # "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE"
 rm -f ./nouveau.fichier.hosts
+sudo cat /etc/hosts  >> ./nouveau.fichier.hosts
 sudo echo "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE" >> ./nouveau.fichier.hosts
 echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1   kytes-io-ssh" >> ./nouveau.fichier.hosts
 echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3   kytes-io-alt1" >> ./nouveau.fichier.hosts
 echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4   kytes-io-alt2" >> ./nouveau.fichier.hosts
-sudo cat /etc/hosts  >> ./nouveau.fichier.hosts
 sudo rm -f /etc/hosts
 sudo cp -f ./nouveau.fichier.hosts /etc/hosts
 rm -f ./nouveau.fichier.hosts
