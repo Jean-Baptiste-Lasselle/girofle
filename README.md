@@ -6,39 +6,41 @@ J'ai accessoirement baptisé le pseudo-système "[Girofle](#)".
 
 Ce pseudo système permet de créer autant de conteneurs [Gitlab](https://gitlab.io) qu'il y a d'interfaces réseau dans le système sous jacent (supporté pour l'instant: centos 7) 
 dans la même VM, et de pouvoir pour chacun:
-* faire un backup local
-* faire un backup remote (vers un stockage qui peut être choisit)
-* faire un restore dans une autre VM, ou la même VM
-* à la comission, les backups locaux sont faits automatiquement (configurés comme une tâche réccurrente système crontab):
-```
-# 1./ il faut ajouter la ligne:
-# 
-# => pour une toutes les 4 heures: [* */4 * * * "$(pwd)/operations-std/serveur/backup.sh"]
-#  
-# Au fichier crontab:
-# 
+* créer une nouvelle instance gitlab, (en lui donnant éventuellement un nom, qui sera suffixé dans le nom du conteneur docker), et en retour on a l'url complète vers l'instace gitlab comissionnée.
+* lister les instaces gitlab
+* pour une instance gitlab, faire un backup local
+* pour une instance gitlab, faire un backup remote (vers un stockage qui peut être choisit)
+* pour une instance gitlab, faire un restore dans une autre VM, ou la même VM
+* pour une instance gitlab, à la comission, les backups locaux sont faits automatiquement (configurés comme une tâche réccurrente système crontab):
+				```
+				# 1./ il faut ajouter la ligne:
+				# 
+				# => pour une toutes les 4 heures: [* */4 * * * "$(pwd)/operations-std/serveur/backup.sh"]
+				#  
+				# Au fichier crontab:
+				# 
 
-# Mode manuel: sudo crontab -e
+				# Mode manuel: sudo crontab -e
 
-# Mode silencieux:
-export PLANIFICATION_DES_BCKUPS="* */4 * * *   $(pwd)/operations-std/serveur/backup.sh"
-rm -f doc-pms/operations-std/serveur/bckup.kytes
-echo "$PLANIFICATION_DES_BCKUPS" >> ./operations-std/serveur/bckup.kytes
-crontab ./operations-std/serveur/bckup.kytes
-rm -f ./operations-std/serveur/bckup.kytes
-echo " provision-girofle- Le backup Girafle a été cofniguré pour  " >> $NOMFICHIERLOG
-echo " provision-girofle- s'exécuter automatiquent de la manière suivante: " >> $NOMFICHIERLOG
-echo " provision-girofle-  " >> $NOMFICHIERLOG
-crontab -l >> $NOMFICHIERLOG
-echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
-#    ANNEXE crontab quickies
-# => pour une fois par nuit: [* 1 * * * "$(pwd)/operations-std/serveur/backup.sh"]
-# => pour une toutes les 2 heures: [* */2 * * * "$(pwd)/operations-std/serveur/backup.sh"]
-# => pour une toutes les 4 heures: [* */4 * * * "$(pwd)/operations-std/serveur/backup.sh"]
-# => pour une fois par nuit: [*/5 */1 * * * "$(pwd)/operations-std/serveur/backup.sh"]
-# => Toutes les 15 minutes après 7 heures: [5 7 * * * "$(pwd)/operations-std/serveur/backup.sh" ]
+				# Mode silencieux:
+				export PLANIFICATION_DES_BCKUPS="* */4 * * *   $(pwd)/operations-std/serveur/backup.sh"
+				rm -f doc-pms/operations-std/serveur/bckup.kytes
+				echo "$PLANIFICATION_DES_BCKUPS" >> ./operations-std/serveur/bckup.kytes
+				crontab ./operations-std/serveur/bckup.kytes
+				rm -f ./operations-std/serveur/bckup.kytes
+				echo " provision-girofle- Le backup Girafle a été cofniguré pour  " >> $NOMFICHIERLOG
+				echo " provision-girofle- s'exécuter automatiquent de la manière suivante: " >> $NOMFICHIERLOG
+				echo " provision-girofle-  " >> $NOMFICHIERLOG
+				crontab -l >> $NOMFICHIERLOG
+				echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
+				#    ANNEXE crontab quickies
+				# => pour une fois par nuit: [* 1 * * * "$(pwd)/operations-std/serveur/backup.sh"]
+				# => pour une toutes les 2 heures: [* */2 * * * "$(pwd)/operations-std/serveur/backup.sh"]
+				# => pour une toutes les 4 heures: [* */4 * * * "$(pwd)/operations-std/serveur/backup.sh"]
+				# => pour une fois par nuit: [*/5 */1 * * * "$(pwd)/operations-std/serveur/backup.sh"]
+				# => Toutes les 15 minutes après 7 heures: [5 7 * * * "$(pwd)/operations-std/serveur/backup.sh" ]
 
-```
+				```
 <!-- # 2./ il faut redémarrer le système? (me souvient plus...) --> 
 
 # stdopsbckups
