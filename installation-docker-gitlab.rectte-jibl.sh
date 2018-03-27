@@ -1,11 +1,4 @@
-# installation de Docker sur centos 7
-																						
-# update CentOS 7
-sudo yum clean all -y && sudo yum update -y
-# DOCKER EASE BARE-METAL-INSTALL - CentOS 7
-sudo systemctl stop docker
-sudo systemctl start docker
-
+# Installation de Docker sur centos 7
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -14,6 +7,7 @@ sudo systemctl start docker
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # - Variables d'environnement héritées de "operations.sh":
 #                >>>   export ADRESSE_IP_SRV_GITLAB
+#                >>>   export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
 # --------------------------------------------------------------------------------------------------------------------------------------------
 GITLAB_INSTANCE_NUMBER=1
 GITLAB_INSTANCE_NUMBER2=2
@@ -83,8 +77,9 @@ sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 # sudo docker run --detach --hostname gitlab.$GITLAB_INSTANCE_NUMBER.kytes.io --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:8080:80 --publish 2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 # Mais maintenant, j'utilise le nom d'hôte de l'OS, pour régler la question du nom de domaine ppour accéder à l'instance gitlab en mode Web.
 # export NOMDHOTE=archiveur-prj-pms.io
-sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:80:80 --publish 2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
-sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:8880:80 --publish 2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2 --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
+echo " Verification adresse IP: [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] " >> $NOMFICHIERLOG
+sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:80:80 --publish $ADRESSE_IP_SRV_GITLAB:2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
+sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:8880:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2 --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
 
 

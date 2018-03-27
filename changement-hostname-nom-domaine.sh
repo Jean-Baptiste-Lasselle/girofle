@@ -1,5 +1,4 @@
-# installation de Docker sur centos 7
-																						
+# Installation de Docker sur Centos 7
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -8,8 +7,9 @@
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # - Variables d'environnement héritées de "operations.sh":
 #                >>>   export ADRESSE_IP_SRV_GITLAB
+#                >>>   export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
 # --------------------------------------------------------------------------------------------------------------------------------------------
-GITLAB_INSTANCE_NUMBER=1
+
 # --------------------------------------------------------------------------------------------------------------------------------------------
 #														RESEAU-HOTE-DOCKER																	 #
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -20,28 +20,10 @@ GITLAB_INSTANCE_NUMBER=1
 # ADRESSE_IP_LINUX_NET_INTERFACE_4=192.168.1.126
 # --------------------------------------------------------------------------------------------------------------------------------------------
 
-#			MAPPING des répertoires d'installation de gitlab dans les conteneurs DOCKER, avec des répertoires de l'hôte DOCKER				 #
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# 
-# ---------------------------------------
-# - répertoires d'installation de gitlab
-# ---------------------------------------
-GITLAB_CONFIG_DIR=/etc/gitlab
-GITLAB_DATA_DIR=/var/opt/gitlab
-GITLAB_LOG_DIR=/var/log/gitlab
 # ---------------------------------------
 # - répertoires  dans l'hôte docker
 # ---------------------------------------
 export REP_GESTION_CONTENEURS_DOCKER=/conteneurs-docker
-# - répertoires associés
-CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/config
-CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/data
-CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/logs
-# - création des répertoires associés
-sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 ##############################################################################################################################################
 
 
