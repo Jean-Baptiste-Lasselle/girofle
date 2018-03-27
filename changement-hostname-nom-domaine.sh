@@ -14,10 +14,10 @@
 #														RESEAU-HOTE-DOCKER																	 #
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # [SEGMENT-IP alloués par DHCP bytes: 192.168.1.123 => 192.168.1.153]
-# ADRESSE_IP_LINUX_NET_INTERFACE_1=192.168.1.123
-# ADRESSE_IP_LINUX_NET_INTERFACE_2=192.168.1.124
-# ADRESSE_IP_LINUX_NET_INTERFACE_3=192.168.1.125
-# ADRESSE_IP_LINUX_NET_INTERFACE_4=192.168.1.126
+ADRESSE_IP_LINUX_NET_INTERFACE_1=192.168.1.31
+ADRESSE_IP_LINUX_NET_INTERFACE_2=192.168.1.32
+ADRESSE_IP_LINUX_NET_INTERFACE_3=192.168.1.33
+ADRESSE_IP_LINUX_NET_INTERFACE_4=192.168.1.34
 # --------------------------------------------------------------------------------------------------------------------------------------------
 
 # ---------------------------------------
@@ -26,25 +26,31 @@
 export REP_GESTION_CONTENEURS_DOCKER=/conteneurs-docker
 ##############################################################################################################################################
 
-
+export NOMDEDOMAINE=prj-pms.girofle.io
 # - le fichier "/etc/hostname" ne doit contenir que la seule ligne suivante:
-# "$ADRESSE_IP_SRV_GITLAB   archiveur-prj-pms.io"
+# "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE"
 sudo rm -f /etc/hostname
 rm -f  ./nouveau.fichier.hostname
-echo "$ADRESSE_IP_SRV_GITLAB   archiveur-prj-pms.io" >> ./nouveau.fichier.hostname
+echo "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE" >> ./nouveau.fichier.hostname
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1   kytes-io-ssh" >> ./nouveau.fichier.hostname
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_2   kytes-io-alt1" >> ./nouveau.fichier.hostname
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3   kytes-io-alt2" >> ./nouveau.fichier.hostname
 sudo cp -f ./nouveau.fichier.hostname /etc/hostname
 rm -f ./nouveau.fichier.hostname
 # - exécuter (pour "activer" le hostname...):
 sudo hostname -F /etc/hostname
 # - à ajouter en fin de fichier "/etc/hosts":
-# "$ADRESSE_IP_SRV_GITLAB   archiveur-prj-pms.io"
+# "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE"
 rm -f ./nouveau.fichier.hosts
-sudo echo "$ADRESSE_IP_SRV_GITLAB   archiveur-prj-pms.io" >> ./nouveau.fichier.hosts
+sudo echo "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE" >> ./nouveau.fichier.hosts
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1   kytes-io-ssh" >> ./nouveau.fichier.hosts
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_2   kytes-io-alt1" >> ./nouveau.fichier.hosts
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3   kytes-io-alt2" >> ./nouveau.fichier.hosts
 sudo cat /etc/hosts  >> ./nouveau.fichier.hosts
 sudo rm -f /etc/hosts
 sudo cp -f ./nouveau.fichier.hosts /etc/hosts
 rm -f ./nouveau.fichier.hosts
-# sudo echo "$ADRESSE_IP_SRV_GITLAB   archiveur-prj-pms.io" >> /etc/hosts
+# sudo echo "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE" >> /etc/hosts
 
 
 
@@ -68,7 +74,7 @@ rm -f ./nouveau.fichier.hosts
 # [jibl@pc-136 ~]$ hostname --domain
 # prj.pms
 # [jibl@pc-136 ~]$  hostname --fqdn
-# archiveur-prj-pms.io
+# $NOMDEDOMAINE
 # [jibl@pc-136 ~]$ hostname --ip-address
 # 192.168.1.32
 # [jibl@pc-136 ~]$
@@ -84,7 +90,7 @@ rm -f ./nouveau.fichier.hosts
 #
 # sudo docker run --detach --hostname gitlab.$GITLAB_INSTANCE_NUMBER.kytes.io --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:8080:80 --publish 2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 # Mais maintenant, j'utilise le nom d'hôte de l'OS, pour régler la question du nom de domaine ppour accéder à l'instance gitlab en mode Web.
-# export NOMDHOTE=archiveur-prj-pms.io
+# export NOMDHOTE=$NOMDEDOMAINE
 # sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:80:80 --publish 2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
 
