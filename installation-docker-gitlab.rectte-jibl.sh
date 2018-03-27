@@ -16,6 +16,7 @@ sudo systemctl start docker
 #                >>>   export ADRESSE_IP_SRV_GITLAB
 # --------------------------------------------------------------------------------------------------------------------------------------------
 GITLAB_INSTANCE_NUMBER=1
+GITLAB_INSTANCE_NUMBER2=2
 # --------------------------------------------------------------------------------------------------------------------------------------------
 #														RESEAU-HOTE-DOCKER																	 #
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -39,6 +40,9 @@ GITLAB_LOG_DIR=/var/log/gitlab
 # - répertoires  dans l'hôte docker
 # ---------------------------------------
 export REP_GESTION_CONTENEURS_DOCKER=/conteneurs-docker
+##############################################################################################################################################
+#####		CONTENEUR 1
+##############################################################################################################################################
 # - répertoires associés
 CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/config
 CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/data
@@ -50,40 +54,21 @@ sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 ##############################################################################################################################################
 
-# - le fichier "/etc/hostname" ne doit contenir que la seule ligne suivante:
-# 192.168.1.32   archiveur-prj-pms.io
-# - exécuter:
-# sudo hostname -F /etc/hostname
-# - à ajouter en fin de fichier "/etc/hosts":
-# 192.168.1.32   archiveur-prj-pms.io
-
-
-
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# -----		Ce qui donne la sortie standard:
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# [jibl@pc-136 ~]$ sudo vim /etc/hostname
-# [sudo] password for jibl:
-# sudo: vim: command not found
-# [jibl@pc-136 ~]$ sudo vi /etc/hostname
-# [jibl@pc-136 ~]$ sudo vi /etc/hostname
-# [jibl@pc-136 ~]$ sudo vi /etc/hostname
-# [jibl@pc-136 ~]$ sudo hostname -F /etc/hostname
-# [jibl@pc-136 ~]$ echo $HOSTNAME
-# pc-136.home
-# [jibl@pc-136 ~]$ sudo vi /etc/hosts
-# [jibl@pc-136 ~]$ echo $HOSTNAME
-# pc-136.home
-# [jibl@pc-136 ~]$ hostname --short
-# archiveur
-# [jibl@pc-136 ~]$ hostname --domain
-# prj.pms
-# [jibl@pc-136 ~]$  hostname --fqdn
-# archiveur-prj-pms.io
-# [jibl@pc-136 ~]$ hostname --ip-address
-# 192.168.1.32
-# [jibl@pc-136 ~]$
-# --------------------------------------------------------------------------------------------------------------------------------------------
+##############################################################################################################################################
+#####		CONTENEUR 2 ===>>>> Pour tests du nombre maximal d'instances serveurs possibles sur une même machine...
+#####		Je commence par tester la possibilité de binder deux mêmes conteneurs usdr la même adresse IP, mais avec des numéros de ports différents.
+#####		Je limiterai le nombre maximal au nombre maximal de hostnames/nomsdedomaines, ce nombre d'instances.
+##############################################################################################################################################
+# - répertoires associés
+CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
+CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
+CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
+# - création des répertoires associés
+sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
+sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
+sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
+sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
+##############################################################################################################################################
 
 
 
@@ -99,6 +84,7 @@ sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 # Mais maintenant, j'utilise le nom d'hôte de l'OS, pour régler la question du nom de domaine ppour accéder à l'instance gitlab en mode Web.
 # export NOMDHOTE=archiveur-prj-pms.io
 sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:80:80 --publish 2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
+sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:8880:80 --publish 2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2 --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
 
 
