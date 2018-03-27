@@ -46,7 +46,7 @@ echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
 * client:
   * save local
   * push remote if there are more local commits  than remote
-  * resolve conflicts if there are more local commits  than remote, with:
+  * resolve conflicts if there are more remote commits than local, with:
     * copy versioned directory to another, as backup
     * clone the remote
     * automatically present list of files missing or presenting differences
