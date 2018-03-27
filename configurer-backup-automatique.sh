@@ -1,11 +1,4 @@
-# installation de Docker sur centos 7
-																						
-# update CentOS 7
-sudo yum clean all -y && sudo yum update -y
-# DOCKER EASE BARE-METAL-INSTALL - CentOS 7
-sudo systemctl stop docker
-sudo systemctl start docker
-
+# Installation de Docker sur centos 7
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -54,14 +47,14 @@ export PLANIFICATION_DES_BCKUPS="3 * * * * $CHEMIN_INVOCATION_BACK_UP"
 
 rm -f ./operations-std/serveur/bckup.kytes
 echo "$PLANIFICATION_DES_BCKUPS" >> ./operations-std/serveur/bckup.kytes
-crontab ./operations-std/serveur/bckup.kytes
+sudo crontab ./operations-std/serveur/bckup.kytes
 rm -f ./operations-std/serveur/bckup.kytes
 echo " provision-girofle- Le backup Girafle a été configuré pour  " >> $NOMFICHIERLOG
 echo " provision-girofle- s'exécuter automatiquent de la manière suivante: " >> $NOMFICHIERLOG
 echo " provision-girofle-  " >> $NOMFICHIERLOG
 echo " provision-girofle-  " >> $NOMFICHIERLOG
 echo " provision-girofle-  " >> $NOMFICHIERLOG
-crontab -l >> $NOMFICHIERLOG
+sudo crontab -l >> $NOMFICHIERLOG
 echo " provision-girofle-  " >> $NOMFICHIERLOG
 echo " provision-girofle-  " >> $NOMFICHIERLOG
 echo " provision-girofle-  " >> $NOMFICHIERLOG
