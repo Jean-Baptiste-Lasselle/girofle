@@ -32,9 +32,9 @@ export NOMDEDOMAINE=prj-pms.girofle.io
 sudo rm -f /etc/hostname
 rm -f  ./nouveau.fichier.hostname
 echo "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE" >> ./nouveau.fichier.hostname
-echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1   kytes-io-ssh" >> ./nouveau.fichier.hostname
-echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3   kytes-io-alt1" >> ./nouveau.fichier.hostname
-echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4   kytes-io-alt2" >> ./nouveau.fichier.hostname
+# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1   kytes-io-ssh" >> ./nouveau.fichier.hostname
+# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3   kytes-io-alt1" >> ./nouveau.fichier.hostname
+# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4   kytes-io-alt2" >> ./nouveau.fichier.hostname
 sudo cp -f ./nouveau.fichier.hostname /etc/hostname
 rm -f ./nouveau.fichier.hostname
 # - exécuter (pour "activer" le hostname...):
