@@ -42,15 +42,15 @@ demander_addrIP () {
 # --------------------------------------------------------------------------------------------------------------------------------------------
 
 echo " provision-girofle-  COMMENCEE  - " >> $NOMFICHIERLOG
+# On rend exécutables 
+sudo chmod +x ./docker-EASE-SPACE-BARE-METAL-SETUP.sh
+sudo chmod +x ./installation-docker-gitlab.rectte-jibl.sh
+sudo chmod +x ./changement-hostname-nom-domaine.sh
+sudo chmod +x ./configurer-backup-automatique.sh
 # On s'assure de l'adresse IP à utiliser (par l'instance Gitlab)
 demander_addrIP
 # On change config hostname/nomdomaine pour adopter girofle
 ./changement-hostname-nom-domaine.sh
-
-
-sudo chmod +x ./docker-EASE-SPACE-BARE-METAL-SETUP.sh
-sudo chmod +x ./installation-docker-gitlab.rectte-jibl.sh
-sudo chmod +x ./changement-hostname-nom-domaine.sh
 # prod:
 # ./changement-hostname-nom-domaine.sh && ./docker-EASE-SPACE-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh >> $NOMFICHIERLOG
 # usinage:
