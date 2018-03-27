@@ -49,10 +49,11 @@ echo " provision-girofle-  COMMENCEE  - " >> $NOMFICHIERLOG
 demander_addrIP
 sudo chmod +x ./docker-EASE-SPACE-BARE-METAL-SETUP.sh
 sudo chmod +x ./installation-docker-gitlab.rectte-jibl.sh
+sudo chmod +x ./changement-hostname-nom-domaine.sh
 # prod:
-# ./docker-EASE-SPACE-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh >> $NOMFICHIERLOG
+# ./changement-hostname-nom-domaine.sh && ./docker-EASE-SPACE-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh >> $NOMFICHIERLOG
 # usinage:
-./docker-EASE-SPACE-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh
+./changement-hostname-nom-domaine.sh && ./docker-EASE-SPACE-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
