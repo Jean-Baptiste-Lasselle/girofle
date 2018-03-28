@@ -20,7 +20,8 @@ touch $NOMFICHIERLOG
 export REP_GESTION_CONTENEURS_DOCKER=/girofle
 # pour l'auto-incrémentation: à chaque fois qu'une nouvelle instance est créée avec succès, une nouvelle ligne est ajoutée dans ce fichier
 export COMPTEUR_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/.auto-increment.girofle
-
+# à remplacer par une petite bdd embarquée de type nosql, .h2, pour au moins avoir gestion des accès concconcurrents, et enfin à remplacer par [etcd]
+export INVENTAIRE_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/.auto-increment.girofle
 # ---------------------------------------
 # - instance Gitlab provisionnée
 # ---------------------------------------
@@ -102,15 +103,23 @@ echo "nouvelleligne"  $COMPTEUR_GIROFLE
 # --------------------------------------------------------------------------------------------------------------------------------------------
 
 echo " provision-girofle-  COMMENCEE  - " >> $NOMFICHIERLOG
+# on crée le répertoire Girofle
+sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
+sudo mkdir -p $REP_GESTION_CONTENEURS_DOCKER
+# On rend à César, ce qui est à César
+sudo chown -R $USER:$USER $REP_GESTION_CONTENEURS_DOCKER
 # À l'installation, on initialise le compteur Girofle:
 sudo rm -f $COMPTEUR_GIROFLE
 touch $COMPTEUR_GIROFLE
+# Ainsi que l'inventaire:
+sudo rm -f $INVENTAIRE_GIROFLE
+touch $INVENTAIRE_GIROFLE
 # On rend exécutables les dépendances
 sudo chmod +x ./docker-EASE-SPACE-BARE-METAL-SETUP.sh
 sudo chmod +x ./installation-docker-gitlab.rectte-jibl.sh
 sudo chmod +x ./changement-hostname-nom-domaine.sh
 sudo chmod +x ./configurer-backup-automatique.sh
-# On s'assure de l'adresse IP à utiliser (par l'instance Gitlab)
+# On s'assure de l'adresse et du numéro de port IP qui seront utilisés (par l'instance Gitlab qui sera créée)
 demander_addrIP
 demander_noPortIP
 # On change config hostname/nomdomaine pour adopter girofle
