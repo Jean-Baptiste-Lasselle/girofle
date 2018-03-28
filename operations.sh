@@ -112,12 +112,19 @@ sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
 sudo mkdir -p $REP_GESTION_CONTENEURS_DOCKER
 # On rend à César, ce qui est à César
 sudo chown -R $USER:$USER $REP_GESTION_CONTENEURS_DOCKER
-# À l'installation, on initialise le compteur Girofle:
+# On initialise le compteur Girofle:
 sudo rm -f $COMPTEUR_GIROFLE
 touch $COMPTEUR_GIROFLE
-# Ainsi que l'inventaire:
+sudo chown -R $USER:$USER $COMPTEUR_GIROFLE
+sudo chmod a-r-w-x $COMPTEUR_GIROFLE
+sudo chmod g+r+w $COMPTEUR_GIROFLE
+# On initialise l'inventaire:
 sudo rm -f $INVENTAIRE_GIROFLE
 touch $INVENTAIRE_GIROFLE
+sudo chown -R $USER:$USER $INVENTAIRE_GIROFLE
+sudo chmod a-r-w-x $INVENTAIRE_GIROFLE
+sudo chmod g+r+w $INVENTAIRE_GIROFLE
+
 # On rend exécutables les dépendances
 sudo chmod +x ./docker-EASE-SPACE-BARE-METAL-SETUP.sh
 sudo chmod +x ./installation-docker-gitlab.rectte-jibl.sh
