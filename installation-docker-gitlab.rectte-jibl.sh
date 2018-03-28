@@ -1,26 +1,4 @@
 # Installation de Docker sur centos 7
-# --------------------------------------------------------------------------------------------------------------------------------------------
-##############################################################################################################################################
-#########################################							FONCTIONS						##########################################
-##############################################################################################################################################
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# Cette fonction permet de demander iteractivement à l'utilisateur du
-# script, quel numéro de port IP, la seconde instance Gitlab de Test pourra utiliser dans l'hôte Docker
-demander_noPortIP_InstanceTest () {
-
-	echo "Quelle adresse IP souhaitez-vous que l'instance gitlab utilise?"
-	echo "Cette adresse est à  choisir parmi:"
-	echo " "
-	ip addr|grep "inet"|grep -v "inet6"|grep "enp\|wlan"
-	echo " "
-	read NO_PORT_IP_CHOISIT
-	if [ "x$NO_PORT_IP_CHOISIT" = "x" ]; then
-       NO_PORT_IP_CHOISIT=80
-	fi
-	
-	NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_CHOISIT
-	echo " Binding Adresse IP choisit pour le serveur gitlab: $NO_PORT_IP_CHOISIT";
-}
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -34,14 +12,18 @@ demander_noPortIP_InstanceTest () {
 #                >>>   export ADRESSE_IP_SRV_GITLAB
 # 				 # le fichier de log des opérations
 #                >>>   export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
-# 
+# 				 # le répertoire d'exploitation Girofle
+#                >>>   export REP_GESTION_CONTENEURS_DOCKER=/girofle
+# 				 # le numéro de port de l'instance Gitalb de test supplémentaire
+#                >>>   export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=8880
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # export ADRESSE_IP_SRV_GITLAB
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
-GITLAB_INSTANCE_NUMBER=1
-GITLAB_INSTANCE_NUMBER2=2
+export NEXT_GITLAB_INSTANCE_NUMBER
+export GITLAB_INSTANCE_NUMBER=1
+export GITLAB_INSTANCE_NUMBER2=2
 # --------------------------------------------------------------------------------------------------------------------------------------------
 #														RESEAU-HOTE-DOCKER																	 #
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -61,17 +43,100 @@ GITLAB_INSTANCE_NUMBER2=2
 GITLAB_CONFIG_DIR=/etc/gitlab
 GITLAB_DATA_DIR=/var/opt/gitlab
 GITLAB_LOG_DIR=/var/log/gitlab
-
-export REP_GIROFLE_CONTENEUR_DOCKER=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
+calculerProchainGitlabInstanceNumber
+export REP_GIROFLE_CONTENEUR_DOCKER
 ##############################################################################################################################################
 #####		CONTENEUR 1
 ##############################################################################################################################################
-export NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER
-# - répertoires associés
+# - répertoire hôte dédié à l'instance Gitlab
+export REP_GIROFLE_CONTENEUR_DOCKER
+# - Nom du conteneur docker qui sera créé
+export NOM_DU_CONTENEUR_CREE
+# - répertoires hôte associés
+export CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
+export CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
+export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
+
+##############################################################################################################################################
+
+##############################################################################################################################################
+#####		CONTENEUR 2 ===>>>> Pour tests du nombre maximal d'instances serveurs possibles sur une même machine...
+#####		Je commence par tester la possibilité de binder deux mêmes conteneurs usdr la même adresse IP, mais avec des numéros de ports différents.
+#####		Je limiterai le nombre maximal au nombre maximal de hostnames/nomsdedomaines, ce nombre d'instances.
+##############################################################################################################################################
+# - répertoire hôte dédié à l'instance Gitlab
+# export REP_GIROFLE_CONTENEUR_DOCKER
+# - Nom du conteneur docker qui sera créé
+export NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST
+# - répertoires hôte associés
+export CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2
+export CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2
+export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2
+
+##############################################################################################################################################
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------
+##############################################################################################################################################
+#########################################							FONCTIONS						##########################################
+##############################################################################################################################################
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# Cette fonction permet de demander iteractivement à l'utilisateur du
+# script, quel numéro de port IP, la seconde instance Gitlab de Test pourra utiliser dans l'hôte Docker
+demander_noPortIP_InstanceTest () {
+
+	echo "Quelle adresse IP souhaitez-vous que l'instance gitlab utilise?"
+	echo "Cette adresse est à  choisir parmi:"
+	echo " "
+	ip addr|grep "inet"|grep -v "inet6"|grep "enp\|wlan"
+	echo " "
+	read NO_PORT_IP_CHOISIT
+	if [ "x$NO_PORT_IP_CHOISIT" = "x" ]; then
+       NO_PORT_IP_CHOISIT=80
+	fi
+	
+	NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_CHOISIT
+	echo " Binding Adresse IP choisit pour le serveur gitlab: $NO_PORT_IP_CHOISIT";
+}
+
+# Cette fonction emts à jour la valeur de la vriable d'environnement [$NEXT_GITLAB_INSTANCE_NUMBER]
+calculerProchainGitlabInstanceNumber () {
+	COMPTEURTEMP=0
+	while read p; do
+	  echo "Ligne $COMPTEURTEMP : [$p]"
+	  echo " "
+	  # COMPTEURTEMP=$COMPTEURTEMP + 1
+	  ((COMPTEURTEMP=COMPTEURTEMP+1))
+	done <./fichiertest
+	NEXT_GITLAB_INSTANCE_NUMBER=$COMPTEURTEMP
+	echo " +girofle+ [calculerProchainGitlabInstanceNumber ()] VALEUR FINALE [NEXT_GITLAB_INSTANCE_NUMBER=$NEXT_GITLAB_INSTANCE_NUMBER]" >> $NOMFICHIERLOG
+	echo " Binding Adresse IP choisit pour le serveur gitlab: $NO_PORT_IP_CHOISIT";
+}
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------
+##############################################################################################################################################
+#########################################							OPS								##########################################
+##############################################################################################################################################
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# 
+calculerProchainGitlabInstanceNumber
+
+
+
+##############################################################################################################################################
+#####		CONTENEUR 1
+##############################################################################################################################################
+# - répertoire hôte dédié à l'instance Gitlab
+REP_GIROFLE_CONTENEUR_DOCKER=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
+# - Nom du conteneur docker qui sera créé
+NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER
+# - répertoires hôte associés
 CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/config
 CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/data
 CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/logs
-# - création des répertoires associés
+# - création des répertoires hôtes associés
 sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
@@ -80,23 +145,27 @@ sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 
 ##############################################################################################################################################
 #####		CONTENEUR 2 ===>>>> Pour tests du nombre maximal d'instances serveurs possibles sur une même machine...
-#####		Je commence par tester la possibilité de binder deux mêmes conteneurs usdr la même adresse IP, mais avec des numéros de ports différents.
-#####		Je limiterai le nombre maximal au nombre maximal de hostnames/nomsdedomaines, ce nombre d'instances.
 ##############################################################################################################################################
+# - répertoire hôte dédié à l'instance Gitlab
+REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2
+NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
 # - répertoires associés
 CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
 CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
 CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
 # - création des répertoires associés
-sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
+# sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 ##############################################################################################################################################
 
 
-
-
+##############################################################################################################################################
+#####		CREATION INSTANCES GITLAB
+##############################################################################################################################################
+#####		TODO: faire la fonction qui demandera le nom Girofle de la nouvelle instance gitlab
+##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Installation de l'instance gitlab dans un conteneur, à partir de l'image officielle :
 # https://docs.gitlab.com/omnibus/docker/README.html
@@ -121,11 +190,16 @@ echo " +girofle+ Verification no. Port IP: [NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SR
 
 # instance à la demande
 sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB:80 --publish $ADRESSE_IP_SRV_GITLAB:2227:22 --name $NOM_DU_CONTENEUR_CREE --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
+# entrée inventaire afférente
+export ENTREE_INVENTAIRE=" +girofle+ INSTANCE GITLAB + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SRV_GITLAB] + [REP_GIROFLE_CONTENEUR_DOCKER=$REP_GIROFLE_CONTENEUR_DOCKER] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE] + [GITLAB_INSTANCE_NUMBER=$GITLAB_INSTANCE_NUMBER] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]"
+echo $ENTREE_INVENTAIRE >> $INVENTAIRE_GIROFLE
+
+
 # instance supplémentaire de test
-sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:8880:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2 --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
-
-
-echo " +girofle+ INSTANCE GITLAB + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SRV_GITLAB] + [REP_GIROFLE_CONTENEUR_DOCKER=$REP_GIROFLE_CONTENEUR_DOCKER] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE] + " >> $INVENTAIRE_GIROFLE
+sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
+# entrée inventaire afférente
+export ENTREE_INVENTAIRE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]"
+echo $ENTREE_INVENTAIRE >> $INVENTAIRE_GIROFLE
 
 
 ##########################################################################################

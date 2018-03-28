@@ -25,10 +25,12 @@ export INVENTAIRE_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/inventory.girofle
 # ---------------------------------------
 # - instance Gitlab provisionnée
 # ---------------------------------------
-# le numéro de port IP qui sera utilisé par le connecteur HTTP de l'instance Gitlab
-export ADRESSE_IP_SRV_GITLAB
 # l'adresse IP qui sera utilisée par les connecteurs HTTP/HTTPS de l'instance Gitlab
+export ADRESSE_IP_SRV_GITLAB
+# le numéro de port IP qui sera utilisé par le connecteur HTTP de l'instance Gitlab
 export NO_PORT_IP_SRV_GITLAB
+# le numéro de port IP qui sera utilisé par le connecteur HTTP de l'instance Gitlab de test
+export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
