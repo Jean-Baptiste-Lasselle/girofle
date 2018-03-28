@@ -41,7 +41,7 @@ echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
 # => Toutes les 15 minutes après 7 heures: [5 7 * * * "$(pwd)/operations-std/serveur/backup.sh" ]
 
 ```
-				
+
 <!-- # 2./ il faut redémarrer le système? (me souvient plus...) --> 
 
 # stdopsbckups
@@ -153,7 +153,7 @@ De la sorte, l'association est déléguée intractivement ou avec avec arguments
     *  le répertoire indiqué contient un répertoire de nom "mapping-volumes", qui doit contenir aussi 3 répertoires "data", "config", "log", 
     *  le répertoire indiqué contient un répertoire de nom "bckups", qui doit contenir au moins un répertoire (un backup), qui lui-même doit contenir aussi 3 répertoires "data", "config", "log"
 
-# Vues
+# `gravity`
 
 Girofle permettra de créer des multivers de galaxies Git.
 
@@ -161,8 +161,6 @@ Aux fonctionnalitrés [citées ci-dessus](#girofle), s'ajouteront celles du comp
 * de construire un ensemble de repo git, les configurer (provision)
 * d'exécuter une suite d'actions sur cet ensemblede repo git: Cet ensemble d'action est un test automatisé d'un "bout" de workflow.
 "`gravity`" Permet donc de développer des workflows, et produira en sortie un fichier BPMN 2.0 exécutable, pour s'intégrer à [Kytes](https://github.com/Jean-Baptiste-Lasselle/kytes)
-
-les fonctionnalités correspon
 
 # POINT DE REPRISE
 
