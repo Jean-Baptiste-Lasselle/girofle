@@ -1,4 +1,4 @@
-# Recette provision instance gitlab rapide
+# Girofle
 
 Cette recette provisionne un pseudo système, qui à l'utilisation se réduits à utiliser des scripts tous situés dans le même répertoire.
 
@@ -6,8 +6,9 @@ J'ai accessoirement baptisé le pseudo-système "[Girofle](#)".
 
 Ce pseudo système permet de créer autant de conteneurs [Gitlab](https://gitlab.io) qu'il y a d'interfaces réseau dans le système sous jacent (supporté pour l'instant: centos 7) 
 dans la même VM, et de pouvoir pour chacun:
-* créer une nouvelle instance gitlab, (en lui donnant éventuellement un nom, qui sera suffixé dans le nom du conteneur docker), et en retour on a l'url complète vers l'instace gitlab comissionnée.
-* lister les instaces gitlab
+* comissioner une nouvelle instance gitlab, (en lui donnant éventuellement un nom, qui sera suffixé dans le nom du conteneur docker), et en retour on a l'url complète vers l'instace gitlab comissionnée.
+* dé-commissioner une nouvelle instance gitlab (pas la détruire sauvagement).
+* lister les instances gitlab
 * pour une instance gitlab, faire un backup local
 * pour une instance gitlab, faire un backup remote (vers un stockage qui peut être choisit)
 * pour une instance gitlab, faire un restore dans une autre VM, ou la même VM
@@ -152,6 +153,16 @@ De la sorte, l'association est déléguée intractivement ou avec avec arguments
     *  le répertoire indiqué contient un répertoire de nom "mapping-volumes", qui doit contenir aussi 3 répertoires "data", "config", "log", 
     *  le répertoire indiqué contient un répertoire de nom "bckups", qui doit contenir au moins un répertoire (un backup), qui lui-même doit contenir aussi 3 répertoires "data", "config", "log"
 
+# Vues
+
+Girofle permettra de créer des multivers de galaxies Git.
+
+Aux fonctionnalitrés [citées ci-dessus](#girofle), s'ajouteront celles du composant "`gravity`". "`gravity`" permettra:
+* de construire un ensemble de repo git, les configurer (provision)
+* d'exécuter une suite d'actions sur cet ensemblede repo git: Cet ensemble d'action est un test automatisé d'un "bout" de workflow.
+"`gravity`" Permet donc de développer des workflows, et produira en sortie un fichier BPMN 2.0 exécutable, pour s'intégrer à [Kytes](https://github.com/Jean-Baptiste-Lasselle/kytes)
+
+les fonctionnalités correspon
 
 # POINT DE REPRISE
 
