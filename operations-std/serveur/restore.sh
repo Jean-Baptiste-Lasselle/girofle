@@ -22,6 +22,23 @@ export ADRESSE_IP_SRV_GITLAB
 # fichier, dans lequel je rajoute une ligne à chaque fois que je créée une nouvelle instance gitlab, que je compte ensuite, etc...
 export COMPTEUR_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/.auto-increment.girofle
 GITLAB_INSTANCE_NUMBER=1
+
+demanderQuelleInstanceRestaurer () {
+
+	echo "Quelle est le numéro d'instance Gitlab que vous souhaitez restaurer?"
+	echo "liste des insances en service:"
+	echo " "
+	./lister-instances-gitlab.sh
+	echo " "
+	read INSTANCE_CHOISIE
+	if [ "x$INSTANCE_CHOISIE" = "x" ]; then
+       INSTANCE_CHOISIE=0.0.0.0
+	fi
+	
+	GITLAB_INSTANCE_NUMBER=$INSTANCE_CHOISIE
+	echo " Binding Adresse IP choisit pour le serveur gitlab: $INSTANCE_CHOISIE";
+}
+
 # --------------------------------------------------------------------------------------------------------------------------------------------
 #														RESEAU-HOTE-DOCKER																	 #
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -41,6 +58,8 @@ GITLAB_INSTANCE_NUMBER=1
 GITLAB_CONFIG_DIR=/etc/gitlab
 GITLAB_DATA_DIR=/var/opt/gitlab
 GITLAB_LOG_DIR=/var/log/gitlab
+
+demanderQuelleInstanceRestaurer
 
 export NOM_CONTENEUR_DOCKER=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER
 
@@ -150,6 +169,7 @@ demander_addrIP () {
 	ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_CHOISIE
 	echo " Binding Adresse IP choisit pour le serveur gitlab: $ADRESSE_IP_CHOISIE";
 }
+
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################

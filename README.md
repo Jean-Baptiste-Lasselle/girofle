@@ -128,10 +128,16 @@ Le fichier `./operations-std/serveur/restore.sh`, est pour le moment le point ex
 export REP_GIROFLE_CONTENEUR_DOCKER=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
 ```
 
-Globalement les opératiosn standard utilisent donc 3 variables indépendantes:
+Globalement les opérations standard utilisent donc 3 variables indépendantes:
 
 ```
  $NOM_CONTENEUR_DOCKER <=> $REP_GIROFLE_CONTENEUR_DOCKER <=> $ADRESSE_IP_DEDIEE_AU_SERVICE_GITLAB
+```
+
+Et la donnée de la valeur de ces 3 variables est suffisante à Girofle pour déduire toute autre information à propos d'une instance répertoirée dans le fichier:
+
+```
+	export INVENTAIRE_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/inventory.girofle
 ```
 
 Dans `./operations-std/serveur/restore.sh`, c'est la variable d'environnement `$ADRESSE_IP_SRV_GITLAB` qui correspond à `$ADRESSE_IP_DEDIEE_AU_SERVICE_GITLAB`
