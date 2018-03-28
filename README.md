@@ -24,7 +24,7 @@ dans la même VM, et de pouvoir pour chacun:
 # Mode manuel: sudo crontab -e
 # Mode silencieux:
 export PLANIFICATION_DES_BCKUPS="* */4 * * *   $(pwd)/operations-std/serveur/backup.sh"
-rm -f doc-pms/operations-std/serveur/bckup.kytes
+rm -f ./operations-std/serveur/bckup.kytes
 echo "$PLANIFICATION_DES_BCKUPS" >> ./operations-std/serveur/bckup.kytes
 crontab ./operations-std/serveur/bckup.kytes
 rm -f ./operations-std/serveur/bckup.kytes
