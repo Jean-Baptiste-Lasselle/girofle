@@ -163,7 +163,7 @@ De la sorte, l'association est déléguée intractivement ou avec arguments en l
   * d'un utilisateur linux qui effectue le provisioning de girofle
   * d'un utilisateur linux qui sera utilisé pour exécuter girofle
 
-
+* faire un conteneur docker dans lequel je mettrai le git pour faire tout ce qu'il y a à faire avec git. De cette manière, plu de git installé sur l'hôte, le conteneur de comissioning ainsi utilisé est détruit à la fin du commissioning, ne laissant que les logs des opérations.
 
 # `gravity`
 
