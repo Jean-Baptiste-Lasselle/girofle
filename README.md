@@ -159,7 +159,10 @@ De la sorte, l'association est déléguée intractivement ou avec arguments en l
     *  le répertoire indiqué contient un répertoire de nom "mapping-volumes", qui doit contenir aussi 3 répertoires "data", "config", "log", 
     *  le répertoire indiqué contient un répertoire de nom "bckups", qui doit contenir au moins un répertoire (un backup), qui lui-même doit contenir aussi 3 répertoires "data", "config", "log"
 
-* Créer le script [lister-instances-gitlab.sh]
+* faire la création:
+  * d'un utilisateur linux qui effectue le provisioning de girofle
+  * d'un utilisateur linux qui sera utilisé pour exécuter girofle
+
 
 
 # `gravity`
