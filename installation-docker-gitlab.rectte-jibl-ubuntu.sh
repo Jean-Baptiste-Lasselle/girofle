@@ -3,8 +3,8 @@
 # update CentOS 7
 sudo yum clean all -y && sudo yum update -y
 # DOCKER EASE BARE-METAL-INSTALL - CentOS 7
-sudo systemctl stop docker
-sudo systemctl start docker
+# sudo systemctl stop docker
+# sudo systemctl start docker
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------

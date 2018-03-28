@@ -1,4 +1,3 @@
-# Installation de Docker sur Centos 7
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -9,9 +8,7 @@
 # 
 # 
 
-# 
-
-# +++ >>> L'appel de cette fonction implique que l'on re-démarre le réseau ... (ou plus tard en fin d'opérations...)
+# +++ >>> L'appel de cette fonction implique que l'on re-démarre le réseau en appelant la fonction [relancer_reseau()], comme dernière opération du script [operations.sh]
 # 
 # systemctl restart networking.service
 # 
@@ -48,75 +45,24 @@ done
 
 
 
-# comment obtenir la liste des interfaces réseaux, pour les re-démarrer
-ip addr >> ./listeinterfaces
-LISTE_NOMS_INTERFACES=$(awk  -F':' '/enp0s*/ {print $2; echo "okok"}' ./listeinterfaces|awk  -F':' '/enp0s*/ {print $1}'|awk '/enp0s*/ {$1=$1;print}')
-
-for NOM_INTERFACE_RESEAU in $LISTE_NOMS_INTERFACES
-do
-sudo ip addr flush $NOM_INTERFACE_RESEAU
-# echo "reconfiguration: $NOM_INTERFACE_RESEAU"
-done
-
-# +++ >>> L'appel de cette fonction implique que l'on re-démarre le réseau ... (ou plus tard en fin d'opérations...)
-# systemctl restart networking.service
 }
 
-# quelques commades qui pourront être utile pour aider Girofle à palper un système réseau
-beaware-girofle () {
-# VAR.
-# ----
-
-NOM_INTERFACE_RESEAU_A_RECONFIGURER_PAR_DEFAUT=enp0s3 # celle-là, il faut qu'elle passe au niveau opérations
-NOM_INTERFACE_RESEAU_A_RECONFIGURER=$NOM_INTERFACE_RESEAU_A_RECONFIGURER_PAR_DEFAUT
-
-# Gestion des valeurs passées en paramètre
-# ----------------------------------------
-
-NBARGS=$#
-clear
-if [ $NBARGS -eq 0 ]
-then
-	echo "Quel est le nom de l'interface réseau linux que vous souhaitez reconfigurer?"
-	echo "(l'interface utilisée par défaut sera : [$NOM_INTERFACE_RESEAU_A_RECONFIGURER]"
-	read SAISIE_UTILISATEUR
-else
-	NOM_INTERFACE_RESEAU_A_RECONFIGURER=$1
-fi
-
-if [ "x$SAISIE_UTILISATEUR" = "x" ]
-then
-	echo "on laisse la valeur par défaut"
-else
-	NOM_INTERFACE_RESEAU_A_RECONFIGURER=$SAISIE_UTILISATEUR
-fi
-
-# confirmation nom interface réseau linux à reconfigurer 
-clear
-echo "Vous confirmez vouloir re-configurer l'interface réseau linux : [$NOM_INTERFACE_RESEAU_A_RECONFIGURER] ?"
-echo "Répondez par Oui ou Non (o/n). Répondre Non annulera toute configuration réseau."
-read VOUSCONFIRMEZ
-case "$VOUSCONFIRMEZ" in
-	[oO] | [oO][uU][iI]) echo "L'interface réseau [$NOM_INTERFACE_RESEAU_A_RECONFIGURER] sera re-configurée" ;;
-	[nN] | [nN][oO][nN]) echo "Aucune reconfiguration réseau ne sera faite.";return ;;
-esac
 
 
-# re-spawning de l'interface réseau linux...
-ip addr flush $NOM_INTERFACE_RESEAU_A_RECONFIGURER
-systemctl restart network
 
-ADRESSE_IP_SRV_JEE=$FUTURE_ADRESSE_IP
-
-}
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
 #########################################							ENV								##########################################
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # - Variables d'environnement héritées de "operations.sh":
+# 				 # le numéro de port IP qui sera utilisé par le connecteur HTTP de l'instance Gitlab
+#                >>>   export NO_PORT_IP_SRV_GITLAB
+# 				 # l'adresse IP qui sera utilisée par les connecteurs HTTP/HTTPS de l'instance Gitlab
 #                >>>   export ADRESSE_IP_SRV_GITLAB
+# 				 # le fichier de log des opérations
 #                >>>   export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
+# 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
