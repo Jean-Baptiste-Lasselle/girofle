@@ -23,6 +23,7 @@ reconfigurer_interfaces_reseau () {
 
 # sudo sed -i 's/NM_CONTROLLED="yes"/NM_CONTROLLED="no"/g' /etc/sysconfig/network-scripts/ifcfg-enp0s*
 FICHIERCONFRESEAUTEMP=confreseautemp.girofle
+rm -f $FICHIERCONFRESEAUTEMP
 for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
 do
 # echo " FICHIER: /etc/sysconfig/network-scripts/$fichierconf"
@@ -39,6 +40,9 @@ sudo chmod a-r-w-x   $fichierconf
 # pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
 sudo chmod u+r+w   $fichierconf
 sudo chmod g+w   $fichierconf
+
+# pour ne pas accumuler
+rm -f $FICHIERCONFRESEAUTEMP
 
 done
 
