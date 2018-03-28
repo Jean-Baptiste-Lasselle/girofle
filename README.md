@@ -153,3 +153,9 @@ De la sorte, l'association est déléguée intractivement ou avec avec arguments
     *  le répertoire indiqué contient un répertoire de nom "bckups", qui doit contenir au moins un répertoire (un backup), qui lui-même doit contenir aussi 3 répertoires "data", "config", "log"
 
 
+# POINT DE REPRISE
+
+L'erreur surlaquelle je tombe est avec la dernière verson est:
+```
+./operations.sh: ligne57: ./docker-EASE-SPACE-BARE-METAL-SETUP.sh: Permission non accordée
+```
