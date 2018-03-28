@@ -54,7 +54,7 @@ LISTE_NOMS_INTERFACES=$(awk  -F':' '/enp0s*/ {print $2; echo "okok"}' ./listeint
 
 for NOM_INTERFACE_RESEAU in $LISTE_NOMS_INTERFACES
 do
-ip addr flush $NOM_INTERFACE_RESEAU
+sudo ip addr flush $NOM_INTERFACE_RESEAU
 # echo "reconfiguration: $NOM_INTERFACE_RESEAU"
 done
 
@@ -104,7 +104,7 @@ esac
 
 # re-spawning de l'interface réseau linux...
 ip addr flush $NOM_INTERFACE_RESEAU_A_RECONFIGURER
-systemctl restart networking.service
+systemctl restart network
 
 ADRESSE_IP_SRV_JEE=$FUTURE_ADRESSE_IP
 
