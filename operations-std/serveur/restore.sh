@@ -8,9 +8,19 @@
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # - Variables d'environnement héritées:
 #                >>>   0
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# - répertoires  dans l'hôte docker
+# --------------------------------------------------------------------------------------------------------------------------------------------
+export REP_GESTION_CONTENEURS_DOCKER=/girofle
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# - instance Gitlab concernée
+# --------------------------------------------------------------------------------------------------------------------------------------------
 # cf. fonction demander_addrIP ()
 export ADRESSE_IP_SRV_GITLAB
-# --------------------------------------------------------------------------------------------------------------------------------------------
+# Numéro d'instance Gitlab: Doit s'auto-incrémenter
+# Pour implémenter l'uto-incrément, je vais utiliser une technique nulle: un
+# fichier, dans lequel je rajoute une ligne à chaque fois que je créée une nouvelle instance gitlab, que je compte ensuite, etc...
+export COMPTEUR_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/.auto-increment.girofle
 GITLAB_INSTANCE_NUMBER=1
 # --------------------------------------------------------------------------------------------------------------------------------------------
 #														RESEAU-HOTE-DOCKER																	 #
@@ -33,10 +43,7 @@ GITLAB_DATA_DIR=/var/opt/gitlab
 GITLAB_LOG_DIR=/var/log/gitlab
 
 export NOM_CONTENEUR_DOCKER=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER
-# ---------------------------------------
-# - répertoires  dans l'hôte docker
-# ---------------------------------------
-export REP_GESTION_CONTENEURS_DOCKER=/conteneurs-docker
+
 # répertoire dédié au conteneur géré dans cette suite d'opérations
 export REP_GIROFLE_CONTENEUR_DOCKER=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
 

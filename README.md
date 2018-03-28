@@ -134,7 +134,7 @@ Globalement les opératiosn standard utilisent donc 3 variables indépendantes:
  $NOM_CONTENEUR_DOCKER <=> $REP_GIROFLE_CONTENEUR_DOCKER <=> $ADRESSE_IP_DEDIEE_AU_SERVICE_GITLAB
 ```
 
-Dans `./operations-std/serveur/restore.sh`, c'est la variable d'envirnnement `$ADRESSE_IP_SRV_GITLAB` qui correspond à `$ADRESSE_IP_DEDIEE_AU_SERVICE_GITLAB`
+Dans `./operations-std/serveur/restore.sh`, c'est la variable d'environnement `$ADRESSE_IP_SRV_GITLAB` qui correspond à `$ADRESSE_IP_DEDIEE_AU_SERVICE_GITLAB`
 
 
 
@@ -142,7 +142,7 @@ Dans `./operations-std/serveur/restore.sh`, c'est la variable d'envirnnement `$A
 
 Demander interactivement à l'utilisateur le nom du conteneur docker à backup/restore, ainsi que le chemin de son répertoire dédié
 
-De la sorte, l'association est déléguée intractivement ou avec avec arguments en ligne de commande:
+De la sorte, l'association est déléguée intractivement ou avec arguments en ligne de commande:
 
 * si aucun argument n'est passé à `./operations-std/serveur/restore.sh`, il demande interactivement le nom du conteneur docker, et le chemin de son répertoire dédié (exemple: [`$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER`])
 * si un seul argument est passé, alors un message d'erreur est affiché, et l'aide affichée.
@@ -152,6 +152,9 @@ De la sorte, l'association est déléguée intractivement ou avec avec arguments
     *  le répertoire indiqué existe dans le système,
     *  le répertoire indiqué contient un répertoire de nom "mapping-volumes", qui doit contenir aussi 3 répertoires "data", "config", "log", 
     *  le répertoire indiqué contient un répertoire de nom "bckups", qui doit contenir au moins un répertoire (un backup), qui lui-même doit contenir aussi 3 répertoires "data", "config", "log"
+
+* Créer le script [lister-instances-gitlab.sh]
+
 
 # `gravity`
 

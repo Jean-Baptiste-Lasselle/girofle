@@ -1,35 +1,34 @@
-# Installation de Docker sur centos 7
-																						
-# update CentOS 7
-sudo yum clean all -y && sudo yum update -y
 
+# --------------------------------------------------------------------------------------------------------------------------------------------
+##############################################################################################################################################
+#########################################						DESCRIPTION							##########################################
+##############################################################################################################################################
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# 
+# Ce script permet d'envoyr sur la sortie standard, la liste des noms d'instances gitlab en cours d'éxécution.
+# 
+# Cette liste présente, pour chaque instance Gitlab:
+# 
+# 		==>> son nom (choisit par l'utilisateur au départ, n'a pas besoin d'être unique)
+# 		==>> son numéro d'instance (attrbué par le script de création d'une novelle instance gitlab)
+# 		==>> 
+# 
+# 
+# 
+# 
+cat girofle.inventory
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
 #########################################							ENV								##########################################
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
-# ---------------------------------------
-# - Logging des opérations
-# ---------------------------------------
-export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
-rm -f $NOMFICHIERLOG
-touch $NOMFICHIERLOG
-# ---------------------------------------
-# - répertoires  dans l'hôte docker
-# ---------------------------------------
-export REP_GESTION_CONTENEURS_DOCKER=/girofle
-# pour l'auto-incrémentation: à chaque fois qu'une nouvelle instance est créée avec succès, une nouvelle ligne est ajoutée dans ce fichier
-export COMPTEUR_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/.auto-increment.girofle
-
-# ---------------------------------------
-# - instance Gitlab provisionnée
-# ---------------------------------------
 # le numéro de port IP qui sera utilisé par le connecteur HTTP de l'instance Gitlab
 export ADRESSE_IP_SRV_GITLAB
 # l'adresse IP qui sera utilisée par les connecteurs HTTP/HTTPS de l'instance Gitlab
 export NO_PORT_IP_SRV_GITLAB
-
-
+export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
+# rm -f $NOMFICHIERLOG
+# touch $NOMFICHIERLOG
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
 #########################################							FONCTIONS						##########################################
@@ -90,10 +89,6 @@ done
 
 }
 
-incrementerCompteurGirofle () {
-echo "nouvelleligne"  $COMPTEUR_GIROFLE
-}
-
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -101,27 +96,5 @@ echo "nouvelleligne"  $COMPTEUR_GIROFLE
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
 
-echo " provision-girofle-  COMMENCEE  - " >> $NOMFICHIERLOG
-# À l'installation, on initialise le compteur Girofle:
-sudo rm -f $COMPTEUR_GIROFLE
-touch $COMPTEUR_GIROFLE
-# On rend exécutables les dépendances
-sudo chmod +x ./docker-EASE-SPACE-BARE-METAL-SETUP.sh
-sudo chmod +x ./installation-docker-gitlab.rectte-jibl.sh
-sudo chmod +x ./changement-hostname-nom-domaine.sh
-sudo chmod +x ./configurer-backup-automatique.sh
-# On s'assure de l'adresse IP à utiliser (par l'instance Gitlab)
-demander_addrIP
-demander_noPortIP
-# On change config hostname/nomdomaine pour adopter girofle
-./changement-hostname-nom-domaine.sh
-# prod:
-# ./changement-hostname-nom-domaine.sh && ./docker-EASE-SPACE-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh >> $NOMFICHIERLOG
-# usinage:
-./docker-EASE-SPACE-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh && ./configurer-backup-automatique.sh && incrementerCompteurGirofle
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# Que la lumière soit! (pour activer les changemnts impactés dans [changement-hostname-nom-domaine.sh])
-
-echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
-relancer_reseau
+echo " +girofle+  INSTANCES GITLAB: " >> $NOMFICHIERLOG
 

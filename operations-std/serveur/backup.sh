@@ -24,7 +24,7 @@ export OPSTIMESTAMP=`date +"%d-%m-%Y-time-%Hh-%Mm-%Ss"`
 # - répertoires  dans l'hôte docker
 # ---------------------------------------
 
-export REP_GESTION_CONTENEURS_DOCKER=/conteneurs-docker
+export REP_GESTION_CONTENEURS_DOCKER=/girofle
 # ---------------------------------------
 # - répertoires d'installation de gitlab
 # ---------------------------------------
