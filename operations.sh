@@ -21,7 +21,7 @@ export REP_GESTION_CONTENEURS_DOCKER=/girofle
 # pour l'auto-incrémentation: à chaque fois qu'une nouvelle instance est créée avec succès, une nouvelle ligne est ajoutée dans ce fichier
 export COMPTEUR_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/.auto-increment.girofle
 # à remplacer par une petite bdd embarquée de type nosql, .h2, pour au moins avoir gestion des accès concconcurrents, et enfin à remplacer par [etcd]
-export INVENTAIRE_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/.auto-increment.girofle
+export INVENTAIRE_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/inventory.girofle
 # ---------------------------------------
 # - instance Gitlab provisionnée
 # ---------------------------------------
@@ -59,10 +59,12 @@ demander_addrIP () {
 # script, quel numéro de port IP, que l'instance Gitlab pourra utiliser dans l'hôte Docker
 demander_noPortIP () {
 
-	echo "Quelle adresse IP souhaitez-vous que l'instance gitlab utilise?"
-	echo "Cette adresse est à  choisir parmi:"
+	echo "Quel numééro de port IP souhaitez-vous que l'instance gitlab utilise?"
+	echo "Ce numéro de port doit être compris entre 1000 et 65535, et ne  pas être dans la liste suivante:"
+	# echo " TODO: afficher la liste des numéros de ports utilisés"
+	echo " Voici les numéros ports utilisés par les instances Gitlab en service:"
 	echo " "
-	ip addr|grep "inet"|grep -v "inet6"|grep "enp\|wlan"
+	more $INVENTAIRE_GIROFLE
 	echo " "
 	read NO_PORT_IP_CHOISIT
 	if [ "x$NO_PORT_IP_CHOISIT" = "x" ]; then
