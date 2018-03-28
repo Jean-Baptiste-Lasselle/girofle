@@ -37,7 +37,7 @@ export NOMDEDOMAINE=prj-pms.girofle.io
 # echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-io-alt2" >> ./nouveau.fichier.hostname
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Pour configurer un hostname différent pour chaque interface réseau, il faudra éditer les fichiers:
 # On commence par éteindre les lumières...
-sudo systemctl stop network
+# sudo systemctl stop network
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s3
 export FICHIERTEMP=./config-int-reseau.girofle
 
@@ -102,7 +102,7 @@ rm -f ./nouveau.fichier.hosts
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Que la lumière soit!
-sudo systemctl start network
+# sudo systemctl start network
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Installation de l'instance gitlab dans un conteneur, à partir de l'image officielle :

@@ -55,5 +55,7 @@ demander_addrIP
 # ./changement-hostname-nom-domaine.sh && ./docker-EASE-SPACE-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh >> $NOMFICHIERLOG
 # usinage:
 ./docker-EASE-SPACE-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh && ./configurer-backup-automatique.sh
-
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# Que la lumière soit! (pour activer les changemnts impactés dans [changement-hostname-nom-domaine.sh])
+sudo systemctl restart network >> $NOMFICHIERLOG
 echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
