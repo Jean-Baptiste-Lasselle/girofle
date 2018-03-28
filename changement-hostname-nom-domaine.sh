@@ -29,24 +29,42 @@ export REP_GESTION_CONTENEURS_DOCKER=/girofle
 export NOMDEDOMAINE=prj-pms.girofle.io
 # - le fichier "/etc/hostname" ne doit contenir que la seule ligne suivante:
 # "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE"
-sudo rm -f /etc/hostname
-rm -f  ./nouveau.fichier.hostname
-echo "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE" >> ./nouveau.fichier.hostname
-# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1   kytes-io-ssh" >> ./nouveau.fichier.hostname
-# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3   kytes-io-alt1" >> ./nouveau.fichier.hostname
-# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4   kytes-io-alt2" >> ./nouveau.fichier.hostname
-sudo cp -f ./nouveau.fichier.hostname /etc/hostname
-rm -f ./nouveau.fichier.hostname
-# - exécuter (pour "activer" le hostname...):
-sudo hostname -F /etc/hostname
+# sudo rm -f /etc/hostname
+# rm -f  ./nouveau.fichier.hostname
+# echo "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE" >> ./nouveau.fichier.hostname
+# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1    kytes-io-ssh" >> ./nouveau.fichier.hostname
+# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3    kytes-io-alt1" >> ./nouveau.fichier.hostname
+# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-io-alt2" >> ./nouveau.fichier.hostname
+# ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Pour configurer un hostname différent pour chaque interface réseau, il faudra éditer les fichiers:
+# On commence par éteindre les lumières...
+sudo systemctl stop network
+# ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s3
+export FICHIERTEMP=./config-int-reseau.girofle
+
+rm -f $FICHIERTEMP
+cat /etc/sysconfig/network-scripts/ifcfg-enp0s3 >> $FICHIERTEMP
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1    kytes-ssh.io" >> $FICHIERTEMP
+sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s3
+
+# ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s8
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3    kytes-alt2.io" >> /etc/sysconfig/network-scripts/ifcfg-enp0s8
+# ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s9
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-alt2.io" >> /etc/sysconfig/network-scripts/ifcfg-enp0s9
+# ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s10
+echo "$ADRESSE_IP_SRV_GITLAB    $NOMDEDOMAINE" >> /etc/sysconfig/network-scripts/ifcfg-enp0s10
+
+# sudo cp -f ./nouveau.fichier.hostname /etc/hostname
+# rm -f ./nouveau.fichier.hostname
+# - exécuter (pour "activer" le fichier hostname...):
+# sudo hostname -F /etc/hostname
 # - à ajouter en fin de fichier "/etc/hosts":
 # "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE"
 rm -f ./nouveau.fichier.hosts
 sudo cat /etc/hosts  >> ./nouveau.fichier.hosts
-sudo echo "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE" >> ./nouveau.fichier.hosts
-echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1   kytes-io-ssh" >> ./nouveau.fichier.hosts
-echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3   kytes-io-alt1" >> ./nouveau.fichier.hosts
-echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4   kytes-io-alt2" >> ./nouveau.fichier.hosts
+sudo echo "$ADRESSE_IP_SRV_GITLAB    $NOMDEDOMAINE" >> ./nouveau.fichier.hosts
+# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1    kytes-ssh.io" >> ./nouveau.fichier.hosts
+# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3    kytes-alt1.io" >> ./nouveau.fichier.hosts
+# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-alt2.io" >> ./nouveau.fichier.hosts
 sudo rm -f /etc/hosts
 sudo cp -f ./nouveau.fichier.hosts /etc/hosts
 rm -f ./nouveau.fichier.hosts
@@ -80,6 +98,11 @@ rm -f ./nouveau.fichier.hosts
 # [jibl@pc-136 ~]$
 # --------------------------------------------------------------------------------------------------------------------------------------------
 
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# Que la lumière soit!
+sudo systemctl start network
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Installation de l'instance gitlab dans un conteneur, à partir de l'image officielle :
