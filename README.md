@@ -180,3 +180,7 @@ L'erreur surlaquelle je tombe est avec la dernière verson est:
 ```
 ./operations.sh: ligne57: ./docker-EASE-SPACE-BARE-METAL-SETUP.sh: Permission non accordée
 ```
+
+# MSCs
+
+Il faudra remplacer `$INVENTAIRE_GIROFLE` par une BDD NoSQL pour régler le problème d'accès concurrent, puis par /etcd
