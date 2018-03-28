@@ -2,6 +2,111 @@
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
+#########################################						FONCTIONS								######################################
+##############################################################################################################################################
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# 
+# 
+# 
+
+# 
+
+# +++ >>> L'appel de cette fonction implique que l'on re-démarre le réseau ... (ou plus tard en fin d'opérations...)
+# 
+# systemctl restart networking.service
+# 
+# +++ >>> TODO:
+# 		- refaire la fonction pour qu'elle donne aux 4 interfaces réseaux une condiguration en DHCP non gérée par le NetworkManager: ainsi, on pourra ajouter le hostname derrière sans problème
+# 
+# 
+reconfigurer_interfaces_reseau () {
+
+# sudo sed -i 's/NM_CONTROLLED="yes"/NM_CONTROLLED="no"/g' /etc/sysconfig/network-scripts/ifcfg-enp0s*
+FICHIERCONFRESEAUTEMP=confreseautemp.girofle
+for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
+do
+# echo " FICHIER: /etc/sysconfig/network-scripts/$fichierconf"
+# ll $fichierconf
+# echo " "
+cat $fichierconf >> $FICHIERCONFRESEAUTEMP
+echo 'NM_CONTROLLED="no"' >> $FICHIERCONFRESEAUTEMP
+sudo rm -f $fichierconf
+sudo cp -f $FICHIERCONFRESEAUTEMP $fichierconf
+# et on redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
+sudo chown -R root:root $fichierconf
+# on enlève tous les droits à tout le monde
+sudo chmod a-r-w-x   $fichierconf
+# pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
+sudo chmod u+r+w   $fichierconf
+sudo chmod g+w   $fichierconf
+
+done
+
+
+
+# comment obtenir la liste des interfaces réseaux, pour les re-démarrer
+ip addr >> ./listeinterfaces
+LISTE_NOMS_INTERFACES=$(awk  -F':' '/enp0s*/ {print $2; echo "okok"}' ./listeinterfaces|awk  -F':' '/enp0s*/ {print $1}'|awk '/enp0s*/ {$1=$1;print}')
+
+for NOM_INTERFACE_RESEAU in $LISTE_NOMS_INTERFACES
+do
+ip addr flush $NOM_INTERFACE_RESEAU
+# echo "reconfiguration: $NOM_INTERFACE_RESEAU"
+done
+
+# +++ >>> L'appel de cette fonction implique que l'on re-démarre le réseau ... (ou plus tard en fin d'opérations...)
+# systemctl restart networking.service
+}
+
+# quelques commades qui pourront être utile pour aider Girofle à palper un système réseau
+beaware-girofle () {
+# VAR.
+# ----
+
+NOM_INTERFACE_RESEAU_A_RECONFIGURER_PAR_DEFAUT=enp0s3 # celle-là, il faut qu'elle passe au niveau opérations
+NOM_INTERFACE_RESEAU_A_RECONFIGURER=$NOM_INTERFACE_RESEAU_A_RECONFIGURER_PAR_DEFAUT
+
+# Gestion des valeurs passées en paramètre
+# ----------------------------------------
+
+NBARGS=$#
+clear
+if [ $NBARGS -eq 0 ]
+then
+	echo "Quel est le nom de l'interface réseau linux que vous souhaitez reconfigurer?"
+	echo "(l'interface utilisée par défaut sera : [$NOM_INTERFACE_RESEAU_A_RECONFIGURER]"
+	read SAISIE_UTILISATEUR
+else
+	NOM_INTERFACE_RESEAU_A_RECONFIGURER=$1
+fi
+
+if [ "x$SAISIE_UTILISATEUR" = "x" ]
+then
+	echo "on laisse la valeur par défaut"
+else
+	NOM_INTERFACE_RESEAU_A_RECONFIGURER=$SAISIE_UTILISATEUR
+fi
+
+# confirmation nom interface réseau linux à reconfigurer 
+clear
+echo "Vous confirmez vouloir re-configurer l'interface réseau linux : [$NOM_INTERFACE_RESEAU_A_RECONFIGURER] ?"
+echo "Répondez par Oui ou Non (o/n). Répondre Non annulera toute configuration réseau."
+read VOUSCONFIRMEZ
+case "$VOUSCONFIRMEZ" in
+	[oO] | [oO][uU][iI]) echo "L'interface réseau [$NOM_INTERFACE_RESEAU_A_RECONFIGURER] sera re-configurée" ;;
+	[nN] | [nN][oO][nN]) echo "Aucune reconfiguration réseau ne sera faite.";return ;;
+esac
+
+
+# re-spawning de l'interface réseau linux...
+ip addr flush $NOM_INTERFACE_RESEAU_A_RECONFIGURER
+systemctl restart networking.service
+
+ADRESSE_IP_SRV_JEE=$FUTURE_ADRESSE_IP
+
+}
+# --------------------------------------------------------------------------------------------------------------------------------------------
+##############################################################################################################################################
 #########################################							ENV								##########################################
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -36,8 +141,10 @@ export NOMDEDOMAINE=prj-pms.girofle.io
 # echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3    kytes-io-alt1" >> ./nouveau.fichier.hostname
 # echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-io-alt2" >> ./nouveau.fichier.hostname
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Pour configurer un hostname différent pour chaque interface réseau, il faudra éditer les fichiers:
-# On commence par éteindre les lumières...
-# sudo systemctl stop network
+# 
+# ================================================
+# On commence par reconfiurer les interfaces réseau linux dans le CentOS, afin qu'elles ne soient plus controllées par le Network manager
+reconfigurer_interfaces_reseau
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s3
 export FICHIERTEMP=./config-int-reseau.girofle
 
@@ -100,9 +207,7 @@ rm -f ./nouveau.fichier.hosts
 
 
 
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# Que la lumière soit!
-# sudo systemctl start network
+
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Installation de l'instance gitlab dans un conteneur, à partir de l'image officielle :
