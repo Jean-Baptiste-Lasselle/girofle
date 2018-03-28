@@ -1,15 +1,5 @@
 # Docker sur centos 7
-# --------------------------------------------------------------------------------------------------------------------------------------------
-##############################################################################################################################################
-#########################################							DESCRIPTION						##########################################
-##############################################################################################################################################
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# 
-# 	Ce script prend un argument optionnel, pour préciser le numéro d'instance à restaurer
-# 	Si aucun argument n'est fourni, alors le script demande cette valeur interactivement.
-# 
-# 
-# 
+
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -22,6 +12,8 @@
 # - répertoires  dans l'hôte docker
 # --------------------------------------------------------------------------------------------------------------------------------------------
 export REP_GESTION_CONTENEURS_DOCKER=/girofle
+# à remplacer par une petite bdd embarquée de type nosql, .h2, pour au moins avoir gestion des accès concconcurrents, et enfin à remplacer par [etcd]
+export INVENTAIRE_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/inventory.girofle
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # - instance Gitlab concernée
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -31,9 +23,9 @@ export ADRESSE_IP_SRV_GITLAB
 # Pour implémenter l'uto-incrément, je vais utiliser une technique nulle: un
 # fichier, dans lequel je rajoute une ligne à chaque fois que je créée une nouvelle instance gitlab, que je compte ensuite, etc...
 export COMPTEUR_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/.auto-increment.girofle
-GITLAB_INSTANCE_NUMBER=1
+export GITLAB_INSTANCE_NUMBER=1
 
-demanderQuelleInstanceRestaurer () {
+demanderQuelleInstanceDecomissioner () {
 
 	echo "Quelle est le numéro d'instance Gitlab que vous souhaitez restaurer?"
 	echo "liste des insances en service:"
@@ -69,12 +61,13 @@ GITLAB_CONFIG_DIR=/etc/gitlab
 GITLAB_DATA_DIR=/var/opt/gitlab
 GITLAB_LOG_DIR=/var/log/gitlab
 
-# Intialisation du numéro d'instance Gitlab à restaurer
+# intiialisation du numéro d'instance Gitlab à dé-comissioner
 if [ "$1" = "x$1" ]; then
    demanderQuelleInstanceRestaurer
 else
 	GITLAB_INSTANCE_NUMBER=$1
 fi
+
 
 export NOM_CONTENEUR_DOCKER=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER
 
@@ -147,43 +140,7 @@ export REP_BCKUP
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
 
-demander_emplacement_bckup () {
 
-	echo "Dans le répertoire [$REP_BCKUP_CONTENEUR_DOCKER], Quel est le "
-	echo "nom du répertoire du backup sur lequel baser ce restore?"
-	echo "-"
-	echo "C'est l'un des suivants:"
-	echo " "
-	ll $REP_BCKUP_CONTENEUR_DOCKER
-	echo " "
-	echo " Part défaut, le répertoire de backup le plus récent sera utilisé, soit:"
-	echo " "
-	ls -t $REP_BCKUP_CONTENEUR_DOCKER | head -1
-	echo " "
-	read REP_BCKUP_CHOISIT
-	if [ "x$REP_BCKUP_CHOISIT" = "x" ]; then
-       REP_BCKUP_CHOISIT=$(ls -t $REP_BCKUP_CONTENEUR_DOCKER | head -1)
-	fi
-	
-	REP_BCKUP=$REP_BCKUP_CHOISIT
-	echo " le répertoire de backup qui sera utilisé pour ce backup est: $REP_BCKUP_CHOISIT/$REP_BCKUP";
-}
-
-demander_addrIP () {
-
-	echo "Quelle adresse IP l'instance gitlab restaurée devra-t-elle utiliser?"
-	echo "Cette adresse est à  choisir parmi:"
-	echo " "
-	ip addr|grep "inet"|grep -v "inet6"|grep "enp\|wlan"
-	echo " "
-	read ADRESSE_IP_CHOISIE
-	if [ "x$ADRESSE_IP_CHOISIE" = "x" ]; then
-       ADRESSE_IP_CHOISIE=0.0.0.0
-	fi
-	
-	ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_CHOISIE
-	echo " Binding Adresse IP choisit pour le serveur gitlab: $ADRESSE_IP_CHOISIE";
-}
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -192,10 +149,76 @@ demander_addrIP () {
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # - hostname:  archiveur-prj-pms.io
-demander_emplacement_bckup
-# 1./ Le conteneur doit être arrêté, et détruis:
-sudo docker stop $NOM_CONTENEUR_DOCKER
-sudo docker rm $NOM_CONTENEUR_DOCKER
+
+# 1./ Je backuppe l'instance, avant de la détruire:
+./backup.sh $GITLAB_INSTANCE_NUMBER
+
+# 2./ Je supprime l'occurence dans le fichier
+
+# export ENTREE_INVENTAIRE_RECHERCHEE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]"
+# export ENTREE_INVENTAIRE_RECHERCHEE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]"
+# Elle est donc retoruvée grâce au nom du conteneur,d éduis du numéro d'instance Gitlab. Ce numéro agit donc comme une sorte de clé primaire.
+export ENTREE_INVENTAIRE_RECHERCHEE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=([0-255].[0-255].[0-255].[0-255])] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=([0-65536])] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=(*)] + [NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER]"
+ENTREE_INVENTAIRE_RECHERCHEE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=([0-255].[0-255].[0-255].[0-255])] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=([0-65536])] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=(*)] + [NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER]"
+# sed -i "s/$ENTREE_INVENTAIRE_RECHERCHEE/-elforig-/g" $INVENTAIRE_GIROFLE
+
+
+# données de test générées
+export INVENTAIRE_GIROFLE_TEST=./inventory.girofle
+rm -f $INVENTAIRE_GIROFLE_TEST
+export ENTREE_INVENTAIRE_TEST=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER]"
+
+# test 1
+GITLAB_INSTANCE_NUMBER=1
+ADRESSE_IP_SRV_GITLAB="192.168.1.32"
+NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=15648
+NOM_DU_CONTENEUR_CREE=poulet
+ENTREE_INVENTAIRE_TEST=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER]"
+echo $ENTREE_INVENTAIRE_TEST >> $INVENTAIRE_GIROFLE_TEST
+# test 2
+GITLAB_INSTANCE_NUMBER=2
+ADRESSE_IP_SRV_GITLAB="192.168.1.32"
+NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=54248
+NOM_DU_CONTENEUR_CREE=tricot
+ENTREE_INVENTAIRE_TEST=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER]"
+echo $ENTREE_INVENTAIRE_TEST >> $INVENTAIRE_GIROFLE_TEST
+# test 3
+GITLAB_INSTANCE_NUMBER=5
+ADRESSE_IP_SRV_GITLAB="192.168.1.32"
+NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=7778
+NOM_DU_CONTENEUR_CREE=ahbon
+ENTREE_INVENTAIRE_TEST=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER]"
+ENTREE_INVENTAIRE_RECHERCHEE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=([0-255].[0-255].[0-255].[0-255])] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=([0-65536])] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=(*)] + [NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER]"
+echo $ENTREE_INVENTAIRE_TEST >> $INVENTAIRE_GIROFLE_TEST
+# test 4
+GITLAB_INSTANCE_NUMBER=4
+ADRESSE_IP_SRV_GITLAB="192.168.1.32"
+NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=2368
+NOM_DU_CONTENEUR_CREE=poulet
+ENTREE_INVENTAIRE_TEST=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER]"
+echo $ENTREE_INVENTAIRE_TEST >> $INVENTAIRE_GIROFLE_TEST
+
+### ==>>> Et là, je peux faire le test de substitution
+echo "TEST -girofle+ DEBUT TEST"
+echo "TEST -girofle+ "
+echo "TEST -girofle+ "
+echo "TEST -girofle+ AVANT substitution dans l'inventaire:"
+echo "TEST -girofle+ "
+cat $INVENTAIRE_GIROFLE_TEST
+echo "TEST -girofle+ "
+sed -i "s/$ENTREE_INVENTAIRE_RECHERCHEE/-elforig-/g" $INVENTAIRE_GIROFLE_TEST
+echo "TEST -girofle+ "
+echo "TEST -girofle+ APRES substitution dans l'inventaire:"
+echo "TEST -girofle+ "
+cat $INVENTAIRE_GIROFLE_TEST
+echo "TEST -girofle+ "
+echo "TEST -girofle+ "
+echo "TEST -girofle+ FIN TEST"
+
+
+
+
+
 
 # 2./ On détruis les répertoires du conteneur à backupper, pour les re-créer vierges
 sudo rm -rf $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR

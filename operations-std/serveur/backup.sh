@@ -10,6 +10,24 @@
 #                >>>   0
 # --------------------------------------------------------------------------------------------------------------------------------------------
 GITLAB_INSTANCE_NUMBER=1
+
+
+demanderQuelleInstanceRestaurer () {
+
+	echo "Quelle est le numéro d'instance Gitlab que vous souhaitez restaurer?"
+	echo "liste des insances en service:"
+	echo " "
+	./lister-instances-gitlab.sh
+	echo " "
+	read INSTANCE_CHOISIE
+	if [ "x$INSTANCE_CHOISIE" = "x" ]; then
+	   echo " +girofle+ERREUR+ impossible de déterminer le numéro d'instance à backupper."
+       exit 1
+	fi
+	GITLAB_INSTANCE_NUMBER=$INSTANCE_CHOISIE
+	echo " Binding Adresse IP choisit pour le serveur gitlab: $INSTANCE_CHOISIE";
+}
+
 # --------------------------------------------------------------------------------------------------------------------------------------------
 #														RESEAU-HOTE-DOCKER																	 #
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -31,13 +49,21 @@ export REP_GESTION_CONTENEURS_DOCKER=/girofle
 GITLAB_CONFIG_DIR=/etc/gitlab
 GITLAB_DATA_DIR=/var/opt/gitlab
 GITLAB_LOG_DIR=/var/log/gitlab
+
+# Intialisation du numéro d'instance Gitlab à restaurer
+if [ "$1" = "x$1" ]; then
+   demanderQuelleInstanceRestaurer
+else
+	GITLAB_INSTANCE_NUMBER=$1
+fi
+
 # ---------------------------------------
 # - répertoires Girofle
 # ---------------------------------------
 # - répertoire dédié au conteneur géré dans cette suite d'opérations
 # cf. demander_chemin_repertoire_giroflebckup ()
-# export REP_GIROFLE_CONTENEUR_DOCKER=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
-export REP_GIROFLE_CONTENEUR_DOCKER
+export REP_GIROFLE_CONTENEUR_DOCKER=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
+# export REP_GIROFLE_CONTENEUR_DOCKER
 # - répertoire dédié au backups du conteneur géré dans cette suite d'opérations
 export REP_BCKUP_CONTENEUR_DOCKER=$REP_GIROFLE_CONTENEUR_DOCKER/bckups
 # - répertoire qui sera utilisé pour le backup en cours du conteneur géré dans cette suite d'opérations
