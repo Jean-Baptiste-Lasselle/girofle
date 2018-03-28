@@ -13,6 +13,7 @@ dans la même VM, et de pouvoir pour chacun:
 * pour une instance gitlab, faire un backup remote (vers un stockage qui peut être choisit)
 * pour une instance gitlab, faire un restore dans une autre VM, ou la même VM
 * pour une instance gitlab, à la comission, les backups locaux sont faits automatiquement (configurés comme une tâche réccurrente système crontab):
+
 				```
 				# 1./ il faut ajouter la ligne:
 				# 
@@ -20,9 +21,7 @@ dans la même VM, et de pouvoir pour chacun:
 				#  
 				# Au fichier crontab:
 				# 
-
 				# Mode manuel: sudo crontab -e
-
 				# Mode silencieux:
 				export PLANIFICATION_DES_BCKUPS="* */4 * * *   $(pwd)/operations-std/serveur/backup.sh"
 				rm -f doc-pms/operations-std/serveur/bckup.kytes
@@ -42,6 +41,7 @@ dans la même VM, et de pouvoir pour chacun:
 				# => Toutes les 15 minutes après 7 heures: [5 7 * * * "$(pwd)/operations-std/serveur/backup.sh" ]
 
 				```
+				
 <!-- # 2./ il faut redémarrer le système? (me souvient plus...) --> 
 
 # stdopsbckups
