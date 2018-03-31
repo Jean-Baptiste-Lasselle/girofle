@@ -26,7 +26,7 @@ do
 # echo " FICHIER: /etc/sysconfig/network-scripts/$fichierconf"
 # ll $fichierconf
 # echo " "
-cat $fichierconf >> $FICHIERCONFRESEAUTEMP
+cat /etc/sysconfig/network-scripts/$fichierconf >> $FICHIERCONFRESEAUTEMP
 echo 'NM_CONTROLLED="no"' >> $FICHIERCONFRESEAUTEMP
 sudo rm -f $fichierconf
 sudo cp -f $FICHIERCONFRESEAUTEMP $fichierconf
@@ -105,7 +105,7 @@ sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s3
 sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s3
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s8
 rm -f $FICHIERTEMP
-cat /etc/sysconfig/network-scripts/ifcfg-enp0s3 >> $FICHIERTEMP
+cat /etc/sysconfig/network-scripts/ifcfg-enp0s8 >> $FICHIERTEMP
 echo "HOSTNAME=kytes-alt1.io" >> $FICHIERTEMP
 sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s8
 sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s8
@@ -124,12 +124,6 @@ sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s10
 
 
 
-# sudo cp -f ./nouveau.fichier.hostname /etc/hostname
-# rm -f ./nouveau.fichier.hostname
-# - exécuter (pour "activer" le fichier hostname...):
-# sudo hostname -F /etc/hostname
-# - à ajouter en fin de fichier "/etc/hosts":
-# "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE"
 rm -f ./nouveau.fichier.hosts
 sudo cat /etc/hosts  >> ./nouveau.fichier.hosts
 sudo echo "# Interface réseau utilisée par l'instance Gitlab" >> ./nouveau.fichier.hosts
