@@ -19,7 +19,7 @@
 reconfigurer_interfaces_reseau () {
 
 # sudo sed -i 's/NM_CONTROLLED="yes"/NM_CONTROLLED="no"/g' /etc/sysconfig/network-scripts/ifcfg-enp0s*
-FICHIERCONFRESEAUTEMP=confreseautemp.girofle
+FICHIERCONFRESEAUTEMP=./confreseautemp.girofle
 rm -f $FICHIERCONFRESEAUTEMP
 for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
 do
