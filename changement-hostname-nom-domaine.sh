@@ -23,18 +23,19 @@ FICHIERCONFRESEAUTEMP=confreseautemp.girofle
 rm -f $FICHIERCONFRESEAUTEMP
 for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
 do
-# echo " FICHIER: /etc/sysconfig/network-scripts/$fichierconf"
+echo " FICHIER: /etc/sysconfig/network-scripts/$fichierconf" >> $NOMFICHIERLOG
 # ll $fichierconf
 # echo " "
 # cat /etc/sysconfig/network-scripts/$fichierconf >> $FICHIERCONFRESEAUTEMP
 sudo cp /etc/sysconfig/network-scripts/$fichierconf $FICHIERCONFRESEAUTEMP
 sudo chown -R $USER:$USER $FICHIERCONFRESEAUTEMP
 sudo chmod a-r-w-x   $FICHIERCONFRESEAUTEMP
-# pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
+# pour ne mette que le user de provisioning ait les droits en écriture et lecrture sur ce fichier temporaire
 sudo chmod u+r+w   $FICHIERCONFRESEAUTEMP
 sudo chmod g+r   $FICHIERCONFRESEAUTEMP
-
 echo 'NM_CONTROLLED="no"' >> $FICHIERCONFRESEAUTEMP
+
+
 sudo rm -f $fichierconf
 sudo cp -f $FICHIERCONFRESEAUTEMP $fichierconf
 # et on redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
