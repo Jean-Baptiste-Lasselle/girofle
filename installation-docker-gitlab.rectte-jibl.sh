@@ -43,13 +43,11 @@ export GITLAB_INSTANCE_NUMBER2=2
 GITLAB_CONFIG_DIR=/etc/gitlab
 GITLAB_DATA_DIR=/var/opt/gitlab
 GITLAB_LOG_DIR=/var/log/gitlab
-calculerProchainGitlabInstanceNumber
-export REP_GIROFLE_CONTENEUR_DOCKER
 ##############################################################################################################################################
 #####		CONTENEUR 1
 ##############################################################################################################################################
 # - répertoire hôte dédié à l'instance Gitlab
-export REP_GIROFLE_CONTENEUR_DOCKER
+export REP_GIROFLE_INSTANCE_GITLAB
 # - Nom du conteneur docker qui sera créé
 export NOM_DU_CONTENEUR_CREE
 # - répertoires hôte associés
@@ -65,7 +63,7 @@ export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 #####		Je limiterai le nombre maximal au nombre maximal de hostnames/nomsdedomaines, ce nombre d'instances.
 ##############################################################################################################################################
 # - répertoire hôte dédié à l'instance Gitlab
-# export REP_GIROFLE_CONTENEUR_DOCKER
+# export REP_GIROFLE_INSTANCE_GITLAB
 # - Nom du conteneur docker qui sera créé
 export NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST
 # - répertoires hôte associés
@@ -128,13 +126,13 @@ calculerProchainGitlabInstanceNumber
 #####		CONTENEUR 1
 ##############################################################################################################################################
 # - répertoire hôte dédié à l'instance Gitlab
-REP_GIROFLE_CONTENEUR_DOCKER=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
+REP_GIROFLE_INSTANCE_GITLAB=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
 # - Nom du conteneur docker qui sera créé
 NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER
 # - répertoires hôte associés
-CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/config
-CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/data
-CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/logs
+CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GIROFLE_INSTANCE_GITLAB/config
+CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GIROFLE_INSTANCE_GITLAB/data
+CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GIROFLE_INSTANCE_GITLAB/logs
 # - création des répertoires hôtes associés
 # sudo rm -rf $REPERTOIRE_GIROFLE
 mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
@@ -146,7 +144,7 @@ mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 #####		CONTENEUR 2 ===>>>> Pour tests du nombre maximal d'instances serveurs possibles sur une même machine...
 ##############################################################################################################################################
 # - répertoire hôte dédié à l'instance Gitlab
-REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2
+REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2
 NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
 # - répertoires associés
 CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
@@ -191,7 +189,7 @@ echo " +girofle+ Verification no. Port IP: [NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SR
 sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB:80 --publish $ADRESSE_IP_SRV_GITLAB:2227:22 --name $NOM_DU_CONTENEUR_CREE --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
 # persistance de la nouvelle entrée dans l'inventaire des instances gitlab
-export ENTREE_INVENTAIRE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SRV_GITLAB] + [REP_GIROFLE_CONTENEUR_DOCKER=$REP_GIROFLE_CONTENEUR_DOCKER] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]"
+export ENTREE_INVENTAIRE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SRV_GITLAB] + [REP_GIROFLE_INSTANCE_GITLAB=$REP_GIROFLE_INSTANCE_GITLAB] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]"
 sudo rm -f $INVENTAIRE_GIROFLE.temp
 touch $INVENTAIRE_GIROFLE.temp
 sudo chown -R $USER:$USER $INVENTAIRE_GIROFLE.temp
@@ -213,7 +211,7 @@ sudo chmod u+r+w $INVENTAIRE_GIROFLE
 sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
 # persistance de la nouvelle entrée dans l'inventaire des instances gitlab
-export ENTREE_INVENTAIRE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]"
+export ENTREE_INVENTAIRE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]"
 sudo rm -f $INVENTAIRE_GIROFLE.temp
 touch $INVENTAIRE_GIROFLE.temp
 sudo chown -R $USER:$USER $INVENTAIRE_GIROFLE.temp
