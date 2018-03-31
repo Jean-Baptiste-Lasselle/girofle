@@ -48,9 +48,10 @@
 # TODO: devra devenir un argument de l'invocatione n ligne de commande
 export CHEMIN_INVOCATION_BACK_UP="$(pwd)/operations-std/serveur/backup.sh"
 
+# Une fois toutes les 4 heures, pour la prod.
+export PLANIFICATION_DES_BCKUPS="* */4 * * *   $(pwd)/operations-std/serveur/backup.sh"
 # Une fois toutes les 3 minutes, pour les tests crontab
-# export PLANIFICATION_DES_BCKUPS="* */4 * * *   $(pwd)/operations-std/serveur/backup.sh"
-export PLANIFICATION_DES_BCKUPS="3 * * * * $CHEMIN_INVOCATION_BACK_UP"
+# export PLANIFICATION_DES_BCKUPS="3 * * * * $CHEMIN_INVOCATION_BACK_UP"
 
 
 rm -f ./operations-std/serveur/bckup.kytes
