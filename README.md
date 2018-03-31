@@ -6,21 +6,22 @@ J'ai accessoirement baptisé le pseudo-système "[Girofle](#)".
 
 Une fois installé, Girofle permet de créer autant de conteneurs [Gitlab](https://gitlab.io) qu'il y a d'interfaces réseau dans le système sous jacent 
 dans la même VM, et de pouvoir pour chacun:
-* comissioner une nouvelle instance gitlab, (en lui donnant éventuellement un nom, qui sera suffixé dans le nom du conteneur docker), et en retour on a l'url complète vers l'instace gitlab comissionnée.
-* dé-commissioner une nouvelle instance gitlab (pas la détruire sauvagement).
-* lister les instances gitlab
-* pour une instance gitlab, faire un backup local
-* pour une instance gitlab, faire un backup remote (vers un stockage qui peut être choisit)
-* pour une instance gitlab, faire un restore dans une autre VM, ou la même VM
-* pour une instance gitlab, à la comission, les backups locaux sont faits automatiquement (configurés comme une tâche réccurrente système crontab):
+* Comissioner une nouvelle instance gitlab, (en lui donnant éventuellement un nom, qui sera suffixé dans le nom du conteneur docker), et en retour on a l'url complète vers l'instance Gitlab comissionnée.
+* Dé-commissioner une nouvelle instance gitlab (pas la détruire sauvagement).
+* Lister les instances gitlab
+* Pour une instance gitlab, faire un backup local
+* Pour une instance gitlab, faire un backup remote (vers un stockage qui peut être choisit)
+* Pour une instance gitlab, faire un restore dans une autre VM, ou la même VM
+* Pour une instance gitlab, à la comission, les backups locaux sont faits automatiquement (configurés comme une tâche réccurrente système crontab):
 
 Girofle est testé pour les OS suivant:
 * CentOS 7
 
+
 ```
 # 1./ il faut ajouter la ligne:
 # 
-# => pour une toutes les 4 heures: [* */4 * * * "$(pwd)/operations-std/serveur/backup.sh"]
+# => Pour une toutes les 4 heures: [* */4 * * * "$(pwd)/operations-std/serveur/backup.sh"]
 #  
 # Au fichier crontab:
 # 
