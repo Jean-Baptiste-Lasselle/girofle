@@ -1,6 +1,6 @@
 # Girofle
 
-Cette recette provisionne un pseudo système, qui à l'utilisation se réduits à utiliser des scripts tous situés dans le même répertoire.
+Cette recette provisionne un pseudo système, qui à l'utilisation se réduit à utiliser des scripts tous situés dans le même répertoire.
 
 J'ai accessoirement baptisé le pseudo-système "[Girofle](#)".
 
@@ -176,7 +176,7 @@ Aux fonctionnalitrés [citées ci-dessus](#girofle), s'ajouteront celles du comp
 
 # POINT DE REPRISE
 
-L'erreur surlaquelle je tombe est avec la dernière verson est:
+L'erreur sur laquelle je tombe est avec la dernière version est:
 ```
 ./operations.sh: ligne57: ./docker-EASE-SPACE-BARE-METAL-SETUP.sh: Permission non accordée
 ```
