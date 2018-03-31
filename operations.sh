@@ -92,7 +92,7 @@ do
 sudo ip addr flush $NOM_INTERFACE_RESEAU >> $NOMFICHIERLOG
 # echo "reconfiguration: $NOM_INTERFACE_RESEAU"
 done
-
+sudo systemctl restart network
 }
 
 incrementerCompteurGirofle () {
