@@ -26,7 +26,14 @@ do
 # echo " FICHIER: /etc/sysconfig/network-scripts/$fichierconf"
 # ll $fichierconf
 # echo " "
-cat /etc/sysconfig/network-scripts/$fichierconf >> $FICHIERCONFRESEAUTEMP
+# cat /etc/sysconfig/network-scripts/$fichierconf >> $FICHIERCONFRESEAUTEMP
+sudo cp /etc/sysconfig/network-scripts/$fichierconf $FICHIERCONFRESEAUTEMP
+sudo chown -R $USER:$USER $FICHIERCONFRESEAUTEMP
+sudo chmod a-r-w-x   $FICHIERCONFRESEAUTEMP
+# pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
+sudo chmod u+r+w   $FICHIERCONFRESEAUTEMP
+sudo chmod g+r   $FICHIERCONFRESEAUTEMP
+
 echo 'NM_CONTROLLED="no"' >> $FICHIERCONFRESEAUTEMP
 sudo rm -f $fichierconf
 sudo cp -f $FICHIERCONFRESEAUTEMP $fichierconf
@@ -36,7 +43,7 @@ sudo chown -R root:root $fichierconf
 sudo chmod a-r-w-x   $fichierconf
 # pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
 sudo chmod u+r+w   $fichierconf
-sudo chmod g+w   $fichierconf
+sudo chmod g+r   $fichierconf
 
 # pour ne pas accumuler
 rm -f $FICHIERCONFRESEAUTEMP
