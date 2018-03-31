@@ -105,7 +105,9 @@ echo "nouvelleligne"  $COMPTEUR_GIROFLE
 #########################################							OPS								##########################################
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
-
+export UTILISATEUR_LINUX_GIROFLE
+# UTILISATEUR_LINUX_GIROFLE=girofle
+UTILISATEUR_LINUX_GIROFLE=$USER
 echo " provision-girofle-  COMMENCEE  - " >> $NOMFICHIERLOG
 # on crée le répertoire Girofle
 sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
@@ -123,7 +125,8 @@ sudo rm -f $INVENTAIRE_GIROFLE
 touch $INVENTAIRE_GIROFLE
 sudo chown -R $USER:$USER $INVENTAIRE_GIROFLE
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE
-sudo chmod g+r+w $INVENTAIRE_GIROFLE
+# sudo chmod g+r+w $INVENTAIRE_GIROFLE
+sudo chmod u+r+w $INVENTAIRE_GIROFLE
 
 # On rend exécutables les dépendances
 sudo chmod +x ./docker-EASE-SPACE-BARE-METAL-SETUP.sh

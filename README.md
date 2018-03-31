@@ -4,7 +4,7 @@ Cette recette provisionne un pseudo système, qui à l'utilisation se réduit à
 
 J'ai accessoirement baptisé le pseudo-système "[Girofle](#)".
 
-Ce pseudo système permet de créer autant de conteneurs [Gitlab](https://gitlab.io) qu'il y a d'interfaces réseau dans le système sous jacent (supporté pour l'instant: centos 7) 
+Une fois installé, Girofle permet de créer autant de conteneurs [Gitlab](https://gitlab.io) qu'il y a d'interfaces réseau dans le système sous jacent 
 dans la même VM, et de pouvoir pour chacun:
 * comissioner une nouvelle instance gitlab, (en lui donnant éventuellement un nom, qui sera suffixé dans le nom du conteneur docker), et en retour on a l'url complète vers l'instace gitlab comissionnée.
 * dé-commissioner une nouvelle instance gitlab (pas la détruire sauvagement).
@@ -13,6 +13,9 @@ dans la même VM, et de pouvoir pour chacun:
 * pour une instance gitlab, faire un backup remote (vers un stockage qui peut être choisit)
 * pour une instance gitlab, faire un restore dans une autre VM, ou la même VM
 * pour une instance gitlab, à la comission, les backups locaux sont faits automatiquement (configurés comme une tâche réccurrente système crontab):
+
+Girofle est testé pour les OS suivant:
+* CentOS 7
 
 ```
 # 1./ il faut ajouter la ligne:
