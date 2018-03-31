@@ -107,10 +107,9 @@ calculerProchainGitlabInstanceNumber () {
 	  echo " "
 	  # COMPTEURTEMP=$COMPTEURTEMP + 1
 	  ((COMPTEURTEMP=COMPTEURTEMP+1))
-	done <./fichiertest
+	done <$INVENTAIRE_GIROFLE
 	NEXT_GITLAB_INSTANCE_NUMBER=$COMPTEURTEMP
 	echo " +girofle+ [calculerProchainGitlabInstanceNumber ()] VALEUR FINALE [NEXT_GITLAB_INSTANCE_NUMBER=$NEXT_GITLAB_INSTANCE_NUMBER]" >> $NOMFICHIERLOG
-	echo " Binding Adresse IP choisit pour le serveur gitlab: $NO_PORT_IP_CHOISIT";
 }
 
 
@@ -138,9 +137,9 @@ CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/data
 CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/logs
 # - création des répertoires hôtes associés
 # sudo rm -rf $REPERTOIRE_GIROFLE
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 ##############################################################################################################################################
 
 ##############################################################################################################################################
@@ -155,9 +154,9 @@ CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB
 CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
 # - création des répertoires associés
 # sudo rm -rf $REPERTOIRE_GIROFLE
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 ##############################################################################################################################################
 
 
