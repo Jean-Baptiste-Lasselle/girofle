@@ -23,27 +23,27 @@ FICHIERCONFRESEAUTEMP=./confreseautemp.girofle
 rm -f $FICHIERCONFRESEAUTEMP
 for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
 do
-echo " FICHIER: /etc/sysconfig/network-scripts/$fichierconf" >> $NOMFICHIERLOG
+echo " FICHIER: $fichierconf" >> $NOMFICHIERLOG
 # ll $fichierconf
 # echo " "
 # cat /etc/sysconfig/network-scripts/$fichierconf >> $FICHIERCONFRESEAUTEMP
-sudo cp /etc/sysconfig/network-scripts/$fichierconf $FICHIERCONFRESEAUTEMP
+sudo cp $fichierconf $FICHIERCONFRESEAUTEMP
 sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $FICHIERCONFRESEAUTEMP
 sudo chmod a-r-w-x   $FICHIERCONFRESEAUTEMP
 # pour ne mette que le user de provisioning ait les droits en écriture et lecrture sur ce fichier temporaire
 sudo chmod u+r+w   $FICHIERCONFRESEAUTEMP
 sudo chmod g+r   $FICHIERCONFRESEAUTEMP
 echo 'NM_CONTROLLED="no"' >> $FICHIERCONFRESEAUTEMP
-sudo rm -f /etc/sysconfig/network-scripts/$fichierconf
-sudo cp -f $FICHIERCONFRESEAUTEMP /etc/sysconfig/network-scripts/$fichierconf
+sudo rm -f $fichierconf
+sudo cp -f $FICHIERCONFRESEAUTEMP $fichierconf
 
 # et on redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
-sudo chown -R root:root /etc/sysconfig/network-scripts/$fichierconf
+sudo chown -R root:root $fichierconf
 # on enlève tous les droits à tout le monde
-sudo chmod a-r-w-x   /etc/sysconfig/network-scripts/$fichierconf
+sudo chmod a-r-w-x   $fichierconf
 # pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
-sudo chmod u+r+w   /etc/sysconfig/network-scripts/$fichierconf
-sudo chmod g+r   /etc/sysconfig/network-scripts/$fichierconf
+sudo chmod u+r+w   $fichierconf
+sudo chmod g+r   $fichierconf
 
 # pour ne pas accumuler
 rm -f $FICHIERCONFRESEAUTEMP
