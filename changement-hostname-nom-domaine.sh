@@ -94,20 +94,35 @@ export NOMDEDOMAINE=prj-pms.girofle.io
 # ================================================
 # On commence par reconfiurer les interfaces réseau linux dans le CentOS, afin qu'elles ne soient plus controllées par le Network manager
 reconfigurer_interfaces_reseau
-# ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s3
+
 export FICHIERTEMP=./config-int-reseau.girofle
 
+# ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s3
 rm -f $FICHIERTEMP
 cat /etc/sysconfig/network-scripts/ifcfg-enp0s3 >> $FICHIERTEMP
-echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1    kytes-ssh.io" >> $FICHIERTEMP
+echo "HOSTNAME=kytes-ssh.io" >> $FICHIERTEMP
 sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s3
-
+sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s3
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s8
-echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3    kytes-alt2.io" >> /etc/sysconfig/network-scripts/ifcfg-enp0s8
+rm -f $FICHIERTEMP
+cat /etc/sysconfig/network-scripts/ifcfg-enp0s3 >> $FICHIERTEMP
+echo "HOSTNAME=kytes-alt1.io" >> $FICHIERTEMP
+sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s8
+sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s8
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s9
-echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-alt2.io" >> /etc/sysconfig/network-scripts/ifcfg-enp0s9
+rm -f $FICHIERTEMP
+cat /etc/sysconfig/network-scripts/ifcfg-enp0s9 >> $FICHIERTEMP
+echo "HOSTNAME=kytes-alt2.io" >> $FICHIERTEMP
+sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s9
+sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s9
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s10
-echo "$ADRESSE_IP_SRV_GITLAB    $NOMDEDOMAINE" >> /etc/sysconfig/network-scripts/ifcfg-enp0s10
+rm -f $FICHIERTEMP
+cat /etc/sysconfig/network-scripts/ifcfg-enp0s10 >> $FICHIERTEMP
+echo "HOSTNAME=$NOMDEDOMAINE" >> $FICHIERTEMP
+sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s10
+sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s10
+
+
 
 # sudo cp -f ./nouveau.fichier.hostname /etc/hostname
 # rm -f ./nouveau.fichier.hostname
@@ -117,10 +132,11 @@ echo "$ADRESSE_IP_SRV_GITLAB    $NOMDEDOMAINE" >> /etc/sysconfig/network-scripts
 # "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE"
 rm -f ./nouveau.fichier.hosts
 sudo cat /etc/hosts  >> ./nouveau.fichier.hosts
+sudo echo "# Interface réseau utilisée par l'instance Gitlab" >> ./nouveau.fichier.hosts
 sudo echo "$ADRESSE_IP_SRV_GITLAB    $NOMDEDOMAINE" >> ./nouveau.fichier.hosts
-# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1    kytes-ssh.io" >> ./nouveau.fichier.hosts
-# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3    kytes-alt1.io" >> ./nouveau.fichier.hosts
-# echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-alt2.io" >> ./nouveau.fichier.hosts
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1    kytes-ssh.io" >> ./nouveau.fichier.hosts
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3    kytes-alt1.io" >> ./nouveau.fichier.hosts
+echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-alt2.io" >> ./nouveau.fichier.hosts
 sudo rm -f /etc/hosts
 sudo cp -f ./nouveau.fichier.hosts /etc/hosts
 rm -f ./nouveau.fichier.hosts
