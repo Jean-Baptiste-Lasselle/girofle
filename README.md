@@ -48,11 +48,20 @@ echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
 
 # 2./ il faut redémarrer le système? (me souvient plus...) --> 
 
-# stdopsbckups
+# Client Girofle
 
-* client:
-  * save local
-  * push remote if there are more local commits  than remote
+L'utilisateur de Girafle utilisera un client.
+Le client Girofle peut être  provisionné dans la machine de l'utilisateur avec les outils connus suivants:
+- Chef.io,
+- Ansible
+- des scripts powershell et linux shell sont aussi supportés
+
+Avec le client Girofle:
+* le technicien IT pourra effectuer toutes les opérations qu'il est autorisé à faire, en tant quutilisateur Girofle
+* le non-technicien IT pourra utiliser ce client, dans un mode dit "restreint" (mode qui est configuré à la provision du client Girofle). Dans ce mode l'utilisateur pourra utiliser
+Git pour versionner son travail sur des documents divers, comme des documents de management, ou la prparation d'une présentation. Avec le client Girofle ainsi restreint, pourra alors 
+  * [save local]: en pressant ce bouton, l'utilisateur sauvegarde une nouvelle version des fichiers, dans leur état courant
+  * [push remote if there are more local commits  than remote]: lorsqu'il est connecté au serveur, il peut en presant un bouton, lancer une "synchronsiation": il s'agit d'un push Git. Que l'utilisateur non-IT voit comme un serveur de sauvegarde
   * resolve conflicts if there are more remote commits than local, with:
     * copy versioned directory to another, as backup
     * clone the remote
