@@ -34,17 +34,16 @@ sudo chmod a-r-w-x   $FICHIERCONFRESEAUTEMP
 sudo chmod u+r+w   $FICHIERCONFRESEAUTEMP
 sudo chmod g+r   $FICHIERCONFRESEAUTEMP
 echo 'NM_CONTROLLED="no"' >> $FICHIERCONFRESEAUTEMP
+sudo rm -f /etc/sysconfig/network-scripts/$fichierconf
+sudo cp -f $FICHIERCONFRESEAUTEMP /etc/sysconfig/network-scripts/$fichierconf
 
-
-sudo rm -f $fichierconf
-sudo cp -f $FICHIERCONFRESEAUTEMP $fichierconf
 # et on redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
-sudo chown -R root:root $fichierconf
+sudo chown -R root:root /etc/sysconfig/network-scripts/$fichierconf
 # on enlève tous les droits à tout le monde
-sudo chmod a-r-w-x   $fichierconf
+sudo chmod a-r-w-x   /etc/sysconfig/network-scripts/$fichierconf
 # pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
-sudo chmod u+r+w   $fichierconf
-sudo chmod g+r   $fichierconf
+sudo chmod u+r+w   /etc/sysconfig/network-scripts/$fichierconf
+sudo chmod g+r   /etc/sysconfig/network-scripts/$fichierconf
 
 # pour ne pas accumuler
 rm -f $FICHIERCONFRESEAUTEMP
