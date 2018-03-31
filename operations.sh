@@ -135,6 +135,7 @@ sudo chmod +x ./docker-EASE-SPACE-BARE-METAL-SETUP.sh
 sudo chmod +x ./installation-docker-gitlab.rectte-jibl.sh
 sudo chmod +x ./changement-hostname-nom-domaine.sh
 sudo chmod +x ./configurer-backup-automatique.sh
+sudo chmod +x ./relancer-reseau.sh
 # On s'assure de l'adresse et du numéro de port IP qui seront utilisés (par l'instance Gitlab qui sera créée)
 demander_addrIP
 demander_noPortIP
@@ -149,5 +150,6 @@ demander_noPortIP
 
 echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
 # relancer_reseau
+echo 'exécutez maintenant la commande: [./relancer-reseau.sh]'
 # echo 'exécutez maintenant : [sudo systemctl restart network]'
 
