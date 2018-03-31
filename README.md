@@ -7,7 +7,7 @@ J'ai accessoirement baptisé le pseudo-système "[Girofle](#)".
 Une fois installé, Girofle permet de créer autant de conteneurs [Gitlab](https://gitlab.io) qu'il y a d'interfaces réseau dans le système sous jacent 
 dans la même VM, et de pouvoir pour chacun:
 * Comissioner une nouvelle instance gitlab, (en lui donnant éventuellement un nom, qui sera suffixé dans le nom du conteneur docker), et en retour on a l'url complète vers l'instance Gitlab comissionnée.
-* Dé-commissioner une nouvelle instance gitlab (pas la détruire sauvagement).
+* Dé-commissioner une instance gitlab (pas la détruire sauvagement).
 * Lister les instances gitlab
 * Pour une instance gitlab, faire un backup local
 * Pour une instance gitlab, faire un backup remote (vers un stockage qui peut être choisit)
@@ -17,7 +17,7 @@ dans la même VM, et de pouvoir pour chacun:
 Girofle est testé pour les OS suivant:
 * CentOS 7
 
-
+<!-- 
 ```
 # 1./ il faut ajouter la ligne:
 # 
@@ -46,7 +46,7 @@ echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
 
 ```
 
-<!-- # 2./ il faut redémarrer le système? (me souvient plus...) --> 
+# 2./ il faut redémarrer le système? (me souvient plus...) --> 
 
 # stdopsbckups
 
