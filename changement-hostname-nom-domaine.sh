@@ -28,7 +28,7 @@ echo " FICHIER: /etc/sysconfig/network-scripts/$fichierconf" >> $NOMFICHIERLOG
 # echo " "
 # cat /etc/sysconfig/network-scripts/$fichierconf >> $FICHIERCONFRESEAUTEMP
 sudo cp /etc/sysconfig/network-scripts/$fichierconf $FICHIERCONFRESEAUTEMP
-sudo chown -R $USER:$USER $FICHIERCONFRESEAUTEMP
+sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $FICHIERCONFRESEAUTEMP
 sudo chmod a-r-w-x   $FICHIERCONFRESEAUTEMP
 # pour ne mette que le user de provisioning ait les droits en écriture et lecrture sur ce fichier temporaire
 sudo chmod u+r+w   $FICHIERCONFRESEAUTEMP

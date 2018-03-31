@@ -64,7 +64,7 @@ sudo systemctl restart network
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # export UTILISATEUR_LINUX_GIROFLE
 # # UTILISATEUR_LINUX_GIROFLE=girofle
-# UTILISATEUR_LINUX_GIROFLE=$USER
+# UTILISATEUR_LINUX_GIROFLE=$UTILISATEUR_LINUX_GIROFLE
 
 echo " provision-girofle-  -------------------------------------" >> $NOMFICHIERLOG
 echo " provision-girofle-  RELANCEMENT DU SERVICE RESEAU - DEBUT" >> $NOMFICHIERLOG

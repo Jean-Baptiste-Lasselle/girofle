@@ -125,7 +125,7 @@ sudo chmod g+r+w $COMPTEUR_GIROFLE
 # On initialise l'inventaire:
 sudo rm -f $INVENTAIRE_GIROFLE
 touch $INVENTAIRE_GIROFLE
-sudo chown -R $USER:$USER $INVENTAIRE_GIROFLE
+sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$USER $INVENTAIRE_GIROFLE
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE
 # sudo chmod g+r+w $INVENTAIRE_GIROFLE
 sudo chmod u+r+w $INVENTAIRE_GIROFLE
@@ -148,8 +148,6 @@ demander_noPortIP
 # Que la lumière soit! (pour activer les changemnts impactés dans [changement-hostname-nom-domaine.sh])
 
 echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
-relancer_reseau
-echo 'exécutez maintenant : [sudo systemctl restart network]'
-
-
+# relancer_reseau
+# echo 'exécutez maintenant : [sudo systemctl restart network]'
 
