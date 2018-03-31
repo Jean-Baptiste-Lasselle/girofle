@@ -198,7 +198,7 @@ sudo rm -f $INVENTAIRE_GIROFLE
 sudo cp -f $INVENTAIRE_GIROFLE.temp $INVENTAIRE_GIROFLE
 sudo chown -R $USER:$USER $INVENTAIRE_GIROFLE
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE
-sudo chmod g+r+w $INVENTAIRE_GIROFLE
+sudo chmod u+r+w $INVENTAIRE_GIROFLE
 
 
 
@@ -212,7 +212,7 @@ sudo rm -f $INVENTAIRE_GIROFLE
 sudo cp -f $INVENTAIRE_GIROFLE.temp $INVENTAIRE_GIROFLE
 sudo chown -R $USER:$USER $INVENTAIRE_GIROFLE
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE
-sudo chmod g+r+w $INVENTAIRE_GIROFLE
+sudo chmod u+r+w $INVENTAIRE_GIROFLE
 
 
 ##########################################################################################
