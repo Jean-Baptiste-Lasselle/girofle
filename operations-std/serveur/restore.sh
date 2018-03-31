@@ -198,19 +198,19 @@ sudo docker stop $NOM_CONTENEUR_DOCKER
 sudo docker rm $NOM_CONTENEUR_DOCKER
 
 # 2./ On détruis les répertoires du conteneur à backupper, pour les re-créer vierges
-sudo rm -rf $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
-sudo rm -rf $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
-sudo rm -rf $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
-sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
+rm -rf $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
+rm -rf $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
+rm -rf $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 
 # 3./ On copie le backup 
 # Pourquoi sudo? parce que l'utilisateur réalisant le backup, n'est pas forcément doté des droits nécessaires pour copier les fichiers exploités par le process gitlab.
 # Voir comissionner des utilisateurs linux plus fins.
-sudo cp -Rf $REP_BCKUP_CHOISIT/$REP_BCKUP/config $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR/*
-sudo cp -Rf $REP_BCKUP_CHOISIT/$REP_BCKUP/log $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR/*
-sudo cp -Rf $REP_BCKUP_CHOISIT/$REP_BCKUP/data $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR/*
+cp -Rf $REP_BCKUP_CHOISIT/$REP_BCKUP/config $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR/*
+cp -Rf $REP_BCKUP_CHOISIT/$REP_BCKUP/log $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR/*
+cp -Rf $REP_BCKUP_CHOISIT/$REP_BCKUP/data $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR/*
 
 # 4./ On relance un conteneur neuf, en liant ses volumes sur les répertoires backuppés.
 
@@ -225,6 +225,7 @@ sudo cp -Rf $REP_BCKUP_CHOISIT/$REP_BCKUP/data $CONTENEUR_GITLAB_MAPPING_HOTE_DA
 # sudo docker run --detach --hostname gitlab.$GITLAB_INSTANCE_NUMBER.kytes.io --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:8080:80 --publish 2227:22 --name $NOM_CONTENEUR_DOCKER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 # Mais maintenant, j'utilise le nom d'hôte de l'OS, pour régler la question du nom de domaine ppour accéder à l'instance gitlab en mode Web.
 # export NOMDHOTE=archiveur-prj-pms.io
+# Pour ce sudo là, il faut que le user "girofle" soit bien dans le groupe docker, pour pouvoir tout exécuter sans sudo 
 sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:80:80 --publish 2227:22 --name $NOM_CONTENEUR_DOCKER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
 
