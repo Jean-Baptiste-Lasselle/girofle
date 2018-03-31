@@ -14,7 +14,7 @@
 # 				 # le fichier de log des opérations
 #                >>>   export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
 # 				 # le répertoire d'exploitation Girofle
-#                >>>   export REP_GESTION_CONTENEURS_DOCKER=/girofle
+#                >>>   export REPERTOIRE_GIROFLE=/girofle
 # 				 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 

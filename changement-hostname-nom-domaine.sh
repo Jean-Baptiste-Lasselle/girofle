@@ -63,7 +63,7 @@ done
 # 				 # le fichier de log des opérations
 #                >>>   export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
 # 				 # le répertoire d'exploitation Girofle
-#                >>>   export REP_GESTION_CONTENEURS_DOCKER=/girofle
+#                >>>   export REPERTOIRE_GIROFLE=/girofle
 # 				 # le numéro de port de l'instance Gitalb de test supplémentaire
 #                >>>   export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=8880
 # --------------------------------------------------------------------------------------------------------------------------------------------

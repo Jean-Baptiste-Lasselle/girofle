@@ -13,7 +13,7 @@
 # 				 # le fichier de log des opérations
 #                >>>   export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
 # 				 # le répertoire d'exploitation Girofle
-#                >>>   export REP_GESTION_CONTENEURS_DOCKER=/girofle
+#                >>>   export REPERTOIRE_GIROFLE=/girofle
 # 				 # le numéro de port de l'instance Gitalb de test supplémentaire
 #                >>>   export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=8880
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ calculerProchainGitlabInstanceNumber
 #####		CONTENEUR 1
 ##############################################################################################################################################
 # - répertoire hôte dédié à l'instance Gitlab
-REP_GIROFLE_CONTENEUR_DOCKER=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
+REP_GIROFLE_CONTENEUR_DOCKER=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
 # - Nom du conteneur docker qui sera créé
 NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER
 # - répertoires hôte associés
@@ -137,7 +137,7 @@ CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/config
 CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/data
 CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/logs
 # - création des répertoires hôtes associés
-sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
+sudo rm -rf $REPERTOIRE_GIROFLE
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
@@ -147,14 +147,14 @@ sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 #####		CONTENEUR 2 ===>>>> Pour tests du nombre maximal d'instances serveurs possibles sur une même machine...
 ##############################################################################################################################################
 # - répertoire hôte dédié à l'instance Gitlab
-REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2
+REP_GIROFLE_CONTENEUR_DOCKER_SUPPLEMENTAIRE_POUR_TEST=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2
 NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
 # - répertoires associés
-CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
-CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
-CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
+CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
+CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
+CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
 # - création des répertoires associés
-# sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
+# sudo rm -rf $REPERTOIRE_GIROFLE
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
 sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR

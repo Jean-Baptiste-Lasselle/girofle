@@ -17,11 +17,11 @@ touch $NOMFICHIERLOG
 # ---------------------------------------
 # - répertoires  dans l'hôte docker
 # ---------------------------------------
-export REP_GESTION_CONTENEURS_DOCKER=/girofle
+export REPERTOIRE_GIROFLE=/girofle
 # pour l'auto-incrémentation: à chaque fois qu'une nouvelle instance est créée avec succès, une nouvelle ligne est ajoutée dans ce fichier
-export COMPTEUR_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/.auto-increment.girofle
+export COMPTEUR_GIROFLE=$REPERTOIRE_GIROFLE/.auto-increment.girofle
 # à remplacer par une petite bdd embarquée de type nosql, .h2, pour au moins avoir gestion des accès concconcurrents, et enfin à remplacer par [etcd]
-export INVENTAIRE_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/inventory.girofle
+export INVENTAIRE_GIROFLE=$REPERTOIRE_GIROFLE/inventory.girofle
 # ---------------------------------------
 # - instance Gitlab provisionnée
 # ---------------------------------------
@@ -110,10 +110,10 @@ export UTILISATEUR_LINUX_GIROFLE
 UTILISATEUR_LINUX_GIROFLE=$USER
 echo " provision-girofle-  COMMENCEE  - " >> $NOMFICHIERLOG
 # on crée le répertoire Girofle
-sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
-sudo mkdir -p $REP_GESTION_CONTENEURS_DOCKER
+sudo rm -rf $REPERTOIRE_GIROFLE
+sudo mkdir -p $REPERTOIRE_GIROFLE
 # On rend à César, ce qui est à César
-sudo chown -R $USER:$USER $REP_GESTION_CONTENEURS_DOCKER
+sudo chown -R $USER:$USER $REPERTOIRE_GIROFLE
 # On initialise le compteur Girofle:
 sudo rm -f $COMPTEUR_GIROFLE
 touch $COMPTEUR_GIROFLE

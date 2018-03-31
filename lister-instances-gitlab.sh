@@ -27,11 +27,11 @@
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # - répertoires  dans l'hôte docker
 # --------------------------------------------------------------------------------------------------------------------------------------------
-export REP_GESTION_CONTENEURS_DOCKER=/girofle
+export REPERTOIRE_GIROFLE=/girofle
 # pour l'auto-incrémentation: à chaque fois qu'une nouvelle instance est créée avec succès, une nouvelle ligne est ajoutée dans ce fichier
-export COMPTEUR_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/.auto-increment.girofle
+export COMPTEUR_GIROFLE=$REPERTOIRE_GIROFLE/.auto-increment.girofle
 # à remplacer par une petite bdd embarquée de type nosql, .h2, pour au moins avoir gestion des accès concconcurrents, et enfin à remplacer par [etcd]
-export INVENTAIRE_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/inventory.girofle
+export INVENTAIRE_GIROFLE=$REPERTOIRE_GIROFLE/inventory.girofle
 # le numéro de port IP qui sera utilisé par le connecteur HTTP de l'instance Gitlab
 export ADRESSE_IP_SRV_GITLAB
 # l'adresse IP qui sera utilisée par les connecteurs HTTP/HTTPS de l'instance Gitlab

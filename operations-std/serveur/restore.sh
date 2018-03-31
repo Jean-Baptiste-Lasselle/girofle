@@ -21,7 +21,7 @@
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # - répertoires  dans l'hôte docker
 # --------------------------------------------------------------------------------------------------------------------------------------------
-export REP_GESTION_CONTENEURS_DOCKER=/girofle
+export REPERTOIRE_GIROFLE=/girofle
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # - instance Gitlab concernée
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ export ADRESSE_IP_SRV_GITLAB
 # Numéro d'instance Gitlab: Doit s'auto-incrémenter
 # Pour implémenter l'uto-incrément, je vais utiliser une technique nulle: un
 # fichier, dans lequel je rajoute une ligne à chaque fois que je créée une nouvelle instance gitlab, que je compte ensuite, etc...
-export COMPTEUR_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/.auto-increment.girofle
+export COMPTEUR_GIROFLE=$REPERTOIRE_GIROFLE/.auto-increment.girofle
 GITLAB_INSTANCE_NUMBER=1
 
 demanderQuelleInstanceRestaurer () {
@@ -79,7 +79,7 @@ fi
 export NOM_CONTENEUR_DOCKER=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER
 
 # répertoire dédié au conteneur géré dans cette suite d'opérations
-export REP_GIROFLE_CONTENEUR_DOCKER=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
+export REP_GIROFLE_CONTENEUR_DOCKER=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
 
 # - répertoires associés
 CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/config
@@ -91,7 +91,7 @@ export REP_BCKUP_CONTENEUR_DOCKER=$REP_GIROFLE_CONTENEUR_DOCKER/bckups
 export REP_BCKUP
 
 
-# export REP_BCKUP_COURANT=$REP_GESTION_CONTENEURS_DOCKER/bckups/$OPSTIMESTAMP
+# export REP_BCKUP_COURANT=$REPERTOIRE_GIROFLE/bckups/$OPSTIMESTAMP
 
 # rm -rf $REP_BCKUP_COURANT
 # mkdir -p $REP_BCKUP_COURANT/log
@@ -103,7 +103,7 @@ export REP_BCKUP
 #           NOM_CONTENEUR_DOCKER <=> noms du répertoire [$REP_GIROFLE_CONTENEUR_DOCKER]
 # Sachant que al règle implicite est que pour chaque service gitlab, un conteneur est créé avec un nom, et un répertoire lui
 # est donné, [$REP_GIROFLE_CONTENEUR_DOCKER], dans lequel on a, pour chaque conteneurs, 5 sous répertoires en arbre:
-# [$REP_GESTION_CONTENEURS_DOCKER]
+# [$REPERTOIRE_GIROFLE]
 #				| 
 #				| 
 # 		[$REP_GIROFLE_CONTENEUR_DOCKER]

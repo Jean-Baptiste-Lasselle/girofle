@@ -42,7 +42,7 @@ export OPSTIMESTAMP=`date +"%d-%m-%Y-time-%Hh-%Mm-%Ss"`
 # - répertoires  dans l'hôte docker
 # ---------------------------------------
 
-export REP_GESTION_CONTENEURS_DOCKER=/girofle
+export REPERTOIRE_GIROFLE=/girofle
 # ---------------------------------------
 # - répertoires d'installation de gitlab
 # ---------------------------------------
@@ -62,7 +62,7 @@ fi
 # ---------------------------------------
 # - répertoire dédié au conteneur géré dans cette suite d'opérations
 # cf. demander_chemin_repertoire_giroflebckup ()
-export REP_GIROFLE_CONTENEUR_DOCKER=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
+export REP_GIROFLE_CONTENEUR_DOCKER=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
 # export REP_GIROFLE_CONTENEUR_DOCKER
 # - répertoire dédié au backups du conteneur géré dans cette suite d'opérations
 export REP_BCKUP_CONTENEUR_DOCKER=$REP_GIROFLE_CONTENEUR_DOCKER/bckups
@@ -74,11 +74,11 @@ export REP_BCKUP_COURANT=$REP_BCKUP_CONTENEUR_DOCKER/$OPSTIMESTAMP
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # 
 # - répertoires associés
-CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/config
-CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/data
-CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/logs
+CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/config
+CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/data
+CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/logs
 # - création des répertoires associés
-# sudo rm -rf $REP_GESTION_CONTENEURS_DOCKER
+# sudo rm -rf $REPERTOIRE_GIROFLE
 # sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
 # sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
 # sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
@@ -93,20 +93,20 @@ CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitla
 # afind ed emander interactivement à l'utilisatuer, d'idiquer le répertoire dédié au conteneur de l'isntance Gitlab.
 demander_chemin_repertoire_giroflebckup () {
 
-	echo "Dans le répertoire [$REP_GESTION_CONTENEURS_DOCKER], Quel est le "
+	echo "Dans le répertoire [$REPERTOIRE_GIROFLE], Quel est le "
 	echo "nom du répertoire girofle de l'instance Gitlab que vous souhaitez backupper?"
 	echo " "
 	echo "C'est l'un des suivants:"
 	echo " "
-	ll $REP_GESTION_CONTENEURS_DOCKER
+	ll $REPERTOIRE_GIROFLE
 	echo " "
 	echo " Part défaut, le répertoire girofle choisi sera:"
 	echo " "
-	ls -t $REP_GESTION_CONTENEURS_DOCKER | head -1
+	ls -t $REPERTOIRE_GIROFLE | head -1
 	echo " "
 	read REP_GIROFLE_INDIQUE
 	if [ "x$REP_GIROFLE_INDIQUE" = "x" ]; then
-       REP_GIROFLE_INDIQUE=$(ls -t $REP_GESTION_CONTENEURS_DOCKER | head -1)
+       REP_GIROFLE_INDIQUE=$(ls -t $REPERTOIRE_GIROFLE | head -1)
 	fi
 	
 	REP_GIROFLE_CONTENEUR_DOCKER=$REP_GIROFLE_INDIQUE
