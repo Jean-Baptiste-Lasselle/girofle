@@ -99,10 +99,10 @@ demander_noPortIP_InstanceTest () {
 
 # Cette fonction emts à jour la valeur de la vriable d'environnement [$NEXT_GITLAB_INSTANCE_NUMBER]
 calculerProchainGitlabInstanceNumber () {
-	COMPTEURTEMP=0
+	export COMPTEURTEMP=0
 	while read p; do
-	  echo "Ligne $COMPTEURTEMP : [$p]"
-	  echo " "
+	  echo "Ligne $COMPTEURTEMP : [$p]" >> $NOMFICHIERLOG
+	  echo " " >> $NOMFICHIERLOG
 	  # COMPTEURTEMP=$COMPTEURTEMP + 1
 	  ((COMPTEURTEMP=COMPTEURTEMP+1))
 	done <$INVENTAIRE_GIROFLE
