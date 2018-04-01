@@ -44,6 +44,9 @@ export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST
 # +++ >>> L'appel de cette fonction est rendu obligatoire par l'exécution de la fonction [reconfigurer_interfaces_reseau ()] du script [changement-hostname-nom-domaijne.sh]
 
 relancer_reseau () {
+# get rid of the network manager service
+sudo systemctl stop NetworkManager
+sudo systemctl disable NetworkManager
 
 # sudo systemctl stop network
 # obtenir la liste des interfaces réseaux, pour les re-démarrer
