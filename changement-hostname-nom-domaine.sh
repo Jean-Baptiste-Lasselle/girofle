@@ -23,7 +23,7 @@ FICHIERCONFRESEAUTEMP=./confreseautemp.girofle
 rm -f $FICHIERCONFRESEAUTEMP
 for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
 do
-echo " FICHIER: $fichierconf" >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interfaces_reseau()]+ FICHIER: $fichierconf" >> $NOMFICHIERLOG
 # ll $fichierconf
 # echo " "
 # cat /etc/sysconfig/network-scripts/$fichierconf >> $FICHIERCONFRESEAUTEMP
@@ -50,10 +50,32 @@ rm -f $FICHIERCONFRESEAUTEMP
 
 done
 
+}
 
+reinitialiser_droits_systeme_fichiers_conf_reseau () {
 
+for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
+do
+echo " +girofle+[reinitialiser_droits_systeme_fichiers_conf_reseau()]+ FICHIER: $fichierconf" >> $NOMFICHIERLOG
+# ll $fichierconf
+# echo " "
+# cat /etc/sysconfig/network-scripts/$fichierconf >> $FICHIERCONFRESEAUTEMP
+
+# ----------------------------------------------------------------------------
+# on redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
+# ----------------------------------------------------------------------------
+# 
+sudo chown -R root:root $fichierconf
+# on enlève tous les droits à tout le monde
+sudo chmod a-r-w-x   $fichierconf
+# pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
+sudo chmod u+r+w   $fichierconf
+sudo chmod g+r   $fichierconf
+
+done
 
 }
+
 
 
 
@@ -99,10 +121,13 @@ export NOMDEDOMAINE=prj-pms.girofle.io
 # echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-io-alt2" >> ./nouveau.fichier.hostname
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Pour configurer un hostname différent pour chaque interface réseau, il faudra éditer les fichiers:
 # 
-# ================================================
-# On commence par reconfiurer les interfaces réseau linux dans le CentOS, afin qu'elles ne soient plus controllées par le Network manager
+# =============================================================================================================================================
+# 1./ On commence par reconfigurerurer les interfaces réseau linux dans le CentOS, afin qu'elles ne soient plus controllées par le Network manager
+# =============================================================================================================================================
 reconfigurer_interfaces_reseau
-
+# =============================================================================================================================================
+# 2./ Puis on ajoute la configuration hostname spécififque à chaque interface réseau.
+# =============================================================================================================================================
 export FICHIERTEMP=./config-int-reseau.girofle
 
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s3
@@ -130,7 +155,32 @@ echo "HOSTNAME=$NOMDEDOMAINE" >> $FICHIERTEMP
 sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s10
 sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s10
 
+# on remet bien comme il faut les droits sur les fichiers dde conf réseau
+reinitialiser_droits_systeme_fichiers_conf_reseau
 
+# =============================================================================================================================================
+# 3./ Puis on configure le hostname principal /etc/hostname
+# =============================================================================================================================================
+export FICHIERTEMPHOSTNAME=./config-hostname-reseau.girofle
+rm -f $FICHIERTEMPHOSTNAME
+echo "$NOMDEDOMAINE" >> $FICHIERTEMPHOSTNAME
+sudo rm -f /etc/hostname
+sudo cp -f $FICHIERTEMPHOSTNAME /etc/hostname
+
+# hop, et on remet les bons droits sur /etc/hostname
+sudo chown -R root:root /etc/hostname
+# on enlève tous les droits à tout le monde
+sudo chmod a-r-w-x   /etc/hostname
+# pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
+sudo chmod u+r+w   /etc/hostname
+sudo chmod g+r   /etc/hostname
+
+# et bim, on active le hostname sans re-démarrage
+sudo hostname -F /etc/hostname
+
+# =============================================================================================================================================
+# 4./ Enfin, on configure les hostnames avec le fichier /etc/hosts
+# =============================================================================================================================================
 
 rm -f ./nouveau.fichier.hosts
 sudo cat /etc/hosts  >> ./nouveau.fichier.hosts
@@ -142,8 +192,13 @@ echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-alt2.io" >> ./nouveau.fichier.h
 sudo rm -f /etc/hosts
 sudo cp -f ./nouveau.fichier.hosts /etc/hosts
 rm -f ./nouveau.fichier.hosts
-# sudo echo "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE" >> /etc/hosts
-
+# hop, et on remet les bons droits sur /etc/hostname
+sudo chown -R root:root /etc/hosts
+# on enlève tous les droits à tout le monde
+sudo chmod a-r-w-x   /etc/hosts
+# pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
+sudo chmod u+r+w   /etc/hosts
+sudo chmod g+r   /etc/hosts
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------

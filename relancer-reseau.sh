@@ -42,8 +42,11 @@ export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Cette fonction permet de relancer le réseau, notamment pour relancer une requête DHCP, et mettre à jur le serveur de nom de domaine de la box FAI
 # +++ >>> L'appel de cette fonction est rendu obligatoire par l'exécution de la fonction [reconfigurer_interfaces_reseau ()] du script [changement-hostname-nom-domaijne.sh]
+
 relancer_reseau () {
-# comment obtenir la liste des interfaces réseaux, pour les re-démarrer
+
+# sudo systemctl stop network
+# obtenir la liste des interfaces réseaux, pour les re-démarrer
 ip addr >> ./listeinterfaces
 LISTE_NOMS_INTERFACES=$(awk  -F':' '/enp0s*/ {print $2; echo "okok"}' ./listeinterfaces|awk  -F':' '/enp0s*/ {print $1}'|awk '/enp0s*/ {$1=$1;print}')
 
@@ -52,7 +55,9 @@ do
 sudo ip addr flush $NOM_INTERFACE_RESEAU >> $NOMFICHIERLOG
 # echo "reconfiguration: $NOM_INTERFACE_RESEAU"
 done
+
 sudo systemctl restart network
+# sudo systemctl start network
 # echo 'exécutez maintenant : [sudo systemctl restart network]'
 
 }
