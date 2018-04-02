@@ -57,7 +57,7 @@ Le client Girofle peut être  provisionné dans la machine de l'utilisateur avec
 - des scripts powershell et linux shell sont aussi supportés
 
 Avec le client Girofle:
-* le technicien IT pourra effectuer toutes les opérations qu'il est autorisé à faire, en tant quutilisateur Girofle
+* le technicien IT pourra effectuer toutes les opérations qu'il est autorisé à faire, en tant qu'utilisateur  Girofle
 * le non-technicien IT pourra utiliser ce client, dans un mode dit "restreint" (mode qui est configuré à la provision du client Girofle). Dans ce mode l'utilisateur pourra utiliser
 Git pour versionner son travail sur des documents divers, comme des documents de management, ou la prparation d'une présentation. Avec le client Girofle ainsi restreint, pourra alors 
   * [save local]: en pressant ce bouton, l'utilisateur sauvegarde une nouvelle version des fichiers, dans leur état courant
