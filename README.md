@@ -42,21 +42,17 @@ Le client Girofle peut être  provisionné dans la machine de l'utilisateur avec
 
 Avec le client Girofle:
 * le technicien IT pourra effectuer toutes les opérations que 'il est autorisé à faire, en vertu de la gestion des autorisations Girofle.
-* le non-technicien IT pourra utiliser ce client, dans un mode dit "restreint" (mode qui est configuré à la provision du client Girofle). Dans ce mode l'utilisateur pourra utiliser
-Git pour versionner son travail sur des documents divers, comme des documents de management, ou la prparation d'une présentation. Avec le client Girofle ainsi restreint, pourra alors 
+* le non-technicien IT pourra utiliser ce client, dans un mode dit "restreint" (mode qui est configuré à la provision du client Girofle). Dans ce mode, l'utilisateur pourra utiliser
+Git pour versionner son travail sur des documents divers, comme des documents de management, ou la préparation d'une présentation. Dans ce mode restreint, l'utilisateur 
+utilise un dépôt Git, en étant le seul (personne d'autre ne `commit && push` sur ce repo). Les fonctionnalités du Client Girofle sont les suivantes:
   * [save local]: en pressant ce bouton, l'utilisateur sauvegarde une nouvelle version des fichiers, dans leur état courant
-  * [push remote if there are more local commits  than remote]: lorsqu'il est connecté au serveur, il peut en presant un bouton, lancer une "synchronsiation": il s'agit d'un push Git. Que l'utilisateur non-IT voit comme un serveur de sauvegarde
+  * [push remote if there are more local commits  than remote]: lorsqu'il est connecté au serveur, il peut en pressant un bouton, lancer une "synchronsiation": il s'agit d'un push Git. Que l'utilisateur non-IT voit comme un serveur de sauvegarde
   * resolve conflicts if there are more remote commits than local, with:
     * copy versioned directory to another, as backup
     * clone the remote
     * automatically present list of files missing or presenting differences
 	* automatically add missing files
 	* which will leave only a list of files with differences to remote
-* server:
-  * bakup gitlab data, config & log dir
-  * restore instance
-  * wikis not included, README.md versioned with source code
-  
   
 
 
@@ -69,7 +65,7 @@ Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'évit
 
 ## 1. Sur les opérations de backup/restore
 
-### Opérations standars d'exploitation
+### Opérations standard d'exploitation
 ```
 # La règle implicite est que pour chaque service gitlab, un conteneur est créé avec un nom, et un répertoire lui
 # est donné : [$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER].
@@ -110,9 +106,8 @@ Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'évit
 #    
 
 ```
-
+	
 L'opération standard de backup, `./operations-std/serveur/restore.sh`, peut-être invoquée avec ou sans arguments en ligne de commande:
-
 * si aucun argument n'est passé à `./operations-std/serveur/restore.sh`, il demande interactivement le nom du conteneur docker, et le chemin de son répertoire dédié (exemple: [`$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER`])
 * si un seul argument est passé, alors un message d'erreur est affiché, et l'aide affichée.
 * si deux arguments sont passés, alors:
@@ -121,15 +116,25 @@ L'opération standard de backup, `./operations-std/serveur/restore.sh`, peut-êt
     *  le répertoire indiqué existe dans le système,
     *  le répertoire indiqué contient un répertoire de nom "mapping-volumes", qui doit contenir aussi 3 répertoires "data", "config", "log", 
     *  le répertoire indiqué contient un répertoire de nom "bckups", qui doit contenir au moins un répertoire (un backup), qui lui-même doit contenir aussi 3 répertoires "data", "config", "log"
+L'opération standard de backup sauvegarde:
+* Les répertoires gitlab: `data`, `config` & `log`
+* Pour chaque repo Git, le wiki n'est pas inclut,
+* Les fichiers README.md sont sauvegardés, parce qu'ils sont versionnés avec les autres fichiers versionnés par le dépôt Git
+  
+### Utilsiateurs Linux provision Girofle
 
-* faire la création:
-  * d'un utilisateur linux qui effectue le provisioning de girofle
-  * d'un utilisateur linux qui sera utilisé pour exécuter girofle
+Modifier le provisionning Girofle, pour que le processus d'installation:
+* créée un utilisateur linux qui effectue le provisioning de Girofle
+* créée un utilisateur linux qui sera utilisé pour exécuter Girofle
 
-* faire un conteneur Docker dans lequel est fait tout ce qu'il y a à faire avec git. De cette manière, plus de git installé sur l'hôte, le conteneur de comissioning ainsi utilisé est détruit à la fin du commissioning, ne laissant que les logs des opérations. Ce qui permet au passage de ne pas créer d'utilisateur dédié au comissioning sur la machine hôte.
+### Conteneur Docker `girofle-provisioner`
 
-* Il faudra remplacer `$INVENTAIRE_GIROFLE` par une BDD NoSQL pour régler le problème d'accès concurrent, puis par /etcd
+Modifier le provisionning Girofle, pour que le processus d'installation se fasse à l'itérieur d'un conteneur Docker, dans 
+lequel est fait tout ce qu'il y a à faire avec git. De cette manière, plus de git installé sur l'hôte, le conteneur de comissionning ainsi utilisé est 
+détruit à la fin du commissioning, ne laissant que les logs des opérations. Ce qui permet au passage de ne pas créer d'utilisateur dédié au 
+comissioning sur la machine hôte.
 
+### Il faudra remplacer `$INVENTAIRE_GIROFLE` par une BDD NoSQL pour régler le problème d'accès concurrent, puis par /etcd
 
 
 ### Dépendances entre variables d'env.
