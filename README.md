@@ -17,37 +17,6 @@ dans la même VM, et de pouvoir pour chacun:
 Girofle est testé pour les OS suivant:
 * CentOS 7
 
-<!-- 
-```
-# 1./ il faut ajouter la ligne:
-# 
-# => Pour une toutes les 4 heures: [* */4 * * * "$(pwd)/operations-std/serveur/backup.sh"]
-#  
-# Au fichier crontab:
-# 
-# Mode manuel: sudo crontab -e
-# Mode silencieux:
-export PLANIFICATION_DES_BCKUPS="* */4 * * *   $(pwd)/operations-std/serveur/backup.sh"
-rm -f ./operations-std/serveur/bckup.kytes
-echo "$PLANIFICATION_DES_BCKUPS" >> ./operations-std/serveur/bckup.kytes
-crontab ./operations-std/serveur/bckup.kytes
-rm -f ./operations-std/serveur/bckup.kytes
-echo " provision-girofle- Le backup Girofle a été cofniguré pour  " >> $NOMFICHIERLOG
-echo " provision-girofle- s'exécuter automatiquent de la manière suivante: " >> $NOMFICHIERLOG
-echo " provision-girofle-  " >> $NOMFICHIERLOG
-crontab -l >> $NOMFICHIERLOG
-echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
-#    ANNEXE crontab quickies
-# => pour une fois par nuit: [* 1 * * * "$(pwd)/operations-std/serveur/backup.sh"]
-# => pour une toutes les 2 heures: [* */2 * * * "$(pwd)/operations-std/serveur/backup.sh"]
-# => pour une toutes les 4 heures: [* */4 * * * "$(pwd)/operations-std/serveur/backup.sh"]
-# => pour une fois par nuit: [*/5 */1 * * * "$(pwd)/operations-std/serveur/backup.sh"]
-# => Toutes les 15 minutes après 7 heures: [5 7 * * * "$(pwd)/operations-std/serveur/backup.sh" ]
-
-```
-
-# 2./ il faut redémarrer le système? (me souvient plus...) --> 
-
 # Client Girofle
 
 L'utilisateur de Girofle utilisera un client.
@@ -74,14 +43,21 @@ Git pour versionner son travail sur des documents divers, comme des documents de
   * wikis not included, README.md versioned with source code
   
   
-* launching ops
+# Installation
+
+Pour ce faire, exécutez, avec un utilisateur adminsitrateur, la commande suivante:
 
 ```
-# mkdir doc-pms && cd doc-pms && git clone "" . && sudo chmod +x ./operations.sh && ./operations.sh
+
 # mkdir doc-pms && cd doc-pms && git clone "https://github.com/Jean-Baptiste-Lasselle/girofle" . && sudo chmod +x ./operations.sh && ./operations.sh
 
 ```
 
+Le processus d'installation de Girofle vous demandera quelques informations interactivement, come l'adresse IP que vous souhaitez que votre instance Gitlab utilise.
+Le reste des opérations est automatisé.
+
+
+<!-- # mkdir doc-pms && cd doc-pms && git clone "" . && sudo chmod +x ./operations.sh && ./operations.sh -->
 # TODOs
 
 ## 0. Sécurité
