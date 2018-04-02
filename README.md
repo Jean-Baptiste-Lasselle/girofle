@@ -84,6 +84,10 @@ Git pour versionner son travail sur des documents divers, comme des documents de
 
 # TODOs
 
+## 0. Sécurité
+
+Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'éviter à l'utilisateur de se faire sniffer ses mots de passe Girofle sur le réseau interne, quelque soit l'attaquant.
+
 ## 1. Sur les opérations de backup/restore
 
 * Future règle à implémenter:
