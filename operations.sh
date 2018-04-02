@@ -139,6 +139,21 @@ sudo chmod +x ./relancer-reseau.sh
 # On s'assure de l'adresse et du numéro de port IP qui seront utilisés (par l'instance Gitlab qui sera créée)
 demander_addrIP
 demander_noPortIP
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------
+# ------	RECONFIGURATION DU RESEAU
+# ---------------------------------------------------------------------------------------------------------------------------------------------
+# 
+# En vertu de la recommandation officielle : 
+# 
+# https://success.docker.com/article/should-you-use-networkmanager
+# 
+# On désactive le NetworkManager, qui ne doit PAS être utilisé dnas un système hôte docker:
+sudo systemctl stop NetworkManager
+sudo systemctl disable NetworkManager
+# on ira jsuqu'à le désinstaller:
+sudo yum remove -y NetworkManager
+
 # On change config hostname/nomdomaine pour adopter girofle
 ./changement-hostname-nom-domaine.sh
 
