@@ -193,10 +193,7 @@ Aux fonctionnalitrés [citées ci-dessus](#girofle), s'ajouteront celles du comp
 
 # POINT DE REPRISE
 
-L'erreur sur laquelle je tombe est avec la dernière version est:
-```
-./operations.sh: ligne57: ./docker-EASE-SPACE-BARE-METAL-SETUP.sh: Permission non accordée
-```
+PAs d'erreur en cours de traitement.
 
 # MSCs
 
