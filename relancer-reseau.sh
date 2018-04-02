@@ -50,14 +50,14 @@ sudo systemctl disable NetworkManager
 
 # sudo systemctl stop network
 # obtenir la liste des interfaces réseaux, pour les re-démarrer
-ip addr >> ./listeinterfaces
-LISTE_NOMS_INTERFACES=$(awk  -F':' '/enp0s*/ {print $2; echo "okok"}' ./listeinterfaces|awk  -F':' '/enp0s*/ {print $1}'|awk '/enp0s*/ {$1=$1;print}')
+# ip addr >> ./listeinterfaces
+# LISTE_NOMS_INTERFACES=$(awk  -F':' '/enp0s*/ {print $2; echo "okok"}' ./listeinterfaces|awk  -F':' '/enp0s*/ {print $1}'|awk '/enp0s*/ {$1=$1;print}')
 
-for NOM_INTERFACE_RESEAU in $LISTE_NOMS_INTERFACES
-do
-sudo ip addr flush $NOM_INTERFACE_RESEAU >> $NOMFICHIERLOG
+# for NOM_INTERFACE_RESEAU in $LISTE_NOMS_INTERFACES
+# do
+# sudo ip addr flush $NOM_INTERFACE_RESEAU >> $NOMFICHIERLOG
 # echo "reconfiguration: $NOM_INTERFACE_RESEAU"
-done
+# done
 
 sudo systemctl restart network
 # sudo systemctl start network
