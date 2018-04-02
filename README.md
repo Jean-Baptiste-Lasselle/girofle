@@ -17,6 +17,21 @@ dans la même VM, et de pouvoir pour chacun:
 Girofle est testé pour les OS suivant:
 * CentOS 7
 
+# Installation
+
+Pour ce faire, exécutez, avec un utilisateur adminsitrateur, la commande suivante:
+
+```
+
+# mkdir doc-pms && cd doc-pms && git clone "https://github.com/Jean-Baptiste-Lasselle/girofle" . && sudo chmod +x ./operations.sh && ./operations.sh
+
+```
+
+Le processus d'installation de Girofle vous demandera quelques informations interactivement, come l'adresse IP que vous souhaitez que votre instance Gitlab utilise.
+Le reste des opérations est automatisé.
+
+<!-- # mkdir doc-pms && cd doc-pms && git clone "" . && sudo chmod +x ./operations.sh && ./operations.sh -->
+
 # Client Girofle
 
 L'utilisateur de Girofle utilisera un client.
@@ -43,21 +58,9 @@ Git pour versionner son travail sur des documents divers, comme des documents de
   * wikis not included, README.md versioned with source code
   
   
-# Installation
-
-Pour ce faire, exécutez, avec un utilisateur adminsitrateur, la commande suivante:
-
-```
-
-# mkdir doc-pms && cd doc-pms && git clone "https://github.com/Jean-Baptiste-Lasselle/girofle" . && sudo chmod +x ./operations.sh && ./operations.sh
-
-```
-
-Le processus d'installation de Girofle vous demandera quelques informations interactivement, come l'adresse IP que vous souhaitez que votre instance Gitlab utilise.
-Le reste des opérations est automatisé.
 
 
-<!-- # mkdir doc-pms && cd doc-pms && git clone "" . && sudo chmod +x ./operations.sh && ./operations.sh -->
+
 # TODOs
 
 ## 0. Sécurité
@@ -66,12 +69,12 @@ Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'évit
 
 ## 1. Sur les opérations de backup/restore
 
-### Règle implicite
+### Opérations standars d'exploitation
 ```
 # La règle implicite est que pour chaque service gitlab, un conteneur est créé avec un nom, et un répertoire lui
-# est donné : [$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER].
+# est donné : [$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER].
 # Dans lequel ce répertoire on a, pour chaque conteneur, 5 sous répertoires en arbre:
-# [$REP_GESTION_CONTENEURS_DOCKER]
+# [$REPERTOIRE_GIROFLE]
 #				| 
 #				| 
 # 		[noeud-gitlab-$GITLAB_INSTANCE_NUMBER]
@@ -103,14 +106,14 @@ Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'évit
 # 						|	   
 # 						|	      
 #    
-#    => les bckups devront être stockés dans [$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/bckups]
+#    => les bckups devront être stockés dans [$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/bckups]
 #    
 
 ```
 
 L'opération standard de backup, `./operations-std/serveur/restore.sh`, peut-être invoquée avec ou sans arguments en ligne de commande:
 
-* si aucun argument n'est passé à `./operations-std/serveur/restore.sh`, il demande interactivement le nom du conteneur docker, et le chemin de son répertoire dédié (exemple: [`$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER`])
+* si aucun argument n'est passé à `./operations-std/serveur/restore.sh`, il demande interactivement le nom du conteneur docker, et le chemin de son répertoire dédié (exemple: [`$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER`])
 * si un seul argument est passé, alors un message d'erreur est affiché, et l'aide affichée.
 * si deux arguments sont passés, alors:
   * le premier est considéré comme étant le nom du conteneur docker (et alors s'il la commande `docker ps -a` ne renvoie pas une sortie standard contenant le nom du conteneur, une erreur est levée)
@@ -139,7 +142,7 @@ Le fichier `./operations-std/serveur/restore.sh`, est pour le moment le point ex
 `$REP_GIROFLE_CONTENEUR_DOCKER` étant le nom du répertoire dédié au conteneur $NOM_CONTENEUR_DOCKER, exemple: 
 
 ```
-export REP_GIROFLE_CONTENEUR_DOCKER=$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
+export REP_GIROFLE_CONTENEUR_DOCKER=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
 ```
 
 Globalement les opérations standard utilisent donc 3 variables indépendantes:
@@ -151,7 +154,7 @@ Globalement les opérations standard utilisent donc 3 variables indépendantes:
 Et la donnée de la valeur de ces 3 variables est suffisante à Girofle pour déduire toute autre information à propos d'une instance répertoriée dans le fichier:
 
 ```
-	export INVENTAIRE_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/inventory.girofle
+	export INVENTAIRE_GIROFLE=$REPERTOIRE_GIROFLE/inventory.girofle
 ```
 
 Dans `./operations-std/serveur/restore.sh`, c'est la variable d'environnement `$ADRESSE_IP_SRV_GITLAB` qui correspond à `$ADRESSE_IP_DEDIEE_AU_SERVICE_GITLAB`
