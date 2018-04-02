@@ -32,7 +32,7 @@ rm -f ./operations-std/serveur/bckup.kytes
 echo "$PLANIFICATION_DES_BCKUPS" >> ./operations-std/serveur/bckup.kytes
 crontab ./operations-std/serveur/bckup.kytes
 rm -f ./operations-std/serveur/bckup.kytes
-echo " provision-girofle- Le backup Girafle a été cofniguré pour  " >> $NOMFICHIERLOG
+echo " provision-girofle- Le backup Girofle a été cofniguré pour  " >> $NOMFICHIERLOG
 echo " provision-girofle- s'exécuter automatiquent de la manière suivante: " >> $NOMFICHIERLOG
 echo " provision-girofle-  " >> $NOMFICHIERLOG
 crontab -l >> $NOMFICHIERLOG
@@ -50,7 +50,7 @@ echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
 
 # Client Girofle
 
-L'utilisateur de Girafle utilisera un client.
+L'utilisateur de Girofle utilisera un client.
 Le client Girofle peut être  provisionné dans la machine de l'utilisateur avec les outils connus suivants:
 - Chef.io,
 - Ansible
