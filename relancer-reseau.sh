@@ -12,8 +12,8 @@
 # - Logging des opérations
 # ---------------------------------------
 export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
-rm -f $NOMFICHIERLOG
-touch $NOMFICHIERLOG
+# rm -f $NOMFICHIERLOG
+# touch $NOMFICHIERLOG
 # ---------------------------------------
 # - répertoires  dans l'hôte docker
 # ---------------------------------------
