@@ -179,6 +179,7 @@ Aux fonctionnalitrés [citées ci-dessus](#girofle), s'ajouteront celles du comp
 
 
 Dernière erreur:
+
 ```
 ./installation-docker-gitlab.rectte-jibl.sh: ligne192:  +girofle+ INSTANCE GITLAB no. [1] + [ADRESSE_IP_SRV_GITLAB= ] +[NO_PORT_IP_SRV_GITLAB=80] + [REP_GIROFLE_INSTANCE_GITLAB=/girofle/noeud-gitlab-1] + [NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.1]: Aucun fichier ou dossier de ce type
 docker: Invalid ip address  : address  :: unexpected '[' in address.
