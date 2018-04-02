@@ -197,7 +197,7 @@ sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $INVENTAIRE_
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE.temp
 sudo chmod u+r+w $INVENTAIRE_GIROFLE.temp
 # on garde les entrées précédentes
-echo $INVENTAIRE_GIROFLE >> $INVENTAIRE_GIROFLE.temp
+cat $INVENTAIRE_GIROFLE >> $INVENTAIRE_GIROFLE.temp
 # on ajoute la nouvelle entrée
 echo $ENTREE_INVENTAIRE >> $INVENTAIRE_GIROFLE.temp
 sudo rm -f $INVENTAIRE_GIROFLE
@@ -220,7 +220,7 @@ sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $INVENTAIRE_
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE.temp
 sudo chmod u+r+w $INVENTAIRE_GIROFLE.temp
 # on garde les entrées précédentes
-echo $INVENTAIRE_GIROFLE >> $INVENTAIRE_GIROFLE.temp
+cat $INVENTAIRE_GIROFLE >> $INVENTAIRE_GIROFLE.temp
 # on ajoute la nouvelle entrée
 echo $ENTREE_INVENTAIRE >> $INVENTAIRE_GIROFLE.temp
 sudo rm -f $INVENTAIRE_GIROFLE
