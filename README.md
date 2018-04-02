@@ -187,7 +187,7 @@ Dans `./operations-std/serveur/restore.sh`, c'est la variable d'environnement `$
 Demander interactivement à l'utilisateur le nom du conteneur docker à backup/restore, ainsi que le chemin de son répertoire dédié
 
 
-# `gravity`
+# Quarks n `gravity`
 
 Girofle permettra de créer des multivers de galaxies Git.
 
