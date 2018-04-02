@@ -193,7 +193,7 @@ Aux fonctionnalitrés [citées ci-dessus](#girofle), s'ajouteront celles du comp
 
 # POINT DE REPRISE
 
-PAs d'erreur en cours de traitement.
+Pas d'erreur en cours de traitement.
 
 # MSCs
 
