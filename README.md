@@ -90,7 +90,7 @@ Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'évit
 
 ## 1. Sur les opérations de backup/restore
 
-* Future règle à implémenter:
+### Règle implicite
 ```
 # La règle implicite est que pour chaque service gitlab, un conteneur est créé avec un nom, et un répertoire lui
 # est donné : [$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER].
@@ -132,7 +132,28 @@ Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'évit
 
 ```
 
-* Dépendances entre variables d'env.
+L'opération standard de backup, `./operations-std/serveur/restore.sh`, peut-être invoquée avec ou sans arguments en ligne de commande:
+
+* si aucun argument n'est passé à `./operations-std/serveur/restore.sh`, il demande interactivement le nom du conteneur docker, et le chemin de son répertoire dédié (exemple: [`$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER`])
+* si un seul argument est passé, alors un message d'erreur est affiché, et l'aide affichée.
+* si deux arguments sont passés, alors:
+  * le premier est considéré comme étant le nom du conteneur docker (et alors s'il la commande `docker ps -a` ne renvoie pas une sortie standard contenant le nom du conteneur, une erreur est levée)
+  * le second est considéré comme étant le chemin du répertoire dédié du conteneur docker, et alors une erreur est levée si les conditions suivnates ne sont pas vérifiées:
+    *  le répertoire indiqué existe dans le système,
+    *  le répertoire indiqué contient un répertoire de nom "mapping-volumes", qui doit contenir aussi 3 répertoires "data", "config", "log", 
+    *  le répertoire indiqué contient un répertoire de nom "bckups", qui doit contenir au moins un répertoire (un backup), qui lui-même doit contenir aussi 3 répertoires "data", "config", "log"
+
+* faire la création:
+  * d'un utilisateur linux qui effectue le provisioning de girofle
+  * d'un utilisateur linux qui sera utilisé pour exécuter girofle
+
+* faire un conteneur Docker dans lequel est fait tout ce qu'il y a à faire avec git. De cette manière, plus de git installé sur l'hôte, le conteneur de comissioning ainsi utilisé est détruit à la fin du commissioning, ne laissant que les logs des opérations. Ce qui permet au passage de ne pas créer d'utilisateur dédié au comissioning sur la machine hôte.
+
+* Il faudra remplacer `$INVENTAIRE_GIROFLE` par une BDD NoSQL pour régler le problème d'accès concurrent, puis par /etcd
+
+
+
+### Dépendances entre variables d'env.
 
 Le fichier `./operations-std/serveur/restore.sh`, est pour le moment le point exact où est faite l'association entre: 
 
@@ -151,7 +172,7 @@ Globalement les opérations standard utilisent donc 3 variables indépendantes:
  $NOM_CONTENEUR_DOCKER <=> $REP_GIROFLE_CONTENEUR_DOCKER <=> $ADRESSE_IP_DEDIEE_AU_SERVICE_GITLAB
 ```
 
-Et la donnée de la valeur de ces 3 variables est suffisante à Girofle pour déduire toute autre information à propos d'une instance répertoirée dans le fichier:
+Et la donnée de la valeur de ces 3 variables est suffisante à Girofle pour déduire toute autre information à propos d'une instance répertoriée dans le fichier:
 
 ```
 	export INVENTAIRE_GIROFLE=$REP_GESTION_CONTENEURS_DOCKER/inventory.girofle
@@ -161,26 +182,10 @@ Dans `./operations-std/serveur/restore.sh`, c'est la variable d'environnement `$
 
 
 
-* À implémenter:
+
 
 Demander interactivement à l'utilisateur le nom du conteneur docker à backup/restore, ainsi que le chemin de son répertoire dédié
 
-De la sorte, l'association est déléguée intractivement ou avec arguments en ligne de commande:
-
-* si aucun argument n'est passé à `./operations-std/serveur/restore.sh`, il demande interactivement le nom du conteneur docker, et le chemin de son répertoire dédié (exemple: [`$REP_GESTION_CONTENEURS_DOCKER/noeud-gitlab-$GITLAB_INSTANCE_NUMBER`])
-* si un seul argument est passé, alors un message d'erreur est affiché, et l'aide affichée.
-* si deux arguments sont passés, alors:
-  * le premier est considéré comme étant le nom du conteneur docker (et alors s'il la commande `docker ps -a` ne renvoie pas une sortie standard contenant le nom du conteneur, une erreur est levée)
-  * le second est considéré comme étant le chemin du répertoire dédié du conteneur docker, et alors une erreur est levée si les conditions suivnates ne sont pas vérifiées:
-    *  le répertoire indiqué existe dans le système,
-    *  le répertoire indiqué contient un répertoire de nom "mapping-volumes", qui doit contenir aussi 3 répertoires "data", "config", "log", 
-    *  le répertoire indiqué contient un répertoire de nom "bckups", qui doit contenir au moins un répertoire (un backup), qui lui-même doit contenir aussi 3 répertoires "data", "config", "log"
-
-* faire la création:
-  * d'un utilisateur linux qui effectue le provisioning de girofle
-  * d'un utilisateur linux qui sera utilisé pour exécuter girofle
-
-* faire un conteneur docker dans lequel je mettrai le git pour faire tout ce qu'il y a à faire avec git. De cette manière, plus de git installé sur l'hôte, le conteneur de comissioning ainsi utilisé est détruit à la fin du commissioning, ne laissant que les logs des opérations. Ce qui permet au passage de ne pas créer d'utilisateur dédié au comissioning sur la machine hôte.
 
 # `gravity`
 
@@ -193,11 +198,8 @@ Aux fonctionnalitrés [citées ci-dessus](#girofle), s'ajouteront celles du comp
 
 # POINT DE REPRISE
 
-Pas d'erreur en cours de traitement.
-
-# MSCs
-
-Il faudra remplacer `$INVENTAIRE_GIROFLE` par une BDD NoSQL pour régler le problème d'accès concurrent, puis par /etcd
+=> tests inventory.girofle
+=> tests restore/backup
 
 # ANNEXE: Docker et CentOS
 
