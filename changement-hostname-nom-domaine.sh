@@ -76,17 +76,6 @@ done
 
 }
 
-# BROUILLON 
-# for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
-# do
-# echo " +girofle+  FICHIER: $fichierconf"
-# sudo cat $fichierconf
-# sudo nmcli con load $fichierconf
-# done
-
-
-
-
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -139,16 +128,48 @@ reconfigurer_interfaces_reseau
 export FICHIERTEMP=./config-int-reseau.girofle
 
 
-for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
-do
+# for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
+# do
 
-rm -f $FICHIERTEMP
-sudo cat $fichierconf >> $FICHIERTEMP
-echo "HOSTNAME=kytes-ssh.io" >> $FICHIERTEMP
-sudo rm -f $fichierconf
-sudo cp -f $FICHIERTEMP $fichierconf
+# rm -f $FICHIERTEMP
+# sudo cat $fichierconf >> $FICHIERTEMP
+# echo "HOSTNAME=kytes-ssh.io" >> $FICHIERTEMP
+# sudo rm -f $fichierconf
+# sudo cp -f $FICHIERTEMP $fichierconf
 
-done
+# done
+
+
+ # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s3
+ rm -f $FICHIERTEMP
+-cat /etc/sysconfig/network-scripts/ifcfg-enp0s3 >> $FICHIERTEMP
++sudo cat /etc/sysconfig/network-scripts/ifcfg-enp0s3 >> $FICHIERTEMP
+ echo "HOSTNAME=kytes-ssh.io" >> $FICHIERTEMP
+ sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s3
+ sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s3
+ # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s8
+ rm -f $FICHIERTEMP
+-cat /etc/sysconfig/network-scripts/ifcfg-enp0s8 >> $FICHIERTEMP
++sudo cat /etc/sysconfig/network-scripts/ifcfg-enp0s8 >> $FICHIERTEMP
+ echo "HOSTNAME=kytes-alt1.io" >> $FICHIERTEMP
+ sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s8
+ sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s8
+ # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s9
+ rm -f $FICHIERTEMP
+-cat /etc/sysconfig/network-scripts/ifcfg-enp0s9 >> $FICHIERTEMP
++sudo cat /etc/sysconfig/network-scripts/ifcfg-enp0s9 >> $FICHIERTEMP
+ echo "HOSTNAME=kytes-alt2.io" >> $FICHIERTEMP
+ sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s9
+ sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s9
+ # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s10
+ rm -f $FICHIERTEMP
+-cat /etc/sysconfig/network-scripts/ifcfg-enp0s10 >> $FICHIERTEMP
++sudo cat /etc/sysconfig/network-scripts/ifcfg-enp0s10 >> $FICHIERTEMP
+ echo "HOSTNAME=$NOMDEDOMAINE" >> $FICHIERTEMP
+ sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s10
+ sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s10
+
+
 
 # on remet bien comme il faut les droits sur les fichiers dde conf réseau
 reinitialiser_droits_systeme_fichiers_conf_reseau

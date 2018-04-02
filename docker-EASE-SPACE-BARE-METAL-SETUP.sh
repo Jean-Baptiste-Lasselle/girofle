@@ -60,6 +60,7 @@ sudo yum --enablerepo=extras install -y epel-release
 sudo yum update -y && sudo yum clean all -y && sudo yum update -y
 sudo chmod +x installation-docker-ce-not-production-env.sh
 sudo ./installation-docker-ce-not-production-env.sh
+UTILISATEUR_LINUX_GIROFLE=$USER
 sudo usermod -aG docker $UTILISATEUR_LINUX_GIROFLE
 # 
 sudo systemctl enable docker

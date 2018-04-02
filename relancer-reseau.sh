@@ -46,12 +46,12 @@ export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST
 relancer_reseau () {
 
 # BROUILLON 
-for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
-do
-echo " +girofle+  FICHIER: $fichierconf"
-sudo cat $fichierconf
-sudo nmcli con load $fichierconf
-done
+# for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
+# do
+# echo " +girofle+  FICHIER: $fichierconf"
+# sudo cat $fichierconf
+# sudo nmcli con load $fichierconf
+# done
 
 # get rid of the network manager service
 # sudo systemctl stop NetworkManager
@@ -68,7 +68,7 @@ done
 # echo "reconfiguration: $NOM_INTERFACE_RESEAU"
 # done
 
-# sudo systemctl restart network
+sudo systemctl restart network
 # sudo systemctl start network
 # echo 'exécutez maintenant : [sudo systemctl restart network]'
 
