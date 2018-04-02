@@ -157,13 +157,13 @@ sudo yum remove -y NetworkManager
 # On change config hostname/nomdomaine pour adopter girofle
 ./changement-hostname-nom-domaine.sh
 
-echo "PAUSE DEBUG - CONFIG RESEAU - AVANT RELANCE RESEAU "
-read DEBUG
+# echo "PAUSE DEBUG - CONFIG RESEAU - AVANT RELANCE RESEAU "
+# read DEBUG
 
 ./relancer-reseau.sh
 
-echo "PAUSE DEBUG - CONFIG RESEAU - APRES RELANCE RESEAU "
-read DEBUG
+# echo "PAUSE DEBUG - CONFIG RESEAU - APRES RELANCE RESEAU "
+# read DEBUG
 
 
 # prod:
