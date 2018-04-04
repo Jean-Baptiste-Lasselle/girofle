@@ -79,23 +79,7 @@ export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2
 #########################################							FONCTIONS						##########################################
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
-# Cette fonction permet de demander iteractivement à l'utilisateur du
-# script, quel numéro de port IP, la seconde instance Gitlab de Test pourra utiliser dans l'hôte Docker
-demander_noPortIP_InstanceTest () {
-
-	echo "À l'adresse IP [$ADRESSE_IP_SRV_GITLAB], quel numéro de port IP souhaitez-vous que l'instance gitlab TEST utilise?"
-	echo "Vous devez choisir un numéro de port, par exemple entre 2000 et 60 000, différent du numéro "
-	echo "de port utilisé par l'instance Gitlab provisionnée en même temps: [$NO_PORT_IP_SRV_GITLAB]"
-	echo " "
-	read NO_PORT_IP_CHOISIT
-	if [ "x$NO_PORT_IP_CHOISIT" = "x" ]; then
-       NO_PORT_IP_CHOISIT=8080
-	fi
-	
-	NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_CHOISIT
-	echo " Binding Adresse IP choisit pour le serveur gitlab de tests: $NO_PORT_IP_CHOISIT";
-}
-
+# 
 # Cette fonction mets à jour la valeur de la variable d'environnement [$NEXT_GITLAB_INSTANCE_NUMBER]
 calculerProchainGitlabInstanceNumber () {
 	export COMPTEURTEMP=0
@@ -118,7 +102,7 @@ calculerProchainGitlabInstanceNumber () {
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # 
 calculerProchainGitlabInstanceNumber
-demander_noPortIP_InstanceTest
+# demander_noPortIP_InstanceTest
 
 
 ##############################################################################################################################################
