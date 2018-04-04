@@ -209,9 +209,22 @@ sudo docker cp $NOM_DU_CONTENEUR_CREE:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.giro
 
 sudo sed -i "s/external_url 'GENERATED_EXTERNAL_URL'/external_url \"http:\/\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB\"/g" ./etc.gitlab.rb.girofle
 
-sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_CREE:/etc/gitlab/gitlab.rb
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  contenu fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION : - " >> $NOMFICHIERLOG
+echo " provision-girofle-  DEBUT fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION - " >> $NOMFICHIERLOG
+cat ./etc.gitlab.rb.girofle >> $NOMFICHIERLOG
+echo " provision-girofle-  FIN   fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION - " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+
+sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_CREE:.
+sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "rm -f /etc/gitlab/gitlab.rb"
+sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb"
+sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "rm -f ./etc.gitlab.rb.girofle"
 sudo docker restart $NOM_DU_CONTENEUR_CREE
 sudo rm -f ./etc.gitlab.rb.girofle
+
 
 ##########################################################################################
 ##########################################################################################
@@ -241,6 +254,15 @@ sudo chmod u+r+w $INVENTAIRE_GIROFLE
 
 
 
+##########################################################################################
+#								LOGS CONFIG INSTANCE GITLAB							   	 #
+##########################################################################################
+
+echo " provision-girofle-  contenu fichier config [/etc/gitlab/gitlab.rb] instance GITLAB: - " >> $NOMFICHIERLOG
+echo " provision-girofle-  DEBUT fichier config [/etc/gitlab/gitlab.rb] - " >> $NOMFICHIERLOG
+sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "more /etc/gitlab/gitlab.rb" >> $NOMFICHIERLOG
+echo " provision-girofle-  FIN fichier config [/etc/gitlab/gitlab.rb] - " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
 ##########################################################################################
 #			configuration du nom de domaine pou l'accès à l'instance gitlab   		   	 #  
 ##########################################################################################
