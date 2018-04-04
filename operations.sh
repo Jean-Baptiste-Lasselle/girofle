@@ -25,6 +25,9 @@ export INVENTAIRE_GIROFLE=$REPERTOIRE_GIROFLE/inventory.girofle
 # ---------------------------------------
 # - instance Gitlab provisionnée
 # ---------------------------------------
+# le nom de domaine par lequel sera accédée la premièe instance Gitlab lancée par Girofle:
+#" Celle provisionnée à l'installation de girofle.
+export NOMDEDOMAINE_INSTANCE_GITLAB=prj-pms.girofle.io
 # l'adresse IP qui sera utilisée par les connecteurs HTTP/HTTPS de l'instance Gitlab
 export ADRESSE_IP_SRV_GITLAB
 # le numéro de port IP qui sera utilisé par le connecteur HTTP de l'instance Gitlab
@@ -78,7 +81,7 @@ demander_noPortIP () {
 }
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
-# Cette fonction permet de demander iteractivement à l'utilisateur du
+# Cette fonction permet de demander interactivement à l'utilisateur du
 # script, quel numéro de port IP, la seconde instance Gitlab de Test pourra utiliser dans l'hôte Docker
 demander_noPortIP_InstanceTest () {
 
@@ -93,6 +96,22 @@ demander_noPortIP_InstanceTest () {
 	
 	NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_CHOISIT
 	echo " Binding Adresse IP choisit pour le serveur gitlab de tests: $NO_PORT_IP_CHOISIT";
+}
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# Cette fonction permet de demander interactivement à l'utilisateur du
+# script, quel nom de domaine il souhaite utilsier pour l'accès aux instances Gitlab de Girofle.
+demander_nomDomaineSouhaite () {
+
+	echo "Quel nom de domaine souhaitez-vous que l'instance gitlab provisionnée à l'installation de Girofle utilise?"
+	echo "(Appuyez simpmlement sur la touche entrée pour appliquer la valeur par défaut: [girofle.io]) "
+	echo " "
+	read NOM_DOMAINE_CHOISIT
+	if [ "x$NO_PORT_IP_CHOISIT" = "x" ]; then
+       NOM_DOMAINE_CHOISIT=girofle.io
+	fi
+	
+	NOMDEDOMAINE_INSTANCE_GITLAB=$NOM_DOMAINE_CHOISIT
+	echo " Binding Adresse IP choisit pour le serveur gitlab de tests: $NOM_DOMAINE_CHOISIT";
 }
 
 
@@ -154,6 +173,7 @@ sudo chmod +x ./changement-hostname-nom-domaine.sh
 sudo chmod +x ./configurer-backup-automatique.sh
 sudo chmod +x ./relancer-reseau.sh
 # On s'assure de l'adresse et du numéro de port IP qui seront utilisés (par l'instance Gitlab qui sera créée)
+demander_nomDomaineSouhaite
 demander_addrIP
 demander_noPortIP
 demander_noPortIP_InstanceTest
@@ -198,7 +218,7 @@ echo "   "
 cat $NOMFICHIERLOG
 echo "   "
 echo " provision-girofle-  Etats des conteneurs Girofle: "
-docker ps -a
+sudo docker ps -a
 echo "   "
 
 # relancer_reseau

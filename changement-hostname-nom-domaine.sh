@@ -93,6 +93,9 @@ done
 #                >>>   export REPERTOIRE_GIROFLE=/girofle
 # 				 # le numéro de port de l'instance Gitalb de test supplémentaire
 #                >>>   export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=8880
+# 				 # le nom de domaine de l'instance Gitlab et de l'insance gitlab de test
+#                >>>   export NOMDEDOMAINE_INSTANCE_GITLAB=prj-pms.girofle.io
+
 # --------------------------------------------------------------------------------------------------------------------------------------------
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -107,12 +110,12 @@ ADRESSE_IP_LINUX_NET_INTERFACE_4=192.168.1.34
 
 ##############################################################################################################################################
 
-export NOMDEDOMAINE=prj-pms.girofle.io
+# 
 # - le fichier "/etc/hostname" ne doit contenir que la seule ligne suivante:
-# "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE"
+# "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE_INSTANCE_GITLAB"
 # sudo rm -f /etc/hostname
 # rm -f  ./nouveau.fichier.hostname
-# echo "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE" >> ./nouveau.fichier.hostname
+# echo "$ADRESSE_IP_SRV_GITLAB   $NOMDEDOMAINE_INSTANCE_GITLAB" >> ./nouveau.fichier.hostname
 # echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1    kytes-io-ssh" >> ./nouveau.fichier.hostname
 # echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3    kytes-io-alt1" >> ./nouveau.fichier.hostname
 # echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-io-alt2" >> ./nouveau.fichier.hostname
@@ -161,7 +164,7 @@ sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s9
  # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s10
 rm -f $FICHIERTEMP
 sudo cat /etc/sysconfig/network-scripts/ifcfg-enp0s10 >> $FICHIERTEMP
-echo "HOSTNAME=$NOMDEDOMAINE" >> $FICHIERTEMP
+echo "HOSTNAME=$NOMDEDOMAINE_INSTANCE_GITLAB" >> $FICHIERTEMP
 sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s10
 sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s10
 
@@ -175,7 +178,7 @@ reinitialiser_droits_systeme_fichiers_conf_reseau
 # =============================================================================================================================================
 export FICHIERTEMPHOSTNAME=./config-hostname-reseau.girofle
 rm -f $FICHIERTEMPHOSTNAME
-echo "$NOMDEDOMAINE" >> $FICHIERTEMPHOSTNAME
+echo "$NOMDEDOMAINE_INSTANCE_GITLAB" >> $FICHIERTEMPHOSTNAME
 sudo rm -f /etc/hostname
 sudo cp -f $FICHIERTEMPHOSTNAME /etc/hostname
 
@@ -197,7 +200,7 @@ sudo hostname -F /etc/hostname
 rm -f ./nouveau.fichier.hosts
 sudo cat /etc/hosts  >> ./nouveau.fichier.hosts
 sudo echo "# Interface réseau utilisée par l'instance Gitlab" >> ./nouveau.fichier.hosts
-sudo echo "$ADRESSE_IP_SRV_GITLAB    $NOMDEDOMAINE" >> ./nouveau.fichier.hosts
+sudo echo "$ADRESSE_IP_SRV_GITLAB    $NOMDEDOMAINE_INSTANCE_GITLAB" >> ./nouveau.fichier.hosts
 echo "$ADRESSE_IP_LINUX_NET_INTERFACE_1    kytes-ssh.io" >> ./nouveau.fichier.hosts
 echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3    kytes-alt1.io" >> ./nouveau.fichier.hosts
 echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-alt2.io" >> ./nouveau.fichier.hosts
@@ -233,7 +236,7 @@ sudo chmod g+r   /etc/hosts
 # [jibl@pc-136 ~]$ hostname --domain
 # prj.pms
 # [jibl@pc-136 ~]$  hostname --fqdn
-# $NOMDEDOMAINE
+# $NOMDEDOMAINE_INSTANCE_GITLAB
 # [jibl@pc-136 ~]$ hostname --ip-address
 # 192.168.1.32
 # [jibl@pc-136 ~]$
@@ -252,7 +255,7 @@ sudo chmod g+r   /etc/hosts
 #
 # sudo docker run --detach --hostname gitlab.$GITLAB_INSTANCE_NUMBER.kytes.io --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:8080:80 --publish 2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 # Mais maintenant, j'utilise le nom d'hôte de l'OS, pour régler la question du nom de domaine ppour accéder à l'instance gitlab en mode Web.
-# export NOMDHOTE=$NOMDEDOMAINE
+# export NOMDHOTE=$NOMDEDOMAINE_INSTANCE_GITLAB
 # sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:80:80 --publish 2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
 
