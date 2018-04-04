@@ -219,6 +219,9 @@ cat $NOMFICHIERLOG
 echo "   "
 echo " provision-girofle-  Etats des conteneurs Girofle: "
 sudo docker ps -a
+echo " provision-girofle-  Etats des conteneurs Girofle: "
+
+
 echo "   "
 
 # relancer_reseau
