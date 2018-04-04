@@ -186,7 +186,13 @@ echo " +girofle+ Verification adresse IP: [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV
 echo " +girofle+ Verification no. Port IP: [NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SRV_GITLAB] " >> $NOMFICHIERLOG
 echo " +girofle+ Verification no. Port IP: [NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] " >> $NOMFICHIERLOG
 
-# instance à la demande
+
+##########################################################################################
+##########################################################################################
+#						instance gitlab provisionnée						   		   	 #
+##########################################################################################
+##########################################################################################
+# 
 sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB:80 --publish $ADRESSE_IP_SRV_GITLAB:2227:22 --name $NOM_DU_CONTENEUR_CREE --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
 # persistance de la nouvelle entrée dans l'inventaire des instances gitlab
@@ -207,9 +213,27 @@ sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $INVENTAIRE_
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE
 sudo chmod u+r+w $INVENTAIRE_GIROFLE
 
+##########################################################################################
+#			configuration du nom de domaine pou l'accès à l'instance gitlab   		   	 #  
+##########################################################################################
 
+sudo rm -f ./etc.gitlab.rb.girofle
+sudo docker cp $NOM_DU_CONTENEUR_CREE:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle
 
-# instance supplémentaire de test
+# sed -i 's/external_url "*"/external_url "http://$HOSTNAME:$NO_PORT_IP_SRV_GITLAB"/g' ./etc.gitlab.rb.recup.jibl
+
+sudo sed -i "s/external_url 'GENERATED_EXTERNAL_URL'/external_url \"http:\/\/$HOSTNAME:$NO_PORT_IP_SRV_GITLAB\"/g" ./etc.gitlab.rb.girofle
+
+sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_CREE:/etc/gitlab/gitlab.rb
+sudo docker restart $NOM_DU_CONTENEUR_CREE
+sudo rm -f ./etc.gitlab.rb.girofle
+
+##########################################################################################
+##########################################################################################
+#						instance supplémentaire de test						   		   	 #
+##########################################################################################
+##########################################################################################
+# 
 sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
 # persistance de la nouvelle entrée dans l'inventaire des instances gitlab
@@ -231,18 +255,6 @@ sudo chmod a-r-w-x $INVENTAIRE_GIROFLE
 sudo chmod u+r+w $INVENTAIRE_GIROFLE
 
 
-##########################################################################################
-#			configuration du nom de domaine pou l'accès à l'instance gitlab   		   	 #  
-##########################################################################################
-
-sudo docker cp $NOM_DU_CONTENEUR_CREE:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle
-
-# sed -i 's/external_url "*"/external_url "http://$HOSTNAME:$NO_PORT_IP_SRV_GITLAB"/g' ./etc.gitlab.rb.recup.jibl
-
-sed -i "s/external_url 'GENERATED_EXTERNAL_URL'/external_url \"http:\/\/$HOSTNAME:$NO_PORT_IP_SRV_GITLAB\"/g" ./etc.gitlab.rb.girofle
-
-sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_CREE:/etc/gitlab/gitlab.rb
-sudo docker restart $NOM_DU_CONTENEUR_CREE
 
 ##########################################################################################
 #			configuration du nom de domaine pou l'accès à l'instance gitlab   		   	 #  
