@@ -175,6 +175,6 @@ sudo yum remove -y NetworkManager
 
 echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
 # relancer_reseau
-echo 'exécutez maintenant la commande: [./relancer-reseau.sh]'
+# echo 'exécutez maintenant la commande: [./relancer-reseau.sh]'
 # echo 'exécutez maintenant : [sudo systemctl restart network]'
 
