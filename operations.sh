@@ -67,7 +67,6 @@ demander_noPortIP () {
 	echo "Quel numéro de port IP souhaitez-vous que l'instance gitlab utilise?"
 	echo "Ce numéro de port doit être compris entre 1000 et 65535, et ne  pas être dans la liste suivante:"
 	# echo " TODO: afficher la liste des numéros de ports utilisés"
-	echo " Voici les numéros ports utilisés par les instances Gitlab en service:"
 	echo " "
 	more $INVENTAIRE_GIROFLE
 	echo " "
