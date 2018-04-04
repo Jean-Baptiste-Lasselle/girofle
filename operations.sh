@@ -185,7 +185,7 @@ demander_noPortIP_InstanceTest
 # 
 # https://success.docker.com/article/should-you-use-networkmanager
 # 
-# On désactive le NetworkManager, qui ne doit PAS être utilisé dnas un système hôte docker:
+# On désactive le NetworkManager, qui ne doit PAS être utilisé dans un système hôte docker:
 sudo systemctl stop NetworkManager
 sudo systemctl disable NetworkManager
 # on ira jsuqu'à le désinstaller:
