@@ -61,7 +61,7 @@ fi
 # - répertoires Girofle
 # ---------------------------------------
 # - répertoire dédié au conteneur géré dans cette suite d'opérations
-# cf. demander_chemin_repertoire_giroflebckup ()
+# cf. demander_rep_girofle_instance_gitlab ()
 export REP_GIROFLE_CONTENEUR_DOCKER=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
 # export REP_GIROFLE_CONTENEUR_DOCKER
 # - répertoire dédié au backups du conteneur géré dans cette suite d'opérations
@@ -90,11 +90,11 @@ CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_I
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
 
-# afind ed emander interactivement à l'utilisatuer, d'idiquer le répertoire dédié au conteneur de l'isntance Gitlab.
-demander_chemin_repertoire_giroflebckup () {
+# afin de demander interactivement à l'utilisatuer, d'indiquer le répertoire dédié au conteneur de l'isntance Gitlab.
+demander_rep_girofle_instance_gitlab () {
 
 	echo "Dans le répertoire [$REPERTOIRE_GIROFLE], Quel est le "
-	echo "nom du répertoire girofle de l'instance Gitlab que vous souhaitez backupper?"
+	echo "nom du répertoire Girofle de l'instance Gitlab que vous souhaitez backupper?"
 	echo " "
 	echo "C'est l'un des suivants:"
 	echo " "
@@ -135,6 +135,10 @@ demander_chemin_repertoire_giroflebckup () {
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
 #
+
+# On commence par déterminer quel est l'instance à backupper
+demander_rep_girofle_instance_gitlab
+
 rm -rf $REP_BCKUP_COURANT
 mkdir -p $REP_BCKUP_COURANT/log
 mkdir -p $REP_BCKUP_COURANT/data

@@ -136,7 +136,9 @@ lequel est fait tout ce qu'il y a à faire avec git. De cette manière, plus de 
 détruit à la fin du commissioning, ne laissant que les logs des opérations. Ce qui permet au passage de ne pas créer d'utilisateur dédié au 
 comissioning sur la machine hôte.
 
-### Il faudra remplacer `$INVENTAIRE_GIROFLE` par une BDD NoSQL pour régler le problème d'accès concurrent, puis par /etcd
+### Persistance inventaire
+
+Il faudra remplacer `$INVENTAIRE_GIROFLE` par une BDD NoSQL pour régler le problème d'accès concurrent, plus essai avec /etcd
 
 
 ### Dépendances entre variables d'env.
