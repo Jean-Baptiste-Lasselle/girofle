@@ -83,21 +83,20 @@ export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2
 # script, quel numéro de port IP, la seconde instance Gitlab de Test pourra utiliser dans l'hôte Docker
 demander_noPortIP_InstanceTest () {
 
-	echo "Quelle adresse IP souhaitez-vous que l'instance gitlab utilise?"
-	echo "Cette adresse est à  choisir parmi:"
-	echo " "
-	ip addr|grep "inet"|grep -v "inet6"|grep "enp\|wlan"
+	echo "À l'adresse IP [$ADRESSE_IP_SRV_GITLAB], quel numéro de port IP souhaitez-vous que l'instance gitlab TEST utilise?"
+	echo "Vous devez choisir un numéro de port, par exemple entre 2000 et 60 000, différent du numéro "
+	echo "de port utilisé par l'instance Gitlab provisionnée en même temps: [$NO_PORT_IP_SRV_GITLAB]"
 	echo " "
 	read NO_PORT_IP_CHOISIT
 	if [ "x$NO_PORT_IP_CHOISIT" = "x" ]; then
-       NO_PORT_IP_CHOISIT=80
+       NO_PORT_IP_CHOISIT=8080
 	fi
 	
 	NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_CHOISIT
-	echo " Binding Adresse IP choisit pour le serveur gitlab: $NO_PORT_IP_CHOISIT";
+	echo " Binding Adresse IP choisit pour le serveur gitlab de tests: $NO_PORT_IP_CHOISIT";
 }
 
-# Cette fonction emts à jour la valeur de la vriable d'environnement [$NEXT_GITLAB_INSTANCE_NUMBER]
+# Cette fonction mets à jour la valeur de la variable d'environnement [$NEXT_GITLAB_INSTANCE_NUMBER]
 calculerProchainGitlabInstanceNumber () {
 	export COMPTEURTEMP=0
 	while read p; do
@@ -119,7 +118,7 @@ calculerProchainGitlabInstanceNumber () {
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # 
 calculerProchainGitlabInstanceNumber
-
+demander_noPortIP_InstanceTest
 
 
 ##############################################################################################################################################
@@ -182,8 +181,10 @@ echo "Choisissez un autre numéro de port pour la seconde instance (de test)."
 demander_noPortIP_InstanceTest
 fi
 
+echo " +girofle+ Verification adresse IP: [HOSTNAME=$HOSTNAME] " >> $NOMFICHIERLOG
 echo " +girofle+ Verification adresse IP: [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] " >> $NOMFICHIERLOG
 echo " +girofle+ Verification no. Port IP: [NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SRV_GITLAB] " >> $NOMFICHIERLOG
+echo " +girofle+ Verification no. Port IP: [NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] " >> $NOMFICHIERLOG
 
 # instance à la demande
 sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB:80 --publish $ADRESSE_IP_SRV_GITLAB:2227:22 --name $NOM_DU_CONTENEUR_CREE --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
@@ -229,6 +230,19 @@ sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $INVENTAIRE_
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE
 sudo chmod u+r+w $INVENTAIRE_GIROFLE
 
+
+##########################################################################################
+#			configuration du nom de domaine pou l'accès à l'instance gitlab   		   	 #  
+##########################################################################################
+
+sudo docker cp $NOM_DU_CONTENEUR_CREE:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle
+
+# sed -i 's/external_url "*"/external_url "http://$HOSTNAME:$NO_PORT_IP_SRV_GITLAB"/g' ./etc.gitlab.rb.recup.jibl
+
+sed -i "s/external_url 'GENERATED_EXTERNAL_URL'/external_url \"http:\/\/$HOSTNAME:$NO_PORT_IP_SRV_GITLAB\"/g" ./etc.gitlab.rb.girofle
+
+sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_CREE:/etc/gitlab/gitlab.rb
+sudo docker restart $NOM_DU_CONTENEUR_CREE
 
 ##########################################################################################
 #			configuration du nom de domaine pou l'accès à l'instance gitlab   		   	 #  

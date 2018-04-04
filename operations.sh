@@ -173,7 +173,17 @@ sudo yum remove -y NetworkManager
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Que la lumière soit! (pour activer les changemnts impactés dans [changement-hostname-nom-domaine.sh])
 
+clear
 echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
+echo " provision-girofle-  TERMINEE - "
+echo " provision-girofle-  LOGS:  "
+echo "   "
+cat $NOMFICHIERLOG
+echo "   "
+echo " provision-girofle-  Etats des conteneurs Girofle: "
+docker ps -a
+echo "   "
+
 # relancer_reseau
 # echo 'exécutez maintenant la commande: [./relancer-reseau.sh]'
 # echo 'exécutez maintenant : [sudo systemctl restart network]'
