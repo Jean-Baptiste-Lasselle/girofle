@@ -190,10 +190,20 @@ Aux fonctionnalitrés [citées ci-dessus](#girofle), s'ajouteront celles du comp
 Dernière erreur:
 
 ```
-./installation-docker-gitlab.rectte-jibl.sh: ligne192:  +girofle+ INSTANCE GITLAB no. [1] + [ADRESSE_IP_SRV_GITLAB= ] +[NO_PORT_IP_SRV_GITLAB=80] + [REP_GIROFLE_INSTANCE_GITLAB=/girofle/noeud-gitlab-1] + [NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.1]: Aucun fichier ou dossier de ce type
-docker: Invalid ip address  : address  :: unexpected '[' in address.
-See 'docker run --help'.
-./installation-docker-gitlab.rectte-jibl.sh: ligne214:  +girofle+ INSTANCE GITLAB no. [1] + [ADRESSE_IP_SRV_GITLAB= ] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=] + [REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=/girofle/noeud-gitlab-2] + [NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.1]: Aucun fichier ou dossier de ce type
+Error: No such container:path: conteneur-kytes.io.gitlab.1:/etc/gitlab/gitlab.rb
+sed: impossible de lire ./etc.gitlab.rb.girofle: Aucun fichier ou dossier de ce type
+cat: ./etc.gitlab.rb.girofle: Aucun fichier ou dossier de ce type
+lstat /home/jibl/doc-pms/etc.gitlab.rb.girofle: no such file or directory
+cp: cannot stat './etc.gitlab.rb.girofle': No such file or directory
+conteneur-kytes.io.gitlab.1
+d0024e1d7990969af10a964f662087930f8ac57a905d5611c38c4e302354b3d0
+Error: No such container:path: conteneur-kytes.io.gitlab.2:/etc/gitlab/gitlab.rb
+sed: impossible de lire ./etc.gitlab.rb.girofle: Aucun fichier ou dossier de ce type
+cat: ./etc.gitlab.rb.girofle: Aucun fichier ou dossier de ce type
+lstat /home/jibl/doc-pms/etc.gitlab.rb.girofle: no such file or directory
+cp: cannot stat './etc.gitlab.rb.girofle': No such file or directory
+conteneur-kytes.io.gitlab.2
+
 ```
 => tests inventory.girofle
 => tests restore/backup
