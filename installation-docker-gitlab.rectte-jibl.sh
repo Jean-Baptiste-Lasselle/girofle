@@ -207,18 +207,31 @@ sudo docker cp $NOM_DU_CONTENEUR_CREE:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.giro
 
 # sed -i 's/external_url "*"/external_url "http://$HOSTNAME:$NO_PORT_IP_SRV_GITLAB"/g' ./etc.gitlab.rb.recup.jibl
 
-sudo sed -i "s/external_url 'GENERATED_EXTERNAL_URL'/external_url \"http:\/\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB\"/g" ./etc.gitlab.rb.girofle
+sudo sed -i "s/# external_url 'GENERATED_EXTERNAL_URL'/external_url \"http:\/\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB\"/g" ./etc.gitlab.rb.girofle
 
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
-echo " provision-girofle-  contenu fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION : - " >> $NOMFICHIERLOG
-echo " provision-girofle-  DEBUT fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  Instance Gitlab provisionnée à l'installation Girofle - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  Contenu [./etc.gitlab.rb.girofle] APRES SUBSTITUTION : - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  DEBUT [./etc.gitlab.rb.girofle] - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 cat ./etc.gitlab.rb.girofle >> $NOMFICHIERLOG
-echo " provision-girofle-  FIN   fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  FIN   [./etc.gitlab.rb.girofle] - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 
-sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_CREE:.
+sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_CREE:./etc.gitlab.rb.girofle
 sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "rm -f /etc/gitlab/gitlab.rb"
 sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb"
 sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "rm -f ./etc.gitlab.rb.girofle"
@@ -243,7 +256,7 @@ sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $INVENTAIRE_
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE.temp
 sudo chmod u+r+w $INVENTAIRE_GIROFLE.temp
 # on garde les entrées précédentes
-cat $INVENTAIRE_GIROFLE >> $INVENTAIRE_GIROFLE.temp
+sudo cat $INVENTAIRE_GIROFLE >> $INVENTAIRE_GIROFLE.temp
 # on ajoute la nouvelle entrée
 echo $ENTREE_INVENTAIRE >> $INVENTAIRE_GIROFLE.temp
 sudo rm -f $INVENTAIRE_GIROFLE
@@ -251,6 +264,46 @@ sudo cp -f $INVENTAIRE_GIROFLE.temp $INVENTAIRE_GIROFLE
 sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $INVENTAIRE_GIROFLE
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE
 sudo chmod u+r+w $INVENTAIRE_GIROFLE
+
+##########################################################################################
+#			configuration du nom de domaine pou l'accès à l'instance gitlab   		   	 #
+#							Supplémentaire pour les test		   		   	 			 #
+##########################################################################################
+
+sudo rm -f ./etc.gitlab.rb.girofle
+sudo docker cp $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle
+
+# sed -i 's/external_url "*"/external_url "http://$HOSTNAME:$NO_PORT_IP_SRV_GITLAB"/g' ./etc.gitlab.rb.recup.jibl
+
+sudo sed -i "s/# external_url 'GENERATED_EXTERNAL_URL'/external_url \"http:\/\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST\"/g" ./etc.gitlab.rb.girofle
+
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  Instance Gitlab supplémentaire de test provisionnée à l'installation Girofle - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  Contenu [./etc.gitlab.rb.girofle] APRES SUBSTITUTION : - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  DEBUT fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+sudo cat ./etc.gitlab.rb.girofle >> $NOMFICHIERLOG
+echo " provision-girofle-  FIN   fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+
+sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST:./etc.gitlab.rb.girofle
+sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "rm -f /etc/gitlab/gitlab.rb"
+sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb"
+sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "rm -f ./etc.gitlab.rb.girofle"
+sudo docker restart $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST
+sudo rm -f ./etc.gitlab.rb.girofle
 
 
 
