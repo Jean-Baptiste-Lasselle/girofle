@@ -105,12 +105,11 @@ demander_nomDomaineSouhaite () {
 	echo "(Appuyez simpmlement sur la touche entrée pour appliquer la valeur par défaut: [girofle.io]) "
 	echo " "
 	read NOM_DOMAINE_CHOISIT
-	if [ "x$NO_PORT_IP_CHOISIT" = "x" ]; then
+	if [ "x$NOM_DOMAINE_CHOISIT" = "x" ]; then
        NOM_DOMAINE_CHOISIT=girofle.io
 	fi
-	
 	NOMDEDOMAINE_INSTANCE_GITLAB=$NOM_DOMAINE_CHOISIT
-	echo " Binding Adresse IP choisit pour le serveur gitlab de tests: $NOM_DOMAINE_CHOISIT";
+	echo "  Binding Adresse IP choisit pour le serveur gitlab de tests: $NOM_DOMAINE_CHOISIT" >> $NOMFICHIERLOG
 }
 
 
