@@ -199,7 +199,7 @@ sudo chmod a-r-w-x $INVENTAIRE_GIROFLE
 sudo chmod u+r+w $INVENTAIRE_GIROFLE
 
 ##########################################################################################
-#			configuration du nom de domaine pou l'accès à l'instance gitlab   		   	 #  
+#			configuration du nom de domaine pour l'accès à l'instance gitlab   		   	 #  
 ##########################################################################################
 
 sudo rm -f ./etc.gitlab.rb.girofle
@@ -235,7 +235,9 @@ sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_CREE:./etc.gitlab.rb.gi
 sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "rm -f /etc/gitlab/gitlab.rb"
 sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb"
 sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "rm -f ./etc.gitlab.rb.girofle"
-sudo docker restart $NOM_DU_CONTENEUR_CREE
+# sudo docker restart $NOM_DU_CONTENEUR_CREE
+# à la place d'un redémarrage complet du conteneur, j'utilise [gitlab-ctl]
+sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "gitlab-ctl reconfigure"
 sudo rm -f ./etc.gitlab.rb.girofle
 
 
@@ -302,7 +304,9 @@ sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TES
 sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "rm -f /etc/gitlab/gitlab.rb"
 sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb"
 sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "rm -f ./etc.gitlab.rb.girofle"
-sudo docker restart $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST
+# sudo docker restart $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST
+# à la place d'un redémarrage complet du conteneur, j'utilise [gitlab-ctl]
+sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "gitlab-ctl reconfigure"
 sudo rm -f ./etc.gitlab.rb.girofle
 
 
