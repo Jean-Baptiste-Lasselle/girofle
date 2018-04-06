@@ -22,8 +22,8 @@
 #                >>>   export NOM_IMAGE_DOCKER_INSTANCES_GIROFLE=girolfe.io/image-gitlab:v1.0.0
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # export ADRESSE_IP_SRV_GITLAB
-
-export CONTEXTE_DU_BUILD_DOCKER=./ # le répertoire courant pwd 
+# à priori, Girofle n'impose pas que le fichier Dockerfile soit présent dans e répertoire qui constituera le contexte du build docker. On pourra ainsi embarquer dans le repo Git de cette recette, un répertoire contenant lui-même des répertoires, chacun de ces derniers pouvant versionner un contexte de build différent, comme des "blends"
+export CONTEXTE_DU_BUILD_DOCKER=./girofle-docker-blends/build-contexts # le répertoire contenant le catalogue de contetes de builds docker pour l'image de base des instances Gitlab.
 
 export DOCKERFILE_INSTANCES_GITLAB=./instances.girofle.dockerfile
 
@@ -49,7 +49,13 @@ export DOCKERFILE_INSTANCES_GITLAB=./instances.girofle.dockerfile
 # 		
 # 
 # 
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  ---------	DEBUT GENERATION IMAGE DOCKER DES INSTANCES GITLAB GIROFLE   ---- " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 
+# - Génération du répertoire  $CONTEXTE_DU_BUILD_DOCKER
+rm -rf $CONTEXTE_DU_BUILD_DOCKER
+mkdir -p $CONTEXTE_DU_BUILD_DOCKER
 # - Génération du fichier $DOCKERFILE_INSTANCES_GITLAB
 sudo rm -f $DOCKERFILE_INSTANCES_GITLAB
 
@@ -75,6 +81,8 @@ echo "HEALTHCHECK --interval=1s --timeout=300s --start-period=1 --retries=300 CM
 echo "CMD [\"/usr/local/bin/wrapper\"]" >> $DOCKERFILE_INSTANCES_GITLAB
 # echo "CMD [\"/bin/bash\"]" >> $DOCKERFILE_INSTANCES_GITLAB
 
+
+
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 echo " provision-girofle-  ---------------------	 DOCKERFILE IMAGE GITLAB      ----------------------- " >> $NOMFICHIERLOG
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
@@ -90,17 +98,21 @@ echo " provision-girofle-  - " >> $NOMFICHIERLOG
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 echo " provision-girofle-  [CONTEXTE_DU_BUILD_DOCKER=$CONTEXTE_DU_BUILD_DOCKER] ------------------------- " >> $NOMFICHIERLOG
 sudo ls -all $CONTEXTE_DU_BUILD_DOCKER
+
+sudo docker build --tag $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE -f $DOCKERFILE_INSTANCES_GITLAB $CONTEXTE_DU_BUILD_DOCKER # ben le build, quoi ...
+
+# sudo docker ps -a >> $NOMFICHIERLOG # et voilà la liste des conteneurs docker que tu as créés.
+
+
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-
-
-cd $MAISON_ATELIER
-sudo docker build --tag $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE -f $MAISON_ATELIER/Dockerfile.jibl $CONTEXTE_DU_BUILD_DOCKER # ben le build, quoi ...
-sudo docker images # et voilà la liste des images que tu as dans ton repo local docker ( --tag , c'est pratique ... ;)
-sudo docker ps -a # et voilà la liste des conteneurs docker que tu as créés.
-
-
-
+echo " provision-girofle-  [Liste des images docker présentes localement] ------------------------- " >> $NOMFICHIERLOG
+sudo docker images >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------	FIN GENERATION IMAGE DOCKER DES INSTANCES GITLAB GIROFLE     -------- " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 # ET LE DOCKER RUN
 
 
