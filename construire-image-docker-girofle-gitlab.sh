@@ -99,7 +99,8 @@ echo " provision-girofle-  -----------------------------------------------------
 echo " provision-girofle-  [CONTEXTE_DU_BUILD_DOCKER=$CONTEXTE_DU_BUILD_DOCKER] ------------------------- " >> $NOMFICHIERLOG
 sudo ls -all $CONTEXTE_DU_BUILD_DOCKER
 
-sudo docker build --tag $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE -f $DOCKERFILE_INSTANCES_GITLAB $CONTEXTE_DU_BUILD_DOCKER # ben le build, quoi ...
+# ben le build, quoi ...
+sudo docker build --tag $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE -f $DOCKERFILE_INSTANCES_GITLAB $CONTEXTE_DU_BUILD_DOCKER | tee $NOMFICHIERLOG
 
 # sudo docker ps -a >> $NOMFICHIERLOG # et voilà la liste des conteneurs docker que tu as créés.
 
