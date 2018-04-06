@@ -180,6 +180,7 @@ echo " +girofle+ Verification no. Port IP: [NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=
 # Point de distribution: "gitlab/gitlab-ce:latest" : https://hub.docker.com/r/gitlab/gitlab-ce/
 export VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB=gitlab/gitlab-ce:latest
 export NOM_IMAGE_DOCKER_INSTANCES_GIROFLE=girolfe.io/image-gitlab:v1.0.0
+sudo chmod +x ./construire-image-docker-girofle-gitlab.sh
 ./construire-image-docker-girofle-gitlab.sh
 ##########################################################################################
 ##########################################################################################
