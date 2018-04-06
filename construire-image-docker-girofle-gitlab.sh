@@ -16,178 +16,100 @@
 #                >>>   export REPERTOIRE_GIROFLE=/girofle
 # 				 # le numéro de port de l'instance Gitalb de test supplémentaire
 #                >>>   export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=8880
+# 				 # le nom de l'image release officielle de Gitlab, utilisée pour construire $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE
+#                >>>   export VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB=gitlab/gitlab-ce:latest
+# 				 # le nom de l'image docker girofle gitlab, construiite sur la base de la release officielle de Gitlab, $VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB
+#                >>>   export NOM_IMAGE_DOCKER_INSTANCES_GIROFLE=girolfe.io/image-gitlab:v1.0.0
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # export ADRESSE_IP_SRV_GITLAB
 
+export CONTEXTE_DU_BUILD_DOCKER=./ # le répertoire courant pwd 
 
-# --------------------------------------------------------------------------------------------------------------------------------------------
-export NEXT_GITLAB_INSTANCE_NUMBER
-export GITLAB_INSTANCE_NUMBER=1
-export GITLAB_INSTANCE_NUMBER2=2
-# --------------------------------------------------------------------------------------------------------------------------------------------
-#														RESEAU-HOTE-DOCKER																	 #
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# [SEGMENT-IP alloués par DHCP bytes: 192.168.1.123 => 192.168.1.153]
-# ADRESSE_IP_LINUX_NET_INTERFACE_1=192.168.1.123
-# ADRESSE_IP_LINUX_NET_INTERFACE_2=192.168.1.124
-# ADRESSE_IP_LINUX_NET_INTERFACE_3=192.168.1.125
-# ADRESSE_IP_LINUX_NET_INTERFACE_4=192.168.1.126
-# --------------------------------------------------------------------------------------------------------------------------------------------
-
-#			MAPPING des répertoires d'installation de gitlab dans les conteneurs DOCKER, avec des répertoires de l'hôte DOCKER				 #
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# 
-# ---------------------------------------
-# - répertoires d'installation de gitlab
-# ---------------------------------------
-GITLAB_CONFIG_DIR=/etc/gitlab
-GITLAB_DATA_DIR=/var/opt/gitlab
-GITLAB_LOG_DIR=/var/log/gitlab
-##############################################################################################################################################
-#####		CONTENEUR 1
-##############################################################################################################################################
-# - répertoire hôte dédié à l'instance Gitlab
-export REP_GIROFLE_INSTANCE_GITLAB
-# - Nom du conteneur docker qui sera créé
-export NOM_DU_CONTENEUR_CREE
-# - répertoires hôte associés
-export CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
-export CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
-export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
-
-##############################################################################################################################################
-
-##############################################################################################################################################
-#####		CONTENEUR 2 ===>>>> Pour tests du nombre maximal d'instances serveurs possibles sur une même machine...
-#####		Je commence par tester la possibilité de binder deux mêmes conteneurs usdr la même adresse IP, mais avec des numéros de ports différents.
-#####		Je limiterai le nombre maximal au nombre maximal de hostnames/nomsdedomaines, ce nombre d'instances.
-##############################################################################################################################################
-# - répertoire hôte dédié à l'instance Gitlab
-# export REP_GIROFLE_INSTANCE_GITLAB
-# - Nom du conteneur docker qui sera créé
-export NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST
-# - répertoires hôte associés
-export CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2
-export CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2
-export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2
-
-##############################################################################################################################################
-
-
-# --------------------------------------------------------------------------------------------------------------------------------------------
-##############################################################################################################################################
-#########################################							FONCTIONS						##########################################
-##############################################################################################################################################
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# 
-# Cette fonction mets à jour la valeur de la variable d'environnement [$NEXT_GITLAB_INSTANCE_NUMBER]
-calculerProchainGitlabInstanceNumber () {
-	export COMPTEURTEMP=0
-	while read p; do
-	  echo "Ligne $COMPTEURTEMP : [$p]" >> $NOMFICHIERLOG
-	  echo " " >> $NOMFICHIERLOG
-	  # COMPTEURTEMP=$COMPTEURTEMP + 1
-	  ((COMPTEURTEMP=COMPTEURTEMP+1))
-	done <$INVENTAIRE_GIROFLE
-	NEXT_GITLAB_INSTANCE_NUMBER=$COMPTEURTEMP
-	echo " +girofle+ [calculerProchainGitlabInstanceNumber ()] VALEUR FINALE [NEXT_GITLAB_INSTANCE_NUMBER=$NEXT_GITLAB_INSTANCE_NUMBER]" >> $NOMFICHIERLOG
-}
-
-
-
-# --------------------------------------------------------------------------------------------------------------------------------------------
-##############################################################################################################################################
-#########################################							OPS								##########################################
-##############################################################################################################################################
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# 
-calculerProchainGitlabInstanceNumber
-# demander_noPortIP_InstanceTest
-
-
-##############################################################################################################################################
-#####		CONTENEUR 1
-##############################################################################################################################################
-# - répertoire hôte dédié à l'instance Gitlab
-REP_GIROFLE_INSTANCE_GITLAB=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
-# - Nom du conteneur docker qui sera créé
-NOM_DU_CONTENEUR_CREE=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER
-# - répertoires hôte associés
-CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GIROFLE_INSTANCE_GITLAB/config
-CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GIROFLE_INSTANCE_GITLAB/data
-CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GIROFLE_INSTANCE_GITLAB/logs
-# - création des répertoires hôtes associés
-# sudo rm -rf $REPERTOIRE_GIROFLE
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
-##############################################################################################################################################
-
-##############################################################################################################################################
-#####		CONTENEUR 2 ===>>>> Pour tests du nombre maximal d'instances serveurs possibles sur une même machine...
-##############################################################################################################################################
-# - répertoire hôte dédié à l'instance Gitlab
-REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2
-NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
-# - répertoires associés
-CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
-CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
-CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
-# - création des répertoires associés
-# sudo rm -rf $REPERTOIRE_GIROFLE
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
-##############################################################################################################################################
-
-
-##############################################################################################################################################
-#####		CREATION INSTANCES GITLAB
-##############################################################################################################################################
-#####		TODO: faire la fonction qui demandera le nom Girofle de la nouvelle instance gitlab
-##############################################################################################################################################
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# Installation de l'instance gitlab dans un conteneur, à partir de l'image officielle :
-# https://docs.gitlab.com/omnibus/docker/README.html
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# ce conteneur docker est lié à l'interface réseau d'adresse IP [$ADRESSE_IP_SRV_GITLAB]:
-# ==>> Les ports ouverts avec loption --publish seront accessibles uniquement par cette adresse IP
-#
-# sudo docker run --detach --hostname gitlab.$GITLAB_INSTANCE_NUMBER.kytes.io --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:8080:80 --publish 2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
-# Mais maintenant, j'utilise le nom d'hôte de l'OS, pour régler la question du nom de domaine ppour accéder à l'instance gitlab en mode Web.
-# export NOMDHOTE=archiveur-prj-pms.io
-
-# donc pour ce test, le numéro de port choisit ne peut êtrele même que pour le second conteneur de test
-if [ $NO_PORT_IP_SRV_GITLAB = "8880" ] 
-then
-echo "attention,  le numéro de port [$NO_PORT_IP_SRV_GITLAB] est celui qui sera utilisé par une seconde instance Gitlab pour ce test:"
-echo "Choisissez un autre numéro de port pour la seconde instance (de test)."
-demander_noPortIP_InstanceTest
-fi
-
-echo " +girofle+ Verification adresse IP: [HOSTNAME=$HOSTNAME] " >> $NOMFICHIERLOG
-echo " +girofle+ Verification adresse IP: [NOMDEDOMAINE_INSTANCE_GITLAB=$NOMDEDOMAINE_INSTANCE_GITLAB] " >> $NOMFICHIERLOG
-echo " +girofle+ Verification adresse IP: [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] " >> $NOMFICHIERLOG
-echo " +girofle+ Verification no. Port IP: [NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SRV_GITLAB] " >> $NOMFICHIERLOG
-echo " +girofle+ Verification no. Port IP: [NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] " >> $NOMFICHIERLOG
+export DOCKERFILE_INSTANCES_GITLAB=./instances.girofle.dockerfile
 
 ##########################################################################################
 ##########################################################################################
-#						construction image docker Girofle.io/Gitlab			  		   	 #
+#						IMAGE DOCKER DES INSTANCES GIROFLE/GITLAB				   		 #
 ##########################################################################################
 ##########################################################################################
 # 
-# Point de distribution: "gitlab/gitlab-ce:latest" : https://hub.docker.com/r/gitlab/gitlab-ce/
-export VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB=gitlab/gitlab-ce:latest
-export NOM_IMAGE_DOCKER_INSTANCES_GIROFLE=girolfe.io/image-gitlab:v1.0.0
-./construire-image-docker-girofle-gitlab.sh
-##########################################################################################
-##########################################################################################
-#						instance gitlab provisionnée						   		   	 #
-##########################################################################################
-##########################################################################################
+# Ajout du dockerfile
 # 
-sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB:80 --publish $ADRESSE_IP_SRV_GITLAB:2227:22 --name $NOM_DU_CONTENEUR_CREE --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE
+#    =>>> CEPENDANT, lorsque l'on devra comissionner un conteneur gitlab, on 
+#         devra "attendre", nécessairement, et en totu cas il est certain que l'on voudra 
+#         pouvoir vérifier QUAND une isntacne gitlab est "prête": lorsqu'elle est 
+#         dans l'état "healthy".
+# 
+# 		
+#    =>>> CEPENDANT, lorsque l'on devra comissionner un conteneur gitlab, on devra 
+#         "attendre", nécessairement, et en totu cas il est certain que l'on voudra 
+#         pouvoir vérifier QUAND une isntacne gitlab est "prête": lorsqu'elle est dans 
+#         l'état "healthy". J'utiliserai donc la fonctionnalité "HEALTHCHECK" de docker 
+# 
+# 		
+# 
+# 
+
+# - Génération du fichier $DOCKERFILE_INSTANCES_GITLAB
+sudo rm -f $DOCKERFILE_INSTANCES_GITLAB
+
+echo "FROM $VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "LABEL name=\"instances.girofle.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "   vendor=\"kyes.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "   license=\"GPLv2\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
+DATEDEMONBUILD=`date +"%M/%d/%Y %Hh%Mmin%Ssec"`
+echo "   build-date=\"$DATEDEMONBUILD\" " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN yum remove -y libappstream3 && yum update -y" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN rm -f ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN cp /etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "sudo sed -i \"s/# external_url 'GENERATED_EXTERNAL_URL'/external_url \\\"http:\\/\\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB\\\"/g\" ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN rm -f /etc/gitlab/gitlab.rb" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb" >> $DOCKERFILE_INSTANCES_GITLAB
+# HEALTH_CHECK
+echo "CMD [\"/usr/local/bin/wrapper\"]" >> $DOCKERFILE_INSTANCES_GITLAB
+# Les 2 HEALTH_CHECK distincts permettent de discriminer les échecs causés par
+# la configuration réseau / DNS  de la cible de déploiement. Ils devront être refactorisé en un unique agent
+# On ne fait donc pas de vérification de la configuration dNS? on passe uniquement par adresse IP pour le HEALTH_CHECK unique
+echo "HEALTHCHECK --interval=1s --timeout=300s --start-period=1 --retries=300 CMD curl --fail http://$ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB/ || exit 1" >> $DOCKERFILE_INSTANCES_GITLAB
+# echo "HEALTHCHECK --interval=5m --timeout=3s --start-period=1 --retries=17 CMD curl --fail http://$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB/ || exit 1" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "CMD [\"/usr/local/bin/wrapper\"]" >> $DOCKERFILE_INSTANCES_GITLAB
+# echo "CMD [\"/bin/bash\"]" >> $DOCKERFILE_INSTANCES_GITLAB
+
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  ---------------------	 DOCKERFILE IMAGE GITLAB      ----------------------- " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+cat $DOCKERFILE_INSTANCES_GITLAB >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  - " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  [CONTEXTE_DU_BUILD_DOCKER=$CONTEXTE_DU_BUILD_DOCKER] ------------------------- " >> $NOMFICHIERLOG
+sudo ls -all $CONTEXTE_DU_BUILD_DOCKER
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+
+
+cd $MAISON_ATELIER
+sudo docker build --tag $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE -f $MAISON_ATELIER/Dockerfile.jibl $CONTEXTE_DU_BUILD_DOCKER # ben le build, quoi ...
+sudo docker images # et voilà la liste des images que tu as dans ton repo local docker ( --tag , c'est pratique ... ;)
+sudo docker ps -a # et voilà la liste des conteneurs docker que tu as créés.
+
+
+
+# ET LE DOCKER RUN
+
+
+
+
+
+
+
+sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB:80 --publish $ADRESSE_IP_SRV_GITLAB:2227:22 --name $NOM_DU_CONTENEUR_CREE --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
 # persistance de la nouvelle entrée dans l'inventaire des instances gitlab
 # export ENTREE_INVENTAIRE=$(" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SRV_GITLAB] + [REP_GIROFLE_INSTANCE_GITLAB=$REP_GIROFLE_INSTANCE_GITLAB] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]")
