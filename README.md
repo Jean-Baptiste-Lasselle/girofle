@@ -90,11 +90,13 @@ Notes perso: après avoir mis en oeuvre la fonctionnalité `HEALTH_CHECK` de doc
 * Pour vérifier l'état du contenu (healthy, unhealthy, starting):
 `docker inspect --format='{{json .State.Health}}' your-container-name`
 * Faire le `HEALTH_CHECK` docker:
-  * il s'agit d'ajouter dans le docker file une instruction, par exemple: `HEALTHCHECK CMD curl --fail http://localhost:3000/ || exit 1`
+  * il s'agit d'ajouter dans le docker file une instruction, par exemple: `HEALTHCHECK --interval=5m --timeout=3s --start-period=1 --retries=17 CMD curl --fail http://localhost:3000/ || exit 1`
+  * Cette instruction doit précéder la commande CMD finale du dockerfile.
 * À tester: `the new orchestration features in Docker Swarm mode services are utilizing a health check to manage zero-downtime deployments.` 
 * À tester:  `HEALTH_CHECK` docker et Kubernetes
 
-Et pour terminer, la gestion du `HEALTH_CHECK` docker peut être concernée par la définition des SLA. d'une appli cloud
+La gestion du `HEALTH_CHECK` docker peut être concernée par la définition des SLA. d'une appli cloud
+Et pour terminer, la gestion du `HEALTH_CHECK` docker ne peut être réalisé que pour les plateformes utilisant Docker en version supérieure ou égale à `Docker 1.12`
 
 Ressources :
 
