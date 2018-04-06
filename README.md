@@ -96,6 +96,13 @@ Notes perso: après avoir mis en oeuvre la fonctionnalité `HEALTH_CHECK` de doc
 
 Et pour terminer, la gestion du `HEALTH_CHECK` docker peut être concernée par la définition des SLA. d'une appli cloud
 
+Ressources :
+
+https://blog.newrelic.com/2016/08/24/docker-health-check-instruction/
+
+https://docs.docker.com/engine/reference/builder/#/healthcheck
+
+
 ## 0. Sécurité
 
 Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'éviter à l'utilisateur de se faire sniffer ses mots de passe Girofle sur le réseau interne, quelque soit l'attaquant.
