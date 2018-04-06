@@ -62,14 +62,14 @@ utilise un dépôt Git, en étant le seul (personne d'autre ne `commit && push` 
 ## Top-TODO
 
 Lorsque l'on devra comissionner un conteneur gitlab, on devra "attendre", nécessairement, et en tout cas il est certain que l'on voudra pouvoir vérifier QUAND une instance gitlab est "prête":
-lorsqu'elle est dans l'état "healthy". J'utiliserai donc la nouvelle fonctionnalité "HEALTHCHECK" de docker-compose, pour réaliser cela.
+lorsqu'elle est dans l'état "healthy". J'utiliserai donc la nouvelle fonctionnalité "`HEALTH_CHECK`" de docker-compose, pour réaliser cela.
 
 La problématique s'est préserntée dans le cas suivant:
 
 Lorsque l'on comissionne le conteneur docker de l'instance gitlab:
 * On démarre le conteneur docker, 
 * Le `daemon` Docker affiche alors un état "starting" pour le conteneur docker, 
-* Puis, on essaie immétdiatement de la reconfigurer en allant chercher le fichier "/etc/gitlab/gitlab.rb" dans le conteneur
+* Puis, on essaie immédiatement de la reconfigurer en allant chercher le fichier "/etc/gitlab/gitlab.rb" dans le conteneur
 * Mais ce fichier n'est pas trouvé dans le conteneur, tant que le conteneur Docker ne notifie pas un état "healthy"
 * D'autre part, en utilisant la commande `gitlab-ctl reconfigure`, on constate:
   * qu'un client chef.io est utilisé pour réaliser la reconfiguration.
@@ -80,7 +80,12 @@ En conclusion:
 * Girofle provisionne des conteneurs dockers identiques, ne différant que par leur configuration (et la recette de provision, ex. pour la publication DNS d'un nouveau nom de domaine)
 * Donc Girofle intrinsèqumen, DOIT pouvoir effectuer (y compris intensément) des reconfiguration d 'instances en cours d'exécution. 
 * Il sera donc absolument nécessaire que Girofle puisse déterminer si un conteneur est (ou non) passé dans l'état "healthy".
-* pour ce faire, Girofle  utilisera la fonctionnalité "HEALTH_CHECK" des dockerfile, pour le docker compose.
+* pour ce faire, Girofle  utilisera la fonctionnalité `HEALTH_CHECK` des dockerfile, ce qui permettra à Girofle d'orchestrer ses opérations de re-configuration.
+
+D'un point de vue général, le principe est qu'une application déployée, doit pouvoir envoyer une notification à l'infrastructure dans laquelle elle est déployée:
+Avec cette notification, l'application informe l'infrastructure (et ses superviseurs) qu'elle est "prête à travailler".
+
+Note perso: après avoir mis en oeuvre la fonctionnalité `HEALTH_CHECK` de docker, il faudra faire un `gitlab-ctl reconfigure`, car j'ai pu remarquer une amélioration significative des performances de mes noeuds gitlabs après une exécution de `gitlab-ctl reconfigure`.
 
 ## 0. Sécurité
 
