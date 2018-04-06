@@ -87,12 +87,12 @@ Avec cette notification, l'application informe l'infrastructure (et ses supervis
 
 Notes perso: après avoir mis en oeuvre la fonctionnalité `HEALTH_CHECK` de docker, il faudra faire un `gitlab-ctl reconfigure`, car j'ai pu remarquer une amélioration significative des performances de mes noeuds gitlabs après une exécution de `gitlab-ctl reconfigure`.
 
-* Pour vérifier l'état du contenru (healthy, unhealthy, starting):
+* Pour vérifier l'état du contenu (healthy, unhealthy, starting):
 `docker inspect --format='{{json .State.Health}}' your-container-name`
 * Faire le `HEALTH_CHECK` docker:
-  * il s'agit d'ajouter dans le docker file une instruction, par exemple: ``
+  * il s'agit d'ajouter dans le docker file une instruction, par exemple: `HEALTHCHECK CMD curl --fail http://localhost:3000/ || exit 1`
 * À tester: `the new orchestration features in Docker Swarm mode services are utilizing a health check to manage zero-downtime deployments.` 
-* À tester:  `HEALTH_CHECK` docker   et Kubernetes
+* À tester:  `HEALTH_CHECK` docker et Kubernetes
 
 Et pour terminer, la gestion du `HEALTH_CHECK` docker peut être concernée par la définition des SLA. d'une appli cloud
 
