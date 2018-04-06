@@ -178,6 +178,51 @@ echo " +girofle+ Verification no. Port IP: [NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=
 ##########################################################################################
 ##########################################################################################
 # 
+# Ajout du dockerfile
+# 
+#    =>>> CEPENDANT, lorsque l'on devra comissionner un conteneur gitlab, on
+#         devra "attendre", nécessairement, et en totu cas il est certain que l'on voudra
+#         pouvoir vérifier QUAND une isntacne gitlab est "prête": lorsqu'elle est dans l'état "healthy"
+# 
+# 		
+#    =>>> CEPENDANT, lorsque l'on devra comissionner un conteneur gitlab, on devra "attendre", nécessairement, et en totu cas il est certain que l'on voudra pouvoir vérifier QUAND une isntacne gitlab est "prête": lorsqu'elle est dans l'état "healthy". J'utiliserai donc la fonctionnalité "HEALTHCHECK" de docker
+# 
+# 		
+# 
+# 
+echo "FROM gitlab/gitlab-ce:latest" >> ./instances.girofle.dockerfile
+DOCKERFILE_INSTANCES_GITLAB=./instances.girofle.dockerfile
+sudo rm -f $DOCKERFILE_INSTANCES_GITLAB
+# emplacement où j'ai trouvé le tag "centos:centos7.4.1708" : https://hub.docker.com/_/centos/
+echo "FROM gitlab/gitlab-ce:latest" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "LABEL name=\"instances.girofle.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "   vendor=\"kyes.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "   license=\"GPLv2\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
+DATEDEMONBUILD=`date +"%M/%d/%Y %Hh%Mmin%Ssec"`
+echo "   build-date=\"$DATEDEMONBUILD\" " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN yum remove -y libappstream3 && yum update -y" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN rm -f ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN cp /etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "sudo sed -i \"s/# external_url 'GENERATED_EXTERNAL_URL'/external_url \\\"http:\\/\\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB\\\"/g\" ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN rm -f /etc/gitlab/gitlab.rb" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "CMD [\"/usr/local/bin/wrapper\"]" >> $DOCKERFILE_INSTANCES_GITLAB
+# echo "CMD [\"/bin/bash\"]" >> $DOCKERFILE_INSTANCES_GITLAB
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB:80 --publish $ADRESSE_IP_SRV_GITLAB:2227:22 --name $NOM_DU_CONTENEUR_CREE --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
 # persistance de la nouvelle entrée dans l'inventaire des instances gitlab

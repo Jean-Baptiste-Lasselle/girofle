@@ -59,6 +59,29 @@ utilise un dépôt Git, en étant le seul (personne d'autre ne `commit && push` 
 
 # TODOs
 
+## Top-TODO
+
+Lorsque l'on devra comissionner un conteneur gitlab, on devra "attendre", nécessairement, et en tout cas il est certain que l'on voudra pouvoir vérifier QUAND une instance gitlab est "prête":
+lorsqu'elle est dans l'état "healthy". J'utiliserai donc la nouvelle fonctionnalité "HEALTHCHECK" de docker-compose, pour réaliser cela.
+
+La problématique s'est préserntée dans le cas suivant:
+
+Lorsque l'on comissionne le conteneur docker de l'instance gitlab:
+* On démarre le conteneur docker, 
+* Le `daemon` Docker affiche alors un état "starting" pour le conteneur docker, 
+* Puis, on essaie immétdiatement de la reconfigurer en allant chercher le fichier "/etc/gitlab/gitlab.rb" dans le conteneur
+* Mais ce fichier n'est pas trouvé dans le conteneur, tant que le conteneur Docker ne notifie pas un état "healthy"
+* D'autre part, en utilisant la commande `gitlab-ctl reconfigure`, on constate:
+  * qu'un client chef.io est utilisé pour réaliser la reconfiguration.
+  * que c'est probablement le cas aussi pendant la séquence d'amorçage du conteneur (à son démarrage)
+  * et donc en prenant un peu de distance par rapport à ces constations, on peut penser que d'un point de vue général, pour Gitlab, on a le cas d'une application dans un conteneur docker, qui doit notifier le `daemon` Docker que l'application est prête, suite àç quoi Docker fait passer l'état du conteneur de "starting" à "healthy"
+
+En conclusion:
+* Girofle provisionne des conteneurs dockers identiques, ne différant que par leur configuration (et la recette de provision, ex. pour la publication DNS d'un nouveau nom de domaine)
+* Donc Girofle intrinsèqumen, DOIT pouvoir effectuer (y compris intensément) des reconfiguration d 'instances en cours d'exécution. 
+* Il sera donc absolument nécessaire que Girofle puisse déterminer si un conteneur est (ou non) passé dans l'état "healthy".
+* pour ce faire, Girofle  utilisera la fonctionnalité "HEALTH_CHECK" des dockerfile, pour le docker compose.
+
 ## 0. Sécurité
 
 Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'éviter à l'utilisateur de se faire sniffer ses mots de passe Girofle sur le réseau interne, quelque soit l'attaquant.
@@ -66,6 +89,7 @@ Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'évit
 ## 1. Sur les opérations de backup/restore
 
 ### Opérations standard d'exploitation
+
 ```
 # La règle implicite est que pour chaque service gitlab, un conteneur est créé avec un nom, et un répertoire lui
 # est donné : [$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER].
@@ -104,26 +128,24 @@ Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'évit
 #    
 #    => les bckups devront être stockés dans [$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/bckups]
 #    
-
 ```
-	
+
 L'opération standard de backup, `./operations-std/serveur/restore.sh`, peut-être invoquée avec ou sans arguments en ligne de commande:
 * si aucun argument n'est passé à `./operations-std/serveur/restore.sh`, il demande interactivement le nom du conteneur docker, et le chemin de son répertoire dédié (exemple: [`$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER`])
 * si un seul argument est passé, alors un message d'erreur est affiché, et l'aide affichée.
-* si deux arguments sont passés, alors:
-  * le premier est considéré comme étant le nom du conteneur docker (et alors s'il la commande `docker ps -a` ne renvoie pas une sortie standard contenant le nom du conteneur, une erreur est levée)
-  * le second est considéré comme étant le chemin du répertoire dédié du conteneur docker, et alors une erreur est levée si les conditions suivnates ne sont pas vérifiées:
-    *  le répertoire indiqué existe dans le système,
-    *  le répertoire indiqué contient un répertoire de nom "mapping-volumes", qui doit contenir aussi 3 répertoires "data", "config", "log", 
+ * si deux arguments sont passés, alors:
+ * le premier est considéré comme étant le nom du conteneur docker (et alors s'il la commande `docker ps -a` ne renvoie pas une sortie standard contenant le nom du conteneur, une erreur est levée)
+ * le second est considéré comme étant le chemin du répertoire dédié du conteneur docker, et alors une erreur est levée si les conditions suivnates ne sont pas vérifiées:
+ *  le répertoire indiqué existe dans le système,
+ *  le répertoire indiqué contient un répertoire de nom "mapping-volumes", qui doit contenir aussi 3 répertoires "data", "config", "log", 
     *  le répertoire indiqué contient un répertoire de nom "bckups", qui doit contenir au moins un répertoire (un backup), qui lui-même doit contenir aussi 3 répertoires "data", "config", "log"
 
-	
 L'opération standard de backup sauvegarde:
 * Les répertoires gitlab: `data`, `config` & `log`
 * Pour chaque repo Git, le wiki n'est pas inclut,
 * Les fichiers README.md sont sauvegardés, parce qu'ils sont versionnés avec les autres fichiers versionnés par le dépôt Git
   
-### Utilsiateurs Linux provision Girofle
+### Utilisateurs Linux provision Girofle
 
 Modifier le provisionning Girofle, pour que le processus d'installation:
 * créée un utilisateur linux qui effectue le provisioning de Girofle
@@ -140,7 +162,6 @@ comissioning sur la machine hôte.
 
 Il faudra remplacer `$INVENTAIRE_GIROFLE` par une BDD NoSQL pour régler le problème d'accès concurrent, plus essai avec /etcd
 
-
 ### Dépendances entre variables d'env.
 
 Le fichier `./operations-std/serveur/restore.sh`, est pour le moment le point exact où est faite l'association entre: 
@@ -148,6 +169,7 @@ Le fichier `./operations-std/serveur/restore.sh`, est pour le moment le point ex
 ```
  $NOM_CONTENEUR_DOCKER <=> $REP_GIROFLE_CONTENEUR_DOCKER
 ```
+
 `$REP_GIROFLE_CONTENEUR_DOCKER` étant le nom du répertoire dédié au conteneur $NOM_CONTENEUR_DOCKER, exemple: 
 
 ```
@@ -155,25 +177,16 @@ export REP_GIROFLE_CONTENEUR_DOCKER=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INS
 ```
 
 Globalement les opérations standard utilisent donc 3 variables indépendantes:
-
 ```
  $NOM_CONTENEUR_DOCKER <=> $REP_GIROFLE_CONTENEUR_DOCKER <=> $ADRESSE_IP_DEDIEE_AU_SERVICE_GITLAB
 ```
 
 Et la donnée de la valeur de ces 3 variables est suffisante à Girofle pour déduire toute autre information à propos d'une instance répertoriée dans le fichier:
-
 ```
 	export INVENTAIRE_GIROFLE=$REPERTOIRE_GIROFLE/inventory.girofle
 ```
-
 Dans `./operations-std/serveur/restore.sh`, c'est la variable d'environnement `$ADRESSE_IP_SRV_GITLAB` qui correspond à `$ADRESSE_IP_DEDIEE_AU_SERVICE_GITLAB`
-
-
-
-
-
 Demander interactivement à l'utilisateur le nom du conteneur docker à backup/restore, ainsi que le chemin de son répertoire dédié
-
 
 # Quarks n `gravity`
 
@@ -183,10 +196,7 @@ Aux fonctionnalitrés [citées ci-dessus](#girofle), s'ajouteront celles du comp
 * de construire un ensemble de repo git, les configurer (provision)
 * d'exécuter une suite d'actions sur cet ensemblede repo git: Cet ensemble d'action est un test automatisé d'un "bout" de workflow.
 "`gravity`" Permet donc de développer des workflows, et produira en sortie un fichier BPMN 2.0 exécutable, pour s'intégrer à [Kytes](https://github.com/Jean-Baptiste-Lasselle/kytes)
-
 # POINT DE REPRISE
-
-
 Dernière erreur:
 
 ```
@@ -203,7 +213,6 @@ cat: ./etc.gitlab.rb.girofle: Aucun fichier ou dossier de ce type
 lstat /home/jibl/doc-pms/etc.gitlab.rb.girofle: no such file or directory
 cp: cannot stat './etc.gitlab.rb.girofle': No such file or directory
 conteneur-kytes.io.gitlab.2
-
 ```
 => tests inventory.girofle
 => tests restore/backup
@@ -216,4 +225,3 @@ Au cours du développement de Girofle, j'ai pu constater, que le `NetworkManager
 * Pour le cas où le lien vers [cette recommandation officielle Docker](https://success.docker.com/article/should-you-use-networkmanager), voici une impression écran de cette recommandation, au 02/04/2018:
 
 ![Recommandations Officelles Docker - Cent OS - NetworkManager](https://raw.githubusercontent.com/Jean-Baptiste-Lasselle/girofle/master/doc/recommandations-officielles-docker-rhel-network-manager.png "Recommandations Officelles Docker - Cent OS - NetworkManager")
-
