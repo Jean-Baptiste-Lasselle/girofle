@@ -60,8 +60,8 @@ mkdir -p $CONTEXTE_DU_BUILD_DOCKER
 sudo rm -f $DOCKERFILE_INSTANCES_GITLAB
 
 echo "FROM $VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB" >> $DOCKERFILE_INSTANCES_GITLAB
-echo "LABEL name=\"instances.girofle.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
-echo "   vendor=\"kyes.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "LABEL name=\"gitlab.girofle.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "   vendor=\"kytes.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "   license=\"GPLv2\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
 DATEDEMONBUILD=`date +"%M/%d/%Y %Hh%Mmin%Ssec"`
 echo "   build-date=\"$DATEDEMONBUILD\" " >> $DOCKERFILE_INSTANCES_GITLAB
