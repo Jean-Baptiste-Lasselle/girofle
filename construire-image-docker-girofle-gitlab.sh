@@ -68,7 +68,7 @@ echo "   build-date=\"$DATEDEMONBUILD\" " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN yum remove -y libappstream3 && yum update -y" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN rm -f ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN cp /etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
-echo "sudo sed -i \"s/# external_url 'GENERATED_EXTERNAL_URL'/external_url \\\"http:\\/\\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB\\\"/g\" ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "sed -i \"s/# external_url 'GENERATED_EXTERNAL_URL'/external_url \\\"http:\\/\\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB\\\"/g\" ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN rm -f /etc/gitlab/gitlab.rb" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb" >> $DOCKERFILE_INSTANCES_GITLAB
 # HEALTH_CHECK
