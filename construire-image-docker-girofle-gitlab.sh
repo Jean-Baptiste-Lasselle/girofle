@@ -76,7 +76,7 @@ echo "CMD [\"/usr/local/bin/wrapper\"]" >> $DOCKERFILE_INSTANCES_GITLAB
 # Les 2 HEALTH_CHECK distincts permettent de discriminer les échecs causés par
 # la configuration réseau / DNS  de la cible de déploiement. Ils devront être refactorisé en un unique agent
 # On ne fait donc pas de vérification de la configuration dNS? on passe uniquement par adresse IP pour le HEALTH_CHECK unique
-echo "HEALTHCHECK --interval=1s --timeout=300s --start-period=1 --retries=300 CMD curl --fail http://$ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB/ || exit 1" >> $DOCKERFILE_INSTANCES_GITLAB
+# echo "HEALTHCHECK --interval=1s --timeout=300s --start-period=1 --retries=300 CMD curl --fail http://$ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB/ || exit 1" >> $DOCKERFILE_INSTANCES_GITLAB
 # echo "HEALTHCHECK --interval=5m --timeout=3s --start-period=1 --retries=17 CMD curl --fail http://$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB/ || exit 1" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "CMD [\"/usr/local/bin/wrapper\"]" >> $DOCKERFILE_INSTANCES_GITLAB
 # echo "CMD [\"/bin/bash\"]" >> $DOCKERFILE_INSTANCES_GITLAB
