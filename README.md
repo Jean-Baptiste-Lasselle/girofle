@@ -105,6 +105,14 @@ https://blog.newrelic.com/2016/08/24/docker-health-check-instruction/
 https://docs.docker.com/engine/reference/builder/#/healthcheck
 
 
+### Possibilité
+
+Utiliser:
+```
+ sudo docker inspect -f '{{json .State.Health.Status}}' $NOM_DU_CONTENEUR_CREE
+```
+avec une boucle While dans un shell script, avec une instruction `sleep 10` dans la boucle, et la boucle st cassée au bout d'un certain nombre maximupm d'essai si le contneur n'entre jamais ni dans l'état "healthy, ni dans l'état "unhealthy". Si au contraire l'un de ces deux état est celui du conteneur, les opérations sont soient arrêtées, et les infos d'ereurs logguées, soit la procédure de déploiement se poursuiit avec le changement de configuration [/etc/gitlab/gitlab.rb]
+
 ## 0. Sécurité
 
 Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'éviter à l'utilisateur de se faire sniffer ses mots de passe Girofle sur le réseau interne, quelque soit l'attaquant.
