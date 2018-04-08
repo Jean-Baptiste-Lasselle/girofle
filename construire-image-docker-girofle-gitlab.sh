@@ -65,7 +65,7 @@ echo "   vendor=\"kytes.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "   license=\"GPLv2\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
 DATEDEMONBUILD=`date +"%M/%d/%Y %Hh%Mmin%Ssec"`
 echo "   build-date=\"$DATEDEMONBUILD\" " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "RUN yum remove -y libappstream3 && yum update -y" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN apt-get remove -y libappstream3 && apt-get update -y" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN rm -f ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN cp /etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN sed -i \"s/# external_url 'GENERATED_EXTERNAL_URL'/external_url \\\"http:\\/\\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB\\\"/g\" ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
