@@ -68,7 +68,7 @@ echo "   build-date=\"$DATEDEMONBUILD\" " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN yum remove -y libappstream3 && yum update -y" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN rm -f ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN cp /etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
-echo "sed -i \"s/# external_url 'GENERATED_EXTERNAL_URL'/external_url \\\"http:\\/\\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB\\\"/g\" ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN sed -i \"s/# external_url 'GENERATED_EXTERNAL_URL'/external_url \\\"http:\\/\\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB\\\"/g\" ./etc.gitlab.rb.girofle" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN rm -f /etc/gitlab/gitlab.rb" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb" >> $DOCKERFILE_INSTANCES_GITLAB
 # HEALTH_CHECK
@@ -128,12 +128,12 @@ sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADR
 # export ENTREE_INVENTAIRE=$(" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SRV_GITLAB] + [REP_GIROFLE_INSTANCE_GITLAB=$REP_GIROFLE_INSTANCE_GITLAB] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]")
 export ENTREE_INVENTAIRE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB=$NO_PORT_IP_SRV_GITLAB] + [REP_GIROFLE_INSTANCE_GITLAB=$REP_GIROFLE_INSTANCE_GITLAB] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]"
 sudo rm -f $INVENTAIRE_GIROFLE.temp
-touch $INVENTAIRE_GIROFLE.temp
+sudo touch $INVENTAIRE_GIROFLE.temp
 sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $INVENTAIRE_GIROFLE.temp
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE.temp
 sudo chmod u+r+w $INVENTAIRE_GIROFLE.temp
 # on garde les entrées précédentes
-cat $INVENTAIRE_GIROFLE >> $INVENTAIRE_GIROFLE.temp
+sudo cat $INVENTAIRE_GIROFLE >> $INVENTAIRE_GIROFLE.temp
 # on ajoute la nouvelle entrée
 echo $ENTREE_INVENTAIRE >> $INVENTAIRE_GIROFLE.temp
 sudo rm -f $INVENTAIRE_GIROFLE
