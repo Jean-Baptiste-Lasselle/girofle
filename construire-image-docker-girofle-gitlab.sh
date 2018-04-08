@@ -58,7 +58,7 @@ rm -rf $CONTEXTE_DU_BUILD_DOCKER
 mkdir -p $CONTEXTE_DU_BUILD_DOCKER
 # - Génération du fichier $DOCKERFILE_INSTANCES_GITLAB
 sudo rm -f $DOCKERFILE_INSTANCES_GITLAB
-
+# Ce dockerfile est tesrté, fonctionnel.
 echo "FROM $VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "LABEL name=\"gitlab.girofle.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "   vendor=\"kytes.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
@@ -79,7 +79,7 @@ echo "RUN apt-get update -y" >> $DOCKERFILE_INSTANCES_GITLAB
 # On ne fait donc pas de vérification de la configuration dNS? on passe uniquement par adresse IP pour le HEALTH_CHECK unique
 echo "HEALTHCHECK --interval=1s --timeout=300s --start-period=1s --retries=300 CMD curl --fail http://$ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB/ || exit 1" >> $DOCKERFILE_INSTANCES_GITLAB
 # echo "HEALTHCHECK --interval=5m --timeout=3s --start-period=1 --retries=17 CMD curl --fail http://$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB/ || exit 1" >> $DOCKERFILE_INSTANCES_GITLAB
-echo "CMD [\"/usr/local/bin/wrapper\"]" >> $DOCKERFILE_INSTANCES_GITLAB
+# echo "CMD [\"/usr/local/bin/wrapper\"]" >> $DOCKERFILE_INSTANCES_GITLAB
 # echo "CMD [\"/bin/bash\"]" >> $DOCKERFILE_INSTANCES_GITLAB
 
 
