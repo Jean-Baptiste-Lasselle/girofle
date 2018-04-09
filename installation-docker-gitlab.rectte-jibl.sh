@@ -233,7 +233,7 @@ sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $INVENTAIRE_
 sudo chmod a-r-w-x $INVENTAIRE_GIROFLE.temp
 sudo chmod u+r+w $INVENTAIRE_GIROFLE.temp
 # on garde les entrées précédentes
-cat $INVENTAIRE_GIROFLE >> $INVENTAIRE_GIROFLE.temp
+sudo cat $INVENTAIRE_GIROFLE >> $INVENTAIRE_GIROFLE.temp
 # on ajoute la nouvelle entrée
 echo $ENTREE_INVENTAIRE >> $INVENTAIRE_GIROFLE.temp
 sudo rm -f $INVENTAIRE_GIROFLE
@@ -267,7 +267,7 @@ echo " provision-girofle-  Contenu [./etc.gitlab.rb.girofle] APRES SUBSTITUTION 
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 echo " provision-girofle-  DEBUT [./etc.gitlab.rb.girofle] - " >> $NOMFICHIERLOG
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-cat ./etc.gitlab.rb.girofle >> $NOMFICHIERLOG
+sudo cat ./etc.gitlab.rb.girofle >> $NOMFICHIERLOG
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 echo " provision-girofle-  FIN   [./etc.gitlab.rb.girofle] - " >> $NOMFICHIERLOG
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
@@ -287,11 +287,34 @@ sudo rm -f ./etc.gitlab.rb.girofle
 
 ##########################################################################################
 ##########################################################################################
+#						 debug						   		   	 #
+##########################################################################################
+##########################################################################################
+# 
+# export REPERTOIRE_GIROFLE=/girofle
+# export GITLAB_INSTANCE_NUMBER=2
+# export REP_GIROFLE_INSTANCE_GITLAB=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
+
+# export NOMDEDOMAINE_INSTANCE_GITLAB=prj-pms.girofle.io
+# export ADRESSE_IP_SRV_GITLAB=192.168.1.32
+# export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=7786
+# export NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=
+# export CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=
+# export GITLAB_CONFIG_DIR=/etc/gitlab
+# export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=
+# export GITLAB_LOG_DIR=/var/log/gitlab
+# export CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=
+# export GITLAB_DATA_DIR=/var/opt/gitlab
+# export NOM_IMAGE_DOCKER_INSTANCES_GIROFLE=girolfe.io/image-gitlab:v1.0.0
+# sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE
+
+##########################################################################################
+##########################################################################################
 #						instance supplémentaire de test						   		   	 #
 ##########################################################################################
 ##########################################################################################
 # 
-sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE
+sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB
 checkHealth $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST
 # persistance de la nouvelle entrée dans l'inventaire des instances gitlab
 # ENTREE_INVENTAIRE=$(" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_SRV_GITLAB] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]")
