@@ -169,9 +169,9 @@ CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB
 CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
 # - création des répertoires associés
 # sudo rm -rf $REPERTOIRE_GIROFLE
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2
 ##############################################################################################################################################
 
 
