@@ -298,13 +298,13 @@ sudo rm -f ./etc.gitlab.rb.girofle
 # export NOMDEDOMAINE_INSTANCE_GITLAB=prj-pms.girofle.io
 # export ADRESSE_IP_SRV_GITLAB=192.168.1.32
 # export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=7786
-# export NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=
-# export CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=
+# export NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
 # export GITLAB_CONFIG_DIR=/etc/gitlab
-# export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=
 # export GITLAB_LOG_DIR=/var/log/gitlab
-# export CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=
 # export GITLAB_DATA_DIR=/var/opt/gitlab
+# export CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
+# export CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
+# export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
 # export NOM_IMAGE_DOCKER_INSTANCES_GIROFLE=girolfe.io/image-gitlab:v1.0.0
 # sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE
 
@@ -358,6 +358,9 @@ echo " provision-girofle-  -----------------------------------------------------
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
+
+
+
 sudo docker cp $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle
 
 # sed -i 's/external_url "*"/external_url "http://$HOSTNAME:$NO_PORT_IP_SRV_GITLAB"/g' ./etc.gitlab.rb.recup.jibl
