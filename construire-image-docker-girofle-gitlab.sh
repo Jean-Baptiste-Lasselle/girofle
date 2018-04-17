@@ -89,7 +89,7 @@ echo " provision-girofle-  ---------------------	 DOCKERFILE IMAGE GITLAB      -
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
-cat $DOCKERFILE_INSTANCES_GITLAB >> $NOMFICHIERLOG
+sudo cat $DOCKERFILE_INSTANCES_GITLAB >> $NOMFICHIERLOG
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
 echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
