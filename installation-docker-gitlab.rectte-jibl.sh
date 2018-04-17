@@ -363,7 +363,7 @@ echo " provision-girofle-  -----------------------------------------------------
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
 
-sudo docker rm -f ./etc.gitlab.rb.girofle
+sudo rm -f ./etc.gitlab.rb.girofle
 
 sudo docker cp $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle
 
