@@ -59,6 +59,10 @@ utilise un dépôt Git, en étant le seul (personne d'autre ne `commit && push` 
 
 # TODOs
 
+
+## next
+
+Il faut changer l'interactivité, je dois juste rentrer des valeurs au début et terminé, ne plsu avoir à saisir au bout de 5 minutes d'exécution
 ## Top-TODO
 
 Lorsque l'on devra comissionner un conteneur gitlab, on devra "attendre", nécessairement, et en tout cas il est certain que l'on voudra pouvoir vérifier QUAND une instance gitlab est "prête":
