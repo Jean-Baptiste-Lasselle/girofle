@@ -92,13 +92,14 @@ demander_rep_girofle_instance_gitlab () {
 	echo " "
 	ls -all $REPERTOIRE_GIROFLE
 	echo " "
-	echo " Part défaut, le répertoire girofle choisi sera:"
+	echo " Par défaut, le répertoire girofle choisi sera:"
 	echo " "
-	ls -t $REPERTOIRE_GIROFLE | head -1
+	ls -all $REPERTOIRE_GIROFLE/noeud-gitlab-1
 	echo " "
 	read REP_GIROFLE_INDIQUE
 	if [ "x$REP_GIROFLE_INDIQUE" = "x" ]; then
-       REP_GIROFLE_INDIQUE=$(ls -t $REPERTOIRE_GIROFLE | head -1)
+       # REP_GIROFLE_INDIQUE=$(ls -t $REPERTOIRE_GIROFLE | head -1)
+       REP_GIROFLE_INDIQUE=$REPERTOIRE_GIROFLE/noeud-gitlab-1
 	fi
 	
 	REP_GIROFLE_CONTENEUR_DOCKER=$REP_GIROFLE_INDIQUE
