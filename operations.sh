@@ -171,7 +171,7 @@ sudo chmod +x ./relancer-reseau.sh
 demander_nomDomaineSouhaite
 demander_addrIP
 demander_noPortIP
-demander_noPortIP_InstanceTest
+# demander_noPortIP_InstanceTest
 
 # update CentOS 7
 sudo yum clean all -y && sudo yum update -y
