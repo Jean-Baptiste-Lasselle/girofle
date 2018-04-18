@@ -53,12 +53,12 @@ fi
 # ---------------------------------------
 # - répertoire dédié au conteneur géré dans cette suite d'opérations
 # cf. demander_rep_girofle_instance_gitlab ()
-export REP_GIROFLE_CONTENEUR_DOCKER=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
+export REP_GIROFLE_CONTENEUR_DOCKER
 # export REP_GIROFLE_CONTENEUR_DOCKER
 # - répertoire dédié au backups du conteneur géré dans cette suite d'opérations
-export REP_BCKUP_CONTENEUR_DOCKER=$REP_GIROFLE_CONTENEUR_DOCKER/bckups
+export REP_BCKUP_CONTENEUR_DOCKER
 # - répertoire qui sera utilisé pour le backup en cours du conteneur géré dans cette suite d'opérations
-export REP_BCKUP_COURANT=$REP_BCKUP_CONTENEUR_DOCKER/$OPSTIMESTAMP
+export REP_BCKUP_COURANT
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 #			MAPPING des répertoires d'installation de gitlab dans les conteneurs DOCKER, avec des répertoires de l'hôte DOCKER				 #
@@ -145,10 +145,18 @@ demanderQuelleInstanceRestaurer () {
 
 # On commence par déterminer quel est l'instance à backupper
 demander_rep_girofle_instance_gitlab
-# la valeur de [$REP_GIROFLE_CONTENEUR_DOCKER] a été fixée par l'utilisateur de ce script
+# La valeur de [$REP_GIROFLE_CONTENEUR_DOCKER] a été fixée par l'utilisateur de ce script
+# et la valeur de [$REP_GIROFLE_CONTENEUR_DOCKER] définit la valeur de 5 autres vairables d'environnement d'exécution.
 CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/config
 CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/data
 CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/logs
+
+# - répertoire dédié au backups du conteneur géré dans cette suite d'opérations
+REP_BCKUP_CONTENEUR_DOCKER=$REP_GIROFLE_CONTENEUR_DOCKER/bckups
+mkdir -p $REP_BCKUP_CONTENEUR_DOCKER
+# - répertoire qui sera utilisé pour le backup en cours du conteneur géré dans cette suite d'opérations
+REP_BCKUP_COURANT=$REP_BCKUP_CONTENEUR_DOCKER/$OPSTIMESTAMP
+mkdir -p $REP_BCKUP_COURANT
 
 sudo rm -rf $REP_BCKUP_COURANT
 sudo mkdir -p $REP_BCKUP_COURANT/log
