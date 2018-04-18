@@ -144,17 +144,17 @@ CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/config
 CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/data
 CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/logs
 
-rm -rf $REP_BCKUP_COURANT
-mkdir -p $REP_BCKUP_COURANT/log
-mkdir -p $REP_BCKUP_COURANT/data
-mkdir -p $REP_BCKUP_COURANT/config
+sudo rm -rf $REP_BCKUP_COURANT
+sudo mkdir -p $REP_BCKUP_COURANT/log
+sudo mkdir -p $REP_BCKUP_COURANT/data
+sudo mkdir -p $REP_BCKUP_COURANT/config
 # Pourquoi sudo? parce que l'utilisateur réalisant le backup, n'est pas forcément doté des droits nécessaires pour copier les fichiers exploités par le process gitlab.
 # Voir comissionner des utilisateurs linux plus fins.
 sudo cp -Rf $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR/* $REP_BCKUP_COURANT/config
 sudo cp -Rf $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR/* $REP_BCKUP_COURANT/log
 sudo cp -Rf $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR/* $REP_BCKUP_COURANT/data
 
-echo 
+echo " +girofle+backup terminé" >> $NOMFICHIERLOG
 ##########################################################################################
 #			configuration du nom de domaine pou l'accès à l'instance gitlab   		   	 #  
 ##########################################################################################
