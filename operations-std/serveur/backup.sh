@@ -85,17 +85,29 @@ export REP_BCKUP_COURANT
 # afin de demander interactivement à l'utilisatuer, d'indiquer le répertoire dédié au conteneur de l'isntance Gitlab.
 demander_rep_girofle_instance_gitlab () {
 
+	echo " [-------------------------------------------------------------------] "
+	echo " [-------------------------------------------------------------------] "
 	echo "Dans le répertoire [$REPERTOIRE_GIROFLE], Quel est le "
 	echo "nom du répertoire Girofle de l'instance Gitlab que vous souhaitez backupper?"
 	echo " "
+	echo " [-------------------------------------------------------------------] "
 	echo "C'est l'un des suivants:"
 	echo " "
 	ls -all $REPERTOIRE_GIROFLE
 	echo " "
+	echo " [-------------------------------------------------------------------] "
 	echo " Par défaut, le répertoire girofle choisi sera:"
+	echo " "
+	echo " [$REPERTOIRE_GIROFLE/noeud-gitlab-1]"
+	echo " "
+	echo " [-------------------------------------------------------------------] "
+	echo " "
+	echo " Son contenu:"
 	echo " "
 	ls -all $REPERTOIRE_GIROFLE/noeud-gitlab-1
 	echo " "
+	echo " [-------------------------------------------------------------------] "
+	echo " [-------------------------------------------------------------------] "
 	read REP_GIROFLE_INDIQUE
 	if [ "x$REP_GIROFLE_INDIQUE" = "x" ]; then
        # REP_GIROFLE_INDIQUE=$(ls -t $REPERTOIRE_GIROFLE | head -1)
