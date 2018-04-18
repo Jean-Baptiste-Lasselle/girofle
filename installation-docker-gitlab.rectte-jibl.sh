@@ -134,7 +134,11 @@ checkHealth () {
 # soient provisionnées dans des conteneurs docker ou non, nécesssite uen configuration supplémentaire pour chaque
 # instance participant à la cohabitation.
 provisionInstanceSupplementaire () {
-
+# - création des répertoires associés
+# sudo rm -rf $REPERTOIRE_GIROFLE
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2
+mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2
 # changement des valeurs de tests.
 ADRESSE_IP_SRV_GITLAB=192.168.1.33
 # NOMDEDOMAINE_INSTANCE_GITLAB=prj-pms.girofle.io
@@ -200,11 +204,7 @@ NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INST
 CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
 CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
 CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
-# - création des répertoires associés
-# sudo rm -rf $REPERTOIRE_GIROFLE
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2
+
 ##############################################################################################################################################
 
 
