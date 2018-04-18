@@ -209,6 +209,10 @@ sudo yum remove -y NetworkManager
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Que la lumière soit! (pour activer les changemnts impactés dans [changement-hostname-nom-domaine.sh])
 
+# Pour terminer, on installe les scripts d'opérations standards d'exploitation dans le répertoire girofle
+sudo cp -Rf ./operations-std 
+
+
 clear
 echo " provision-girofle-  TERMINEE - " >> $NOMFICHIERLOG
 echo " provision-girofle-  TERMINEE - "

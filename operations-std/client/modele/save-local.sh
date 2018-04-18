@@ -5,3 +5,7 @@
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # todo : pour automatiser les opaerations gitbash client hors it
 # => commit local vec message standard
+
+echo "Test invocation par Git Bash sur Windows"
+echo "Pressez la touche entrée pour terminer le test."
+read variablequinesertquastopperleprocess

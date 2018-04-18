@@ -4,15 +4,26 @@ Cette recette provisionne un pseudo système, qui à l'utilisation se réduit à
 
 J'ai accessoirement baptisé le pseudo-système "[Girofle](#)".
 
-Une fois installé, Girofle permet de créer autant de conteneurs [Gitlab](https://gitlab.io) qu'il y a d'interfaces réseau dans le système sous jacent 
-dans la même VM, et de pouvoir pour chacun:
-* Comissioner une nouvelle instance gitlab, (en lui donnant éventuellement un nom, qui sera suffixé dans le nom du conteneur docker), et en retour on a l'url complète vers l'instance Gitlab comissionnée.
-* Dé-commissioner une instance gitlab (pas la détruire sauvagement).
+L'intention de girofle, est de permettre de gérer une grappe d'instances [Gitlab](https://gitlab.io), dont la taille 
+a pour seule limitation les capacités du matériel.
+
+Girofle conditionne ses instances Gitlab sous la forme de conteneurs Docker.
+Très simplifié, Girofle permet de faire des opérations CRUD, sur un ensemble (de cardinal quelconque) d'instances Gitlab.
+
+`[À venir dans la prochaine release]` Une fois installé, Girofle utilise les interfaces réseau dans le système sous-jacent, mais seule celles qui lui ont été attribuées.
+
+## Opérations standard d'exploitation
+
+* `[À VENIR DANS LA PROCHAINE RELEASE]` Comissioner une nouvelle instance gitlab, (en lui donnant éventuellement un nom, qui sera suffixé dans le nom du conteneur docker), et en retour on a l'url complète vers l'instance Gitlab comissionnée.
+* `[À VENIR DANS LA PROCHAINE RELEASE]` Dé-commissioner une instance gitlab (pas la détruire sauvagement).
 * Lister les instances gitlab
-* Pour une instance gitlab, faire un backup local
-* Pour une instance gitlab, faire un backup remote (vers un stockage qui peut être choisit)
+* Pour une instance gitlab, faire un backup local (1,2)
+* Pour une instance gitlab, faire un backup remote(1,2,3)(vers un stockage de géolocalisation différente)
 * Pour une instance gitlab, faire un restore dans une autre VM, ou la même VM
 * Pour une instance gitlab, à la comission, les backups locaux sont faits automatiquement (configurés comme une tâche réccurrente système crontab):
+
+À la provision, Girofle commisionne une première instance Gitlab, par défaut.
+La recette de provision Girofle permet de configurer les paramètres de commission de l'Instance Gitlab initiale.
 
 Girofle est testé pour les OS suivant:
 * CentOS 7
@@ -63,6 +74,7 @@ utilise un dépôt Git, en étant le seul (personne d'autre ne `commit && push` 
 ## next
 
 Il faut changer l'interactivité, je dois juste rentrer des valeurs au début et terminé, ne plsu avoir à saisir au bout de 5 minutes d'exécution
+
 ## Top-TODO
 
 Lorsque l'on devra comissionner un conteneur gitlab, on devra "attendre", nécessairement, et en tout cas il est certain que l'on voudra pouvoir vérifier QUAND une instance gitlab est "prête":
