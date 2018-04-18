@@ -81,6 +81,7 @@ utilise un dépôt Git, en étant le seul (personne d'autre ne `commit && push` 
 * Il faut isntaller les scripts d'opérations standards dans le répertoire `/girofle/operations-std`
 * Il faut créer le repo Git du client Girofle dans l'instance Gitlab, et y mettre les fichiers du client girofle (les .sh, les .bat etc...)
 * Il faudra en fait créer dans l'instance Gitlab Intitiale, un repo Git pour la recette de provision du client girofle pour Windows, pour CentOS, pour Ubuntu, etc... Mais aussi un pourt la rectte ansible, et un autre pour la recette Chef.io. Il y a une boucle de dépendances à démêler ici.
+* re-tester les backup automatiques.
 
 
 
@@ -91,7 +92,7 @@ lorsqu'elle est dans l'état "healthy". J'utiliserai donc la nouvelle fonctionna
 
 La problématique s'est préserntée dans le cas suivant:
 
-Lorsque l'on comissionne le conteneur docker de l'instance gitlab:
+Lorsque l'on comissionne le conteneur docker de l'instance Gitlab:
 * On démarre le conteneur docker, 
 * Le `daemon` Docker affiche alors un état "starting" pour le conteneur docker, 
 * Puis, on essaie immédiatement de la reconfigurer en allant chercher le fichier "/etc/gitlab/gitlab.rb" dans le conteneur
