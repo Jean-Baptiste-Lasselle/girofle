@@ -1,7 +1,4 @@
-# Installation de Docker sur centos 7
-																						
-# update CentOS 7
-sudo yum clean all -y && sudo yum update -y
+
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -175,6 +172,10 @@ demander_nomDomaineSouhaite
 demander_addrIP
 demander_noPortIP
 demander_noPortIP_InstanceTest
+
+# update CentOS 7
+sudo yum clean all -y && sudo yum update -y
+
 # ---------------------------------------------------------------------------------------------------------------------------------------------
 # ------	RECONFIGURATION DU RESEAU
 # ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -218,8 +219,6 @@ echo "   "
 echo " provision-girofle-  Etats des conteneurs Girofle: "
 sudo docker ps -a
 echo " provision-girofle-  Etats des conteneurs Girofle: "
-
-
 echo "   "
 
 # relancer_reseau
