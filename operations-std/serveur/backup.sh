@@ -9,24 +9,9 @@
 # - Variables d'environnement héritées:
 #                >>>   0
 # --------------------------------------------------------------------------------------------------------------------------------------------
-GITLAB_INSTANCE_NUMBER=1
 
 
-demanderQuelleInstanceRestaurer () {
 
-	echo "Quelle est le numéro d'instance Gitlab que vous souhaitez restaurer?"
-	echo "liste des insances en service:"
-	echo " "
-	./lister-instances-gitlab.sh
-	echo " "
-	read INSTANCE_CHOISIE
-	if [ "x$INSTANCE_CHOISIE" = "x" ]; then
-	   echo " +girofle+ERREUR+ impossible de déterminer le numéro d'instance à backupper."
-       exit 1
-	fi
-	GITLAB_INSTANCE_NUMBER=$INSTANCE_CHOISIE
-	echo " Binding Adresse IP choisit pour le serveur gitlab: $INSTANCE_CHOISIE";
-}
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 #														RESEAU-HOTE-DOCKER																	 #
@@ -43,6 +28,12 @@ export OPSTIMESTAMP=`date +"%d-%m-%Y-time-%Hh-%Mm-%Ss"`
 # ---------------------------------------
 
 export REPERTOIRE_GIROFLE=/girofle
+export NOMFICHIERLOG
+export GITLAB_INSTANCE_NUMBER
+REPERTOIRE_GIROFLE=/girofle
+NOMFICHIERLOG=$REPERTOIRE_GIROFLE/girofle.log
+# devra pouvoir servir pour avoir un serice de niommage par défaut des instances gitlab, et assurer l'intégrité/unicité du nommage des isntances.
+GITLAB_INSTANCE_NUMBER=1
 # ---------------------------------------
 # - répertoires d'installation de gitlab
 # ---------------------------------------
@@ -129,6 +120,21 @@ demander_rep_girofle_instance_gitlab () {
 # export NOMDHOTE=archiveur-prj-pms.io
 # sudo docker run --detach --hostname $HOSTNAME --publish $ADRESSE_IP_SRV_GITLAB:433:443 --publish $ADRESSE_IP_SRV_GITLAB:80:80 --publish 2227:22 --name conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR:$GITLAB_DATA_DIR gitlab/gitlab-ce:latest
 
+demanderQuelleInstanceRestaurer () {
+
+	echo "Quelle est le numéro d'instance Gitlab que vous souhaitez restaurer?"
+	echo "liste des insances en service:"
+	echo " "
+	./lister-instances-gitlab.sh
+	echo " "
+	read INSTANCE_CHOISIE
+	if [ "x$INSTANCE_CHOISIE" = "x" ]; then
+	   echo " +girofle+ERREUR+ impossible de déterminer le numéro d'instance à backupper."
+       exit 1
+	fi
+	GITLAB_INSTANCE_NUMBER=$INSTANCE_CHOISIE
+	echo " Binding Adresse IP choisit pour le serveur gitlab: $INSTANCE_CHOISIE";
+}
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
