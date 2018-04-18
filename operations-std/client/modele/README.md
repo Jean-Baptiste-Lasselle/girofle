@@ -10,17 +10,18 @@ avec un premier commit:
 
 # Provision du client Girofle
 
-Cible Windows 10:
+## Provision du client pour Cible Windows 10:
+
 Pour ce faire, il suffit:
 * d'installer Git sur Windows,
 * de faire un git clone de ce repo,
 * d'exécuter `installer-client-girofle.bat`
 
-## À porpos du script `installer-client-girofle.bat`
+### À porpos du script `installer-client-girofle.bat`
 
 Ce script crée un répertoire `$REPERTOIRE_CLIENT_GIROFLE`, copie les fichiers `*.sh` (`save-local.sh` et `sync-remote.sh`) dans `$REPERTOIRE_CLIENT_GIROFLE`, créée un raccourci vers le script `client-girofle.bat`
 
-## À propos du script `client-girofle.bat`
+### À propos du script `client-girofle.bat`
 
 Il s'agit du script invoqué pour exécuter toute opération du client Girofle sur Windows.
 Ce script prend toujours les options suivantes en paramètre:
@@ -52,16 +53,24 @@ REM
 ```
 
 
+## Provision du client pour Cible Linux
 
+Pour ce faire, il suffit de faire un git clone, et d'exécuter 
 
-Cible Linux:
-Pour ce faire, il suffit de faire un git clone, et d'exécuter "installer-client-girofle.sh"
+Pour ce faire, il suffit:
+* d'installer Git sur Windows,
+* de faire un git clone de ce repo,
+* d'exécuter `installer-client-girofle.sh`
 
 
 ## À venir dans les prochaines release Girofle
 
 
-Le client windows 10 sera déployable en powershell, puis recette ansible /chef.io
+Le client Girofle sera déployable avec des recettes:
+* en powershell, pour Windows (1 repo Git)
+* en linux scripts /bin/bash (1 repo Git, un git tag pour chaque version pleinement qualifiée en regard d'uen version précise d'OS, le repo organisé en branche par OS) 
+* recette ansible
+* recette chef.io
 
 
 # Dépendances
