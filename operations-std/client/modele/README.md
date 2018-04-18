@@ -8,7 +8,7 @@ avec un premier commit:
 * qui contient seulement les fichiers contenus dans ce répertoire 
 * le commit message est "Repository créé par la Provision Girofle, pour mettre en service le service de déploiement du client girofle, sous la forme d'un repository git."
 
-# Provision duc lient girofle
+# Provision du client Girofle
 
 Cible Windows 10:
 Pour ce faire, il suffit:
@@ -20,7 +20,7 @@ Pour ce faire, il suffit:
 
 Ce script crée un répertoire `$REPERTOIRE_CLIENT_GIROFLE`, copie les fichiers `*.sh` (`save-local.sh` et `sync-remote.sh`) dans `$REPERTOIRE_CLIENT_GIROFLE`, créée un raccourci vers le script `client-girofle.bat`
 
-## À porpos du script `client-girofle.bat`
+## À propos du script `client-girofle.bat`
 
 Il s'agit du script invoqué pour exécuter toute opération du client Girofle sur Windows.
 Ce script prend toujours les options suivantes en paramètre:
@@ -32,7 +32,7 @@ Ce script prend toujours les options suivantes en paramètre:
 * Si l'option --bckup est utilisée, en premier argument, alors le client girofle comprend qu'il doit prendre en charge un nouveau répertoire, et le second argument:
   * S'il est précisé, c'est le chemin complet du répertoireà backupper
   * S'il n'est pas précisé, le chemin complet du nouveau répertoire à backupper avvec Girofle, est demandé interactivement.
-  * Si le répertoire précisé est déjà pris en cahrge par Girofle (je vérifie si je trouve un `.git`, et si oui, je vérifie l'URL du repo distant origin, si c'est un repo Girofle, je sais qu'il est déjà pros en chage par Girofle et je loggue une erreur)
+  * Si le répertoire précisé est déjà pris en charge par Girofle (je vérifie si je trouve un `.git`, et si oui, je vérifie l'URL du repo distant origin, si c'est un repo Girofle, je sais qu'il est déjà pros en chage par Girofle et je loggue une erreur)
 
 
 ```
