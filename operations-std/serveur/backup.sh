@@ -74,9 +74,10 @@ export REP_BCKUP_COURANT=$REP_BCKUP_CONTENEUR_DOCKER/$OPSTIMESTAMP
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # 
 # - répertoires associés
-CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/config
-CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/data
-CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/logs
+# CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/config
+# CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/data
+# CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/logs
+
 # - création des répertoires associés
 # sudo rm -rf $REPERTOIRE_GIROFLE
 # sudo mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR
@@ -98,7 +99,7 @@ demander_rep_girofle_instance_gitlab () {
 	echo " "
 	echo "C'est l'un des suivants:"
 	echo " "
-	ll $REPERTOIRE_GIROFLE
+	ls -all $REPERTOIRE_GIROFLE
 	echo " "
 	echo " Part défaut, le répertoire girofle choisi sera:"
 	echo " "
@@ -138,6 +139,10 @@ demander_rep_girofle_instance_gitlab () {
 
 # On commence par déterminer quel est l'instance à backupper
 demander_rep_girofle_instance_gitlab
+# la valeur de [$REP_GIROFLE_CONTENEUR_DOCKER] a été fixée par l'utilisateur de ce script
+CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/config
+CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/data
+CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR=$REP_GIROFLE_CONTENEUR_DOCKER/logs
 
 rm -rf $REP_BCKUP_COURANT
 mkdir -p $REP_BCKUP_COURANT/log

@@ -19,8 +19,13 @@ Très simplifié, Girofle permet de faire des opérations CRUD, sur un ensemble 
 * Lister les instances gitlab
 * Pour une instance gitlab, faire un backup local (1,2)
 * Pour une instance gitlab, faire un backup remote(1,2,3)(vers un stockage de géolocalisation différente)
-* Pour une instance gitlab, faire un restore dans une autre VM, ou la même VM
-* Pour une instance gitlab, à la comission, les backups locaux sont faits automatiquement (configurés comme une tâche réccurrente système crontab):
+* Pour une instance gitlab, faire un restore dans une autre VM, ou la même VM:
+  * à partir d'un backup retrouvé dans le stockage de mmême géolocalisation, mais machine différente
+  * à partir d'un backup retrouvé dans le stockage de géolocalisation différente
+  * Ces bakcups / Restore 
+* Pour une instance gitlab, à la comission, les backups (1,2) sont faits automatiquement (configurés comme une tâche réccurrente système crontab). Par défaut, toutes les 4 heures:
+  * une opération de backup vers le répertoire `/girofle/sauvegardes` est réalisée pour l'instance Gitlab Entière.
+  * par défaut, toutes les 4 heures, le répertoire `/girofle/sauvegardes` est backuppé dans le stockage de même géolocalistation, mais exploité par une machine différente
 
 À la provision, Girofle commisionne une première instance Gitlab, par défaut.
 La recette de provision Girofle permet de configurer les paramètres de commission de l'Instance Gitlab initiale.
