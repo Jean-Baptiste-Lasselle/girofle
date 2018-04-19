@@ -78,6 +78,7 @@ utilise un dépôt Git, en étant le seul (personne d'autre ne `commit && push` 
 
 ## next
 
+* Utiliser [ce nouveau repo](https://github.com/Jean-Baptiste-Lasselle/recette-conditionnment-java-windows) pour créer les repository nesséaires au déploiement du cleint Girofle.
 * Il faut isntaller les scripts d'opérations standards dans le répertoire `/girofle/operations-std`
 * Il faut créer le repo Git du client Girofle dans l'instance Gitlab, et y mettre les fichiers du client girofle (les .sh, les .bat etc...)
 * Il faudra en fait créer dans l'instance Gitlab Intitiale, un repo Git pour la recette de provision du client girofle pour Windows, pour CentOS, pour Ubuntu, etc... Mais aussi un pourt la rectte ansible, et un autre pour la recette Chef.io. Il y a une boucle de dépendances à démêler ici.
