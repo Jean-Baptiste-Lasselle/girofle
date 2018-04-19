@@ -53,6 +53,7 @@ REM
 ```
 
 
+
 ## Provision du client pour Cible Linux
 
 Pour ce faire, il suffit de faire un git clone, et d'exécuter 
@@ -61,6 +62,56 @@ Pour ce faire, il suffit:
 * d'installer Git sur Windows,
 * de faire un git clone de ce repo,
 * d'exécuter `installer-client-girofle.sh`
+
+### Futur de la provision
+
+Devra devenir un repo séparé au bootstrap de l'infrastrucuture de l'organisation: le repo de déploiement du client Girofle. 
+Celui-ci pourrait même faire l'objet d'un repo Git à part entière avant même le bootstrap, comme dépendance de la recette de provision du client Girofle.
+
+Lors de la provision Girofle, un repo est créé dans l'instance Gitlab initialement créée:
+* Ce `repo` Git est le `repo` de la recette de provision du client Girofle, dans son état initial des opérations (jamais encore invoquée, traçée dans l'histroique des opérations si invoquée pour une première provision).
+* Ce `repo` doit contenir le `README.md` suivant:
+
+```
+# Liste des OS supportés
+
+Correspond exactement à la liste des branches du repo git de la recette de provisionning du client Girofle.
+Rappel de la liste:
+
+* Windows
+* CentOS
+* Ubuntu Server (support assuré pour les release LTS d'Ubuntu Server)
+* Debian
+
+## Client Girofle Windows
+
+### Liste des distributions Windows testées, et tags correspondants
+
+* Branche git: `windows`
+* `TODO: ` tableau de mapping bijectif entre tags et distributions Windows
+
+## Client Girofle CentOS
+
+### Liste des distributions CentOS testées, et tags correspondants
+
+* Branche git: `centos`
+* `TODO: ` tableau de mapping bijectif entre tags et distributions CentOS
+
+## Client Girofle Ubuntu
+
+### Liste des distributions Ubuntu Server testées, et tags correspondants
+
+* Branche git: `ubuntu`
+* `TODO: ` tableau de mapping bijectif entre tags et distributions Ubuntu
+
+## Client Girofle Debian
+
+### Liste des distributions Debian testées, et tags correspondants
+
+* Branche git: `debian`
+* `TODO: ` tableau de mapping bijectif entre tags et distributions Debian
+
+```
 
 
 ## À venir dans les prochaines release Girofle
