@@ -70,8 +70,20 @@ utilise un dépôt Git, en étant le seul (personne d'autre ne `commit && push` 
 	* automatically add missing files
 	* which will leave only a list of files with differences to remote
   
-
-
+* On considère que l'ensemble des machine sutilisées par  un utilsiateur non IT constituent une seule et même machine.
+* en plsu de son repo git, chaque répertoire est recensé dans le compte de l'utilisateur: il faut donc une application serveur, qui maintient l'inventaire des répertoires.
+* L'utilsiateur non-IT versionne un répertoire sur une machine `M1`, fait des commit && push, fait des dernières modifications, mais ne fait pas le dernier commit && push.
+* Il met sa machine hors tension, et passe sur une autre machine. Il tente de récupérer le répertoire, la récupération lui est refusée, aprce qu'il n'a pas fait le dernier commit && push : il reste "quelque part" (sur l'une de ses machines), des modificationsqui n'ont pas été sauvegardées.
+* Il faudra gérer toutes les possibilités pour faciliter le dernier commit && push.
+* L'utilisateur non IT versionne un répertoire de sa machine avec un repo. Aucun autre répertoire de sa machine ne peut être versionné par le même repo.
+* Le client Girofle assure el respect de cette règle.
+* De plus, l'applications erveur vérifiera que si un AUTRE utilisateur demande à récupérer le répertoire, il y est autorisé (donc un utilisateur doit poucvoir donner cette autorisation), et si autorisation il y a, alors l'applciations erveur Girofle vérifie que l'utilisateur précédent n'a pas ublié le dernier commit and push.
+*  Bon, il faut qu'un tel utilisateur puisse aussi annuler les chagements qu'il a en cours: dans ce cas, je détris le répertoire et je refais un cloen entier du repo à la version voulue.
+* Un truc qui n'a rien à voir, masi que je garde là parce qu'il est tard: Imaginons que j'ai des changements non commités, mais bon, il y en a beaucoup, dans plusieurs fichiers. Je sais que je veux "en gros" totu annuler, mais je veux vérifer. Ce que je voudrais alors pouvoir faire:
+  * Pour chaque différence par rapport à la version précédente, je veux pouvoir l'examiner, et "préparer" une version git à lavance. Au fur et à mesure que je dépile la liste des différences, je vais probablement vouloir préparer encore d'autres versions à l'avance.
+  * À la fin, j'ai préparé un sous arbre git, que je peux visualiser graphiquement. Avec cette visualisation graphique, je peux retirer n'imprte quelle version, sans changer la relation d'ordre canonique dans un arbre git. Le nouvel ordre obtenue, est un sous-ordre de l'ordre original.
+L4ensemble de ces règles 
+* 
 
 # TODOs
 
