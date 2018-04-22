@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -162,7 +162,7 @@ sudo chmod a-r-w-x $INVENTAIRE_GIROFLE
 sudo chmod u+r+w $INVENTAIRE_GIROFLE
 
 # On rend exécutables les dépendances
-sudo chmod +x ./docker-EASE-SPACE-BARE-METAL-SETUP.sh
+sudo chmod +x ./docker-BARE-METAL-SETUP.sh
 sudo chmod +x ./installation-docker-gitlab.rectte-jibl.sh
 sudo chmod +x ./changement-hostname-nom-domaine.sh
 sudo chmod +x ./configurer-backup-automatique.sh
@@ -203,9 +203,9 @@ sudo yum remove -y NetworkManager
 
 
 # prod:
-# ./changement-hostname-nom-domaine.sh && ./docker-EASE-SPACE-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh >> $NOMFICHIERLOG
+# ./changement-hostname-nom-domaine.sh && ./docker-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh >> $NOMFICHIERLOG
 # usinage:
-./docker-EASE-SPACE-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh && ./configurer-backup-automatique.sh && incrementerCompteurGirofle
+./docker-BARE-METAL-SETUP.sh && ./installation-docker-gitlab.rectte-jibl.sh && ./configurer-backup-automatique.sh && incrementerCompteurGirofle
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Que la lumière soit! (pour activer les changemnts impactés dans [changement-hostname-nom-domaine.sh])
 

@@ -1,0 +1,92 @@
+@media screen and (max-width: 975px) {
+	#gabarit_superieur, #gabarit_logo, #gabarit_menu, #gabarit_barre1, #gabarit_barre2, #gabarit_responsable, #gabarit_pied, #gabarit_recherche {
+		display: none;
+	}
+
+	#gabarit_pub0, #gabarit_pub1 {
+		display: none !important;
+	}
+
+	#gabarit_mobile {
+		display: block;
+	}
+}
+
+#gabarit_mobile {
+	font-size: 10pt;
+	height: 70px;
+	text-align: left;
+}
+
+#gabarit_mobile div:first-child {
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: block;
+}
+
+#gabarit_mobile div:nth-child(2) {
+	position: absolute;
+	left: 75px;
+	top: 5px;
+	color: #68869a;
+}
+
+#gabarit_mobile div:nth-child(3) {
+	margin: 15px 0 0 75px;
+}
+
+#gabarit_mobile div:nth-child(3) a, #gabarit_mobile div:nth-child(3) span {
+	display: inline-block;
+	font-size: 8pt;
+	margin: 0 0 5px 0;
+	padding: 5px;
+	color: white;
+	background-color: #5A7F97;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#gabarit_menu_mobile {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: white;
+	color: white;
+	font-size: 10pt;
+	z-index: 1;
+}
+
+#gabarit_menu_mobile div {
+	float: right;
+	background: red;
+	padding: 2px;
+	font-size: 12pt;
+	cursor: pointer;
+}
+
+#gabarit_menu_mobile p {
+	background: #5A7F97;
+	height: 17px;
+	padding: 4px;
+	margin: 0;
+}
+
+#gabarit_menu_mobile a, #gabarit_menu_mobile a:visited {
+	color: white;
+	text-decoration: none;
+}
+
+#gabarit_menu_mobile > ul {
+	margin: 5px 0 0 5px;
+	padding: 10px 0 0 0;
+}
+
+#gabarit_menu_mobile > ul > li {
+	margin: 5px;
+	padding: 2px 0 2px 5px;
+	background: #5A7F97;
+	width: 200px;
+}
