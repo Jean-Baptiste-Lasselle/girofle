@@ -320,7 +320,33 @@ Au cours du développement de Girofle, j'ai pu constater, que le `NetworkManager
 
 ![Recommandations Officelles Docker - Cent OS - NetworkManager](https://raw.githubusercontent.com/Jean-Baptiste-Lasselle/girofle/master/doc/recommandations-officielles-docker-rhel-network-manager.png "Recommandations Officelles Docker - Cent OS - NetworkManager")
 
-## ANNEXE: Authentification "SAML"](https://docs.gitlab.com/ee/integration/saml.html) pour chaque instance Gitlab
+# ANNEXE: noms de domaines pour l'accès aux repositories
+
+Utiliser Traefik.io , avec le backend docker:
+https://docs.traefik.io/configuration/backends/docker/
+
+je fais les sous domaines (tous correspondent à des conteneurs de l'infrastructure d'un pipe):
+ - $ID_DU_PROJET.application.scm.nom-specifique-instance-gitlab4.kytes.io =>> 1 nom de domaine des repository de versionning du code source de l'application.
+ - $ID_DU_PROJET.application.scm.nom-specifique-instance-gitlab5.kytes.io =>> 1 nom de domaine des repository de versionning du code source de l'application.
+ - les repository de versionning du code source de l'application ne peuvent être ni supprimés, ni modifiés par le pipeline, qui n'a droit qu'en lecture, à ceux ci. Plusieurs pipeline peuvent utiliser le même repo de code source d'application. Ces repo sont uniques.
+ - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.kytes.io =>> Le nom de domaine du repository de versionning du code source de l'application.
+ - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab1.kytes.io
+ - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab2.kytes.io
+ - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab3.kytes.io
+ - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab6.kytes.io
+ - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab7.kytes.io ==>> Le dernier du pipeline donne la trace des déploiements de tous les pipeplines, par user, etc... rporting données à collecter de ce côité du tuyau.
+ - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-1.kytes.io
+ - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-2.kytes.io
+ - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-3.kytes.io
+ - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-4.kytes.io
+ - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-5.kytes.io
+ 
+* un robot est constitué d'un contneur instance gitlab + un conteneur exécutant un build (avec un gitlab-runner déjà provisionné dedans, et conecté au sereur maître Gitlab). À la place du gitlab runner, je peux aussi utiliser, dans le dockerfile de mon worker, une définition `CMD`de commande de démarrage du conteneur, qui permet de définir un build. Si ce build déclenché dans le conteneur est écrit en language de script, les buidls deveinnent dépendants de l'OS exécutant le buid. C'est peu gênant étant donnéla facilité avec laquelle on change la distribution Linux dans un conteneur docker. Ceci étant, idéalement, il fatdrait utiliser des recettes Ansible et Chef.io pour déclencher les builds... là où la questione st intéresante, c'est que Ansible et Chef.io ne sont pas en soit pensés come des orchestrateurs de pipeline, et il y aurait peut-être à faire quelque chose là, pour utilsier unlanguage agnostique...
+* un robot exécute un build, commit et pousse sur le repository git utilisé par l'exécution du pipeline. À chaque push d'un conteneur-gitlab-runner, les ficheirs générés modifiés etc... sont ajoutés et poussés aussi, pour être présents au git clone suivant.
+* À chaque exécution d'un pipeline, correspond donc un nouveau repository gitcomplètemejnt neuf. Ce repossitory permet éventuellment de reprendre les oéprations là où elles s'étaient arrêtées parce que l'usine trop encombrée, ou a cessé de fonctionner anormalement.
+* Si je peux re-définir l'action exécutée lorsque l'évènement push sur un repo est déclenché, et le re-définir de manière à transmettre sur une queue, pour que l'opération soit reprise sur échec et exécutée en atteneant le temps nécessaire, que l'usine baisse de régime. Donc du message Anynchrone
+
+# ANNEXE: Authentification "SAML"](https://docs.gitlab.com/ee/integration/saml.html) pour chaque instance Gitlab
 
 Le script [`configuration-authentification-autorisations.sh`], configure authentification et autorisations SAML / OAuth2 , avec 
 l'intégration au serveur OAuth2 précisé dans la configuration Girofle, ou le serveur OAuth2 provisionné avec Girofle, si aucun n'est 
