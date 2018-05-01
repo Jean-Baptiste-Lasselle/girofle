@@ -326,22 +326,24 @@ Utiliser Traefik.io , avec le backend docker:
 https://docs.traefik.io/configuration/backends/docker/
 
 je fais les sous domaines (tous correspondent à des conteneurs de l'infrastructure d'un pipe):
- - $ID_DU_PROJET.application.scm.nom-specifique-instance-gitlab4.kytes.io =>> 1 nom de domaine des repository de versionning du code source de l'application.
- - $ID_DU_PROJET.application.scm.nom-specifique-instance-gitlab5.kytes.io =>> 1 nom de domaine des repository de versionning du code source de l'application.
- - les repository de versionning du code source de l'application ne peuvent être ni supprimés, ni modifiés par le pipeline, qui n'a droit qu'en lecture, à ceux ci. Plusieurs pipeline peuvent utiliser le même repo de code source d'application. Ces repo sont uniques.
- - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.kytes.io =>> Le nom de domaine du repository de versionning du code source de l'application.
- - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab1.kytes.io
- - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab2.kytes.io
- - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab3.kytes.io
- - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab6.kytes.io
- - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab7.kytes.io ==>> Le dernier du pipeline donne la trace des déploiements de tous les pipeplines, par user, etc... rporting données à collecter de ce côité du tuyau.
- - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-1.kytes.io
- - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-2.kytes.io
- - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-3.kytes.io
- - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-4.kytes.io
- - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-5.kytes.io
+* Pool de repos de référence du code source de chaque composant applicatif
+  - $ID_DU_PROJET.application.scm.nom-specifique-instance-gitlab4.kytes.io =>> 1 nom de domaine des repository de versionning du code source de l'application.
+  - $ID_DU_PROJET.application.scm.nom-specifique-instance-gitlab5.kytes.io =>> 1 nom de domaine des repository de versionning du code source de l'application.
+  - les repository de versionning du code source de l'application ne peuvent être ni supprimés, ni modifiés par le pipeline, qui n'a droit qu'en lecture, à ceux ci. Plusieurs pipeline peuvent utiliser le même repo de code source d'application. Ces repo sont uniques.
+* Pool de repos pour les pipelines:  
+  - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab1.kytes.io
+  - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab2.kytes.io
+  - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab3.kytes.io
+  - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab6.kytes.io
+  - $ID_DU_PROJET.$ID_DU_PIPELINE.scm.nom-specifique-instance-gitlab7.kytes.io ==>> Le dernier du pipeline donne la trace des déploiements de tous les pipeplines, par user, etc... rporting données à collecter de ce côité du tuyau.
+* Pool de conenteneur exécutant les builds:
+  - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-1.kytes.io
+  - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-2.kytes.io
+  - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-3.kytes.io
+  - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-4.kytes.io
+  - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-5.kytes.io
  
-* un robot est constitué d'un contneur instance gitlab + un conteneur exécutant un build (avec un gitlab-runner déjà provisionné dedans, et conecté au sereur maître Gitlab). À la place du gitlab runner, je peux aussi utiliser, dans le dockerfile de mon worker, une définition `CMD`de commande de démarrage du conteneur, qui permet de définir un build. Si ce build déclenché dans le conteneur est écrit en language de script, les buidls deveinnent dépendants de l'OS exécutant le buid. C'est peu gênant étant donnéla facilité avec laquelle on change la distribution Linux dans un conteneur docker. Ceci étant, idéalement, il fatdrait utiliser des recettes Ansible et Chef.io pour déclencher les builds... là où la questione st intéresante, c'est que Ansible et Chef.io ne sont pas en soit pensés come des orchestrateurs de pipeline, et il y aurait peut-être à faire quelque chose là, pour utilsier unlanguage agnostique...
+* un robot est constitué d' (un repo Git dans un conteneur instance gitlab) + (un conteneur exécutant un build, avec un gitlab-runner déjà provisionné dedans, et connecté au serveur maître Gitlab, `HEALTH_CHECK` spécifique Kytesà à développer). À la place du gitlab runner, je peux aussi utiliser, dans le dockerfile de mon worker, une définition `CMD`de commande de démarrage du conteneur, qui permet de définir un build. Si ce build déclenché dans le conteneur est écrit en language de script, les buidls deveinnent dépendants de l'OS exécutant le buid. C'est peu gênant étant donnéla facilité avec laquelle on change la distribution Linux dans un conteneur docker. Ceci étant, idéalement, il fatdrait utiliser des recettes Ansible et Chef.io pour déclencher les builds... là où la questione st intéresante, c'est que Ansible et Chef.io ne sont pas en soit pensés come des orchestrateurs de pipeline, et il y aurait peut-être à faire quelque chose là, pour utilsier un language agnostique...)
 * un robot exécute un build, commit et pousse sur le repository git utilisé par l'exécution du pipeline. À chaque push d'un conteneur-gitlab-runner, les ficheirs générés modifiés etc... sont ajoutés et poussés aussi, pour être présents au git clone suivant.
 * À chaque exécution d'un pipeline, correspond donc un nouveau repository gitcomplètemejnt neuf. Ce repossitory permet éventuellment de reprendre les oéprations là où elles s'étaient arrêtées parce que l'usine trop encombrée, ou a cessé de fonctionner anormalement.
 * Si je peux re-définir l'action exécutée lorsque l'évènement push sur un repo est déclenché, et le re-définir de manière à transmettre sur une queue, pour que l'opération soit reprise sur échec et exécutée en atteneant le temps nécessaire, que l'usine baisse de régime. Donc du message Anynchrone
@@ -350,6 +352,9 @@ je fais les sous domaines (tous correspondent à des conteneurs de l'infrastruct
 Dixit [cette page](https://docs.gitlab.com/ce/api/projects.html#create-project) :
 ```
 
+# curl --header "Private-Token: 9koXpg98eAheJpvBs5tK" https://gitlab.example.com/api/v4/projects
+# 
+curl --header "PRIVATE-TOKEN: is2sP8rMFUPXrWAsvy7b" -X POST "https://gitlab.com/api/v3/projects?name=kytes-pipeline-worker-1&issues_enabled=false"
 
 ```
 
@@ -392,3 +397,62 @@ précisé dans la configuration de (la provision) Girofle.
 # Le client Girofle en java, "pour l'utilisateur non-IT", devra s'authentifier lui aussi en SAML, avec JGit / JSch
 # 
 ```
+
+# Annexe: [Traefik.io](https://traefik.io)
+
+Il s'agit bien d'infrastructure:
+
+![Les premiers mots qui sautent aux yeux]()
+
+[La documentation](https://docs.traefik.io/) indique:
+
+* Il faut un `docker-compose.yml` contenant:
+
+```
+version: '3'
+
+services:
+  reverse-proxy:
+    image: traefik #The official Traefik docker image
+    command: --api --docker # Enables the web UI and tells Træfik to listen to docker
+    ports:
+      - "80:80"     #The HTTP port
+      - "8080:8080" #The Web UI (enabled by --api)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+
+```
+* puis exécuter:
+ 
+```
+docker-compose up -d reverse-proxy
+# You can open a browser and go to http://localhost:8080 to see Træfik's dashboard
+
+```
+ 
+* Ensuite ajouter le contenu suivant, au fichier `docker-compose.yml`:
+```
+# ... À ajouter en fin de fichier
+export NOM_DU_SERVICE
+NOM_DU_SERVICE=whoami
+export DOCKER_COMPOSE_YML=./docker-compose.yml
+echo "whoami:" >> $DOCKER_COMPOSE_YML
+echo "  image: emilevauge/whoami #A container that exposes an API to show it's IP address" >> $DOCKER_COMPOSE_YML
+echo "  labels:" >> $DOCKER_COMPOSE_YML
+echo "    - \"traefik.frontend.rule=Host:whoami.docker.localhost\"" >> $DOCKER_COMPOSE_YML
+```
+* Puis on exécute le nouveau docker compose:
+
+```
+export NOM_DU_SERVICE
+NOM_DU_SERVICE=whoami
+docker-compose up -d $NOM_DU_SERVICE
+```
+* Et on peut tester le nouveau service avec la commande:
+```
+curl -H Host:whoami.docker.localhost http://127.0.0.1
+# permettra de mettre au point un HEALTH_CHECK spécifique Girofle:
+# (healcheck spécifique à la platefome, pour la provision d'une nouvelle instance gitlab girofle) 
+```
+`
+`
