@@ -322,4 +322,24 @@ Au cours du développement de Girofle, j'ai pu constater, que le `NetworkManager
 
 ## ANNEXE: Authentification "SAML"](https://docs.gitlab.com/ee/integration/saml.html) pour chaque instance Gitlab
 
-réalisée par `configuration-authentification-autorisations.sh`
+Le script [`configuration-authentification-autorisations.sh`], configure authentification et autorisations SAML / OAuth2 , avec 
+l'intégration au serveur OAuth2 précisé dans la configuration Girofle, ou le serveur OAuth2 provisionné avec Girofle, si aucun n'est 
+précisé dans la configuration de (la provision) Girofle.
+
+
+```
+
+# Reste à appliquer les instructions de :
+# - https://docs.gitlab.com/ee/integration/saml.html  , qui a comme pré-requis:
+#   +  https://docs.gitlab.com/ee/install/installation.html#using-https
+# - et au cours de cette docuementation, il faudra exécuter aussi:
+#   +  https://docs.gitlab.com/ee/integration/omniauth.html#initial-omniauth-configuration
+# - et pour configurer un OAuth2 provider server, de mon choix: https://docs.gitlab.com/ee/integration/omniauth.html#configure-omniauth-providers-as-external
+#   + exemple dans le fichier "gitlab.yml": 
+# --------------------------------------------------------------
+#  omniauth:
+#    external_providers: ['twitter', 'google_oauth2'] 
+# --------------------------------------------------------------
+# L'idée serait d'utiliser mon propre serveur OAuth2 / SAML, déployé indépendamment et Free-Ipa-Server gère l'identité de l'ensemble Serveur OAuth2 / Girofle.
+
+```
