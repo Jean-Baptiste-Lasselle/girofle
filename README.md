@@ -120,6 +120,8 @@ L4ensemble de ces règles
 
 ## Top-TODO
 
+Mettre en oeuvre l'[authentification "SAML"](https://docs.gitlab.com/ee/integration/saml.html) pour chaque instance Gitlab, et vérifer les CRUD sur auth et autorisations.
+
 Lorsque l'on devra comissionner un conteneur gitlab, on devra "attendre", nécessairement, et en tout cas il est certain que l'on voudra pouvoir vérifier QUAND une instance gitlab est "prête":
 lorsqu'elle est dans l'état "healthy". J'utiliserai donc la nouvelle fonctionnalité "`HEALTH_CHECK`" de docker-compose, pour réaliser cela.
 
@@ -317,3 +319,7 @@ Au cours du développement de Girofle, j'ai pu constater, que le `NetworkManager
 * Pour le cas où le lien vers [cette recommandation officielle Docker](https://success.docker.com/article/should-you-use-networkmanager), voici une impression écran de cette recommandation, au 02/04/2018:
 
 ![Recommandations Officelles Docker - Cent OS - NetworkManager](https://raw.githubusercontent.com/Jean-Baptiste-Lasselle/girofle/master/doc/recommandations-officielles-docker-rhel-network-manager.png "Recommandations Officelles Docker - Cent OS - NetworkManager")
+
+## ANNEXE: Authentification "SAML"](https://docs.gitlab.com/ee/integration/saml.html) pour chaque instance Gitlab
+
+réalisée par 

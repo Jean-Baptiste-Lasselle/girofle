@@ -52,25 +52,23 @@ done
 
 }
 
+# On redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
 reinitialiser_droits_systeme_fichiers_conf_reseau () {
 
-for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
+for fichierconf2 in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
 do
-echo " +girofle+[reinitialiser_droits_systeme_fichiers_conf_reseau()]+ FICHIER: $fichierconf" >> $NOMFICHIERLOG
-# ll $fichierconf
-# echo " "
-# cat /etc/sysconfig/network-scripts/$fichierconf >> $FICHIERCONFRESEAUTEMP
+echo " +girofle+[reinitialiser_droits_systeme_fichiers_conf_reseau()]+ FICHIER: $fichierconf2" >> $NOMFICHIERLOG
 
 # ----------------------------------------------------------------------------
 # on redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
 # ----------------------------------------------------------------------------
 # 
-sudo chown -R root:root $fichierconf
+sudo chown -R root:root $fichierconf2
 # on enlève tous les droits à tout le monde
-sudo chmod a-r-w-x   $fichierconf
+sudo chmod a-r-w-x   $fichierconf2
 # pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
-sudo chmod u+r+w   $fichierconf
-sudo chmod g+r   $fichierconf
+sudo chmod u+r+w   $fichierconf2
+sudo chmod g+r   $fichierconf2
 
 done
 
@@ -120,13 +118,13 @@ ADRESSE_IP_LINUX_NET_INTERFACE_4=192.168.1.34
 # echo "$ADRESSE_IP_LINUX_NET_INTERFACE_3    kytes-io-alt1" >> ./nouveau.fichier.hostname
 # echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-io-alt2" >> ./nouveau.fichier.hostname
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Pour configurer un hostname différent pour chaque interface réseau, il faudra éditer les fichiers:
-# 
+# TODO: revoir tout cela avec [hostnamectl --help]
 # =============================================================================================================================================
-# 1./ On commence par reconfigurerurer les interfaces réseau linux dans le CentOS, afin qu'elles ne soient plus controllées par le Network manager
+# 1./ On commence par reconfigurer les interfaces réseau linux dans le CentOS, afin qu'elles ne soient plus controllées par le Network manager
 # =============================================================================================================================================
 reconfigurer_interfaces_reseau
 # =============================================================================================================================================
-# 2./ Puis on ajoute la configuration hostname spécififque à chaque interface réseau.
+# 2./ Puis on ajoute la configuration hostname spécifique à chaque interface réseau.
 # =============================================================================================================================================
 export FICHIERTEMP=./config-int-reseau.girofle
 
@@ -167,8 +165,6 @@ sudo cat /etc/sysconfig/network-scripts/ifcfg-enp0s10 >> $FICHIERTEMP
 echo "HOSTNAME=$NOMDEDOMAINE_INSTANCE_GITLAB" >> $FICHIERTEMP
 sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s10
 sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s10
-
-
 
 # on remet bien comme il faut les droits sur les fichiers dde conf réseau
 reinitialiser_droits_systeme_fichiers_conf_reseau
