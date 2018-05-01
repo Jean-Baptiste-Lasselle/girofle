@@ -49,7 +49,7 @@ L'état Girofle est défini par:
   * Pour chaque repository Git dans l'instance Gitlab, doivent être backuppées:
     * Les données de repository (l'historique des commit et tags) (contenues dans `GITLAB_DATA_DIR=/var/opt/gitlab`)
     * Les données de documentation du repository (les `README.md`, contenus dans `GITLAB_DATA_DIR=/var/opt/gitlab`, et les vérifier si le wiki de chaque repo est backuppé avec `GITLAB_DATA_DIR=/var/opt/gitlab`)
-	* -> Pour le backup des wikis, éventuellement créer un java qui exécute les opérations (récupération de la liste des wikis, de cahque page de cahque wiki, crféationd 'un wiki, etc...) de l'API REST Gitlab permettant de faire le backup / restore des wikis de chaque repo Git d'une instance Gitlab (l'instacne Gitlab définissant le endpoint de l'API).
+	* -> Pour le backup des wikis, éventuellement créer un java qui exécute les opérations (récupération de la liste des wikis, de chaque page de chaque wiki, création d 'un wiki, etc...) de [l'API REST Gitlab](https://docs.gitlab.com/ee/api/wikis.html) permettant de faire le backup / restore des wikis de chaque repo Git d'une instance Gitlab (l'instance Gitlab définissant le endpoint de l'API).
     * La configuration de l'authentification et des autorisations des utilsateurs du repository (contenues où? configuration de l'authentification faite comment dans gitlab? À retrouver)
 
 
