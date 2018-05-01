@@ -341,5 +341,9 @@ précisé dans la configuration de (la provision) Girofle.
 #    external_providers: ['twitter', 'google_oauth2'] 
 # --------------------------------------------------------------
 # L'idée serait d'utiliser mon propre serveur OAuth2 / SAML, déployé indépendamment et Free-Ipa-Server gère l'identité de l'ensemble Serveur OAuth2 / Girofle.
-
+# ---
+# Intégrer la provision d'éclipse dans une VM, et à la provision, toutes les authentifications fonctionnent
+# --- 
+# Le client Girofle en java, "pour l'utilisateur non-IT", devra s'authentifier lui aussi en SAML, avec JGit / JSch
+# 
 ```
