@@ -1,3 +1,29 @@
+#!/bin/bash
+# --------------------------------------------------------------------------------------------------------------------------------------------
+##############################################################################################################################################
+#########################################						ENVIRONNEMENT							######################################
+##############################################################################################################################################
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# Hérité de [operations.sh]
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# 
+# - Logs de la recette de provision:
+# 
+# 	--- >>> export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
+# 
+# - répertoires  dans l'hôte docker:
+# 
+# 	--- >>> export REPERTOIRE_GIROFLE=/girofle
+# 	--- >>> export COMPTEUR_GIROFLE=$REPERTOIRE_GIROFLE/.auto-increment.girofle
+# 	--- >>> export INVENTAIRE_GIROFLE=$REPERTOIRE_GIROFLE/inventory.girofle
+# 	--- >>> export NOMDEDOMAINE_INSTANCE_GITLAB
+# 	--- >>> export ADRESSE_IP_SRV_GITLAB
+# 	--- >>> export NO_PORT_IP_SRV_GITLAB
+# 	--- >>> export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST
+# 
+# 
+# 
+
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -8,72 +34,111 @@
 # 
 # 
 
-# +++ >>> L'appel de cette fonction implique que l'on re-démarre le réseau en appelant la fonction [relancer_reseau()], comme dernière opération du script [operations.sh]
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# +++ >>> L'appel de cette fonction implique que l'on re-démarre le réseau en appelant la fonction [relancer_reseau()], comme
+#         dernière opération du script [operations.sh]
 # 
 # systemctl restart networking.service
 # 
 # +++ >>> TODO:
-# 		- refaire la fonction pour qu'elle donne aux 4 interfaces réseaux une condiguration en DHCP non gérée par le NetworkManager: ainsi, on pourra ajouter le hostname derrière sans problème
+# 		- refaire la fonction pour qu'elle donne aux 4 interfaces réseaux une condiguration en DHCP non gérée par le NetworkManager: ainsi, on
+#         pourra ajouter le hostname derrière sans problème
 # 
-# 
+# +++ >>> Un seul argument : le nom de domaine affecté à chaque interface réseau
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 reconfigurer_interfaces_reseau () {
 
 # sudo sed -i 's/NM_CONTROLLED="yes"/NM_CONTROLLED="no"/g' /etc/sysconfig/network-scripts/ifcfg-enp0s*
-FICHIERCONFRESEAUTEMP=./confreseautemp.girofle
-rm -f $FICHIERCONFRESEAUTEMP
+
 for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
 do
-echo " +girofle+[reconfigurer_interfaces_reseau()]+ FICHIER: $fichierconf" >> $NOMFICHIERLOG
-# ll $fichierconf
-# echo " "
-# cat /etc/sysconfig/network-scripts/$fichierconf >> $FICHIERCONFRESEAUTEMP
-sudo cp $fichierconf $FICHIERCONFRESEAUTEMP
+	if [ "$fichierconf" = "/etc/sysconfig/network-scripts/ifcfg-enp0s3" ]; then
+       reconfigurer_interface_reseau $fichierconf "kytes-ssh.io"
+	fi
+	if [ "$fichierconf" = "/etc/sysconfig/network-scripts/ifcfg-enp0s8" ]; then
+       reconfigurer_interface_reseau $fichierconf "kytes-alt1.io"
+	fi
+	if [ "$fichierconf" = "/etc/sysconfig/network-scripts/ifcfg-enp0s9" ]; then
+       reconfigurer_interface_reseau $fichierconf "kytes-alt2.io"
+	fi
+	if [ "$fichierconf" = "/etc/sysconfig/network-scripts/ifcfg-enp0s10" ]; then
+       reconfigurer_interface_reseau $fichierconf "$NOMDEDOMAINE_INSTANCE_GITLAB"
+	fi
+done
+
+}
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# 
+# +++ >>> Premier argument : le chemin absolu du fichier de configuration réseau centos associé à l'interface reconfigurée
+# 
+# +++ >>> Second argument : le nom de domaine à associer à l'interface reconfigurée
+# 
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+reconfigurer_interface_reseau () {
+
+
+
+
+# sudo sed -i 's/NM_CONTROLLED="yes"/NM_CONTROLLED="no"/g' /etc/sysconfig/network-scripts/ifcfg-enp0s*
+FICHIER_CONF_INTERF_RESEAU=$1
+NOM_DE_DOMAINE_ASSOCIE=$2
+FICHIERCONFRESEAUTEMP=./confreseautemp.girofle
+touch $FICHIERCONFRESEAUTEMP
+rm -f $FICHIERCONFRESEAUTEMP
+echo " +girofle+[reconfigurer_interface_reseau()]+ variable : [FICHIER_CONF_INTERF_RESEAU=$FICHIER_CONF_INTERF_RESEAU]" >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interface_reseau()]+ variable : [FICHIERCONFRESEAUTEMP=$FICHIERCONFRESEAUTEMP]" >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interface_reseau()]+ variable: [NOM_DE_DOMAINE_ASSOCIE=$NOM_DE_DOMAINE_ASSOCIE]" >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interface_reseau()]+ ----------------------------------------- " >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interface_reseau()]+ COPIE FICHIER RESEAU SYSTEME HÔTE - DEBUT " >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interface_reseau()]+ ----------------------------------------- " >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interface_reseau()]+ [ls -all $FICHIERCONFRESEAUTEMP] donne sur le système hôte [AVANT la copie du fichier système] : " >> $NOMFICHIERLOG
+ls -all $FICHIERCONFRESEAUTEMP >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interface_reseau()]" >> $NOMFICHIERLOG
+sudo cp $FICHIER_CONF_INTERF_RESEAU $FICHIERCONFRESEAUTEMP
+echo " +girofle+[reconfigurer_interface_reseau()]+ [ls -all $FICHIERCONFRESEAUTEMP] donne sur le système hôte [APRES la copie du fichier système] : " >> $NOMFICHIERLOG
+ls -all $FICHIERCONFRESEAUTEMP >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interface_reseau()]" >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interface_reseau()]+ ---------------------------------------- " >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interface_reseau()]+ COPIE FICHIER RESEAU SYSTEME HÔTE - FIN  " >> $NOMFICHIERLOG
+echo " +girofle+[reconfigurer_interface_reseau()]+ ---------------------------------------- " >> $NOMFICHIERLOG
 sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $FICHIERCONFRESEAUTEMP
 sudo chmod a-r-w-x   $FICHIERCONFRESEAUTEMP
-# pour ne mette que le user de provisioning ait les droits en écriture et lecrture sur ce fichier temporaire
+# pour que le user de provisioning ait les droits en écriture et lecture sur ce fichier temporaire
 sudo chmod u+r+w   $FICHIERCONFRESEAUTEMP
 sudo chmod g+r   $FICHIERCONFRESEAUTEMP
+# =============================================================================================================================================
+# 1./ On reconfigure l'interface réseau linux dans le CentOS, afin qu'elle ne soit plus controllée par le Network manager
+# =============================================================================================================================================
 echo 'NM_CONTROLLED="no"' >> $FICHIERCONFRESEAUTEMP
-sudo rm -f $fichierconf
-sudo cp -f $FICHIERCONFRESEAUTEMP $fichierconf
+# =============================================================================================================================================
+# 2./ Puis on ajoute la configuration hostname spécifique à l'interface réseau.
+# =============================================================================================================================================
+echo "HOSTNAME=$NOM_DE_DOMAINE_ASSOCIE" >> $FICHIERCONFRESEAUTEMP
+sudo rm -f $FICHIER_CONF_INTERF_RESEAU
+sudo cp -f $FICHIERCONFRESEAUTEMP $FICHIER_CONF_INTERF_RESEAU
 
-# et on redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
-sudo chown -R root:root $fichierconf
-# on enlève tous les droits à tout le monde
-sudo chmod a-r-w-x   $fichierconf
-# pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
-sudo chmod u+r+w   $fichierconf
-sudo chmod g+r   $fichierconf
+
+
 
 # pour ne pas accumuler
 rm -f $FICHIERCONFRESEAUTEMP
 
-done
 
-}
-
-# On redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
-reinitialiser_droits_systeme_fichiers_conf_reseau () {
-
-for fichierconf2 in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
-do
-echo " +girofle+[reinitialiser_droits_systeme_fichiers_conf_reseau()]+ FICHIER: $fichierconf2" >> $NOMFICHIERLOG
-
-# ----------------------------------------------------------------------------
-# on redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
-# ----------------------------------------------------------------------------
+# =============================================================================================================================================
+# 3./ Enfin, on redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
+# =============================================================================================================================================
 # 
-sudo chown -R root:root $fichierconf2
+sudo chown -R root:root $FICHIER_CONF_INTERF_RESEAU
 # on enlève tous les droits à tout le monde
-sudo chmod a-r-w-x   $fichierconf2
-# pour ne mette que les exacts droits tles qu'ils sont au commissionning d'un CentOS 7
-sudo chmod u+r+w   $fichierconf2
-sudo chmod g+r   $fichierconf2
-
-done
+sudo chmod a-r-w-x   $FICHIER_CONF_INTERF_RESEAU
+# pour ne mette que les exacts droits tels qu'ils sont au commissionning d'un CentOS 7
+sudo chmod u+r+w   $FICHIER_CONF_INTERF_RESEAU
+sudo chmod g+r   $FICHIER_CONF_INTERF_RESEAU
+echo " +girofle+[reconfigurer_interface_reseau()]+ réinitialisation des droits systèmes pour le fichier réseau : $FICHIER_CONF_INTERF_RESEAU" >> $NOMFICHIERLOG
 
 }
 
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -119,52 +184,8 @@ ADRESSE_IP_LINUX_NET_INTERFACE_4=192.168.1.34
 # echo "$ADRESSE_IP_LINUX_NET_INTERFACE_4    kytes-io-alt2" >> ./nouveau.fichier.hostname
 # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Pour configurer un hostname différent pour chaque interface réseau, il faudra éditer les fichiers:
 # TODO: revoir tout cela avec [hostnamectl --help]
-# =============================================================================================================================================
-# 1./ On commence par reconfigurer les interfaces réseau linux dans le CentOS, afin qu'elles ne soient plus controllées par le Network manager
-# =============================================================================================================================================
+
 reconfigurer_interfaces_reseau
-# =============================================================================================================================================
-# 2./ Puis on ajoute la configuration hostname spécifique à chaque interface réseau.
-# =============================================================================================================================================
-export FICHIERTEMP=./config-int-reseau.girofle
-
-
-# for fichierconf in $(ls /etc/sysconfig/network-scripts/ifcfg-enp0s*)
-# do
-
-# rm -f $FICHIERTEMP
-# sudo cat $fichierconf >> $FICHIERTEMP
-# echo "HOSTNAME=kytes-ssh.io" >> $FICHIERTEMP
-# sudo rm -f $fichierconf
-# sudo cp -f $FICHIERTEMP $fichierconf
-
-# done
-
-
- # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s3
-rm -f $FICHIERTEMP
-sudo cat /etc/sysconfig/network-scripts/ifcfg-enp0s3 >> $FICHIERTEMP
-echo "HOSTNAME=kytes-ssh.io" >> $FICHIERTEMP
-sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s3
-sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s3
- # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s8
-rm -f $FICHIERTEMP
-sudo cat /etc/sysconfig/network-scripts/ifcfg-enp0s8 >> $FICHIERTEMP
-echo "HOSTNAME=kytes-alt1.io" >> $FICHIERTEMP
-sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s8
-sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s8
- # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s9
-rm -f $FICHIERTEMP
-sudo cat /etc/sysconfig/network-scripts/ifcfg-enp0s9 >> $FICHIERTEMP
-echo "HOSTNAME=kytes-alt2.io" >> $FICHIERTEMP
-sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s9
-sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s9
- # ================================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 	> /etc/sysconfig/network-scripts/ifcfg-enp0s10
-rm -f $FICHIERTEMP
-sudo cat /etc/sysconfig/network-scripts/ifcfg-enp0s10 >> $FICHIERTEMP
-echo "HOSTNAME=$NOMDEDOMAINE_INSTANCE_GITLAB" >> $FICHIERTEMP
-sudo rm -f /etc/sysconfig/network-scripts/ifcfg-enp0s10
-sudo cp -f $FICHIERTEMP /etc/sysconfig/network-scripts/ifcfg-enp0s10
 
 # on remet bien comme il faut les droits sur les fichiers dde conf réseau
 reinitialiser_droits_systeme_fichiers_conf_reseau

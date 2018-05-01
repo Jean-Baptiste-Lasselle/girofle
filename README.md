@@ -322,4 +322,4 @@ Au cours du développement de Girofle, j'ai pu constater, que le `NetworkManager
 
 ## ANNEXE: Authentification "SAML"](https://docs.gitlab.com/ee/integration/saml.html) pour chaque instance Gitlab
 
-réalisée par 
+réalisée par `configuration-authentification-autorisations.sh`
