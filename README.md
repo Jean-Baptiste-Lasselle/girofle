@@ -1,10 +1,8 @@
 # Girofle
 
-Cette recette provisionne un pseudo système, qui à l'utilisation se réduit à utiliser des scripts tous situés dans le même répertoire.
+Cette recette provisionne Girofle sur un hôte réseau unique.
 
-J'ai accessoirement baptisé le pseudo-système "[Girofle](#)".
-
-L'intention de girofle, est de permettre de gérer une grappe d'instances [Gitlab](https://gitlab.io), dont la taille 
+L'intention de [Girofle](#), est de permettre de gérer un ensemble d'instances [Gitlab](https://gitlab.io), dont la taille 
 a pour seule limitation les capacités du matériel.
 
 Girofle conditionne ses instances Gitlab sous la forme de conteneurs Docker.
@@ -12,26 +10,48 @@ Très simplifié, Girofle permet de faire des opérations CRUD, sur un ensemble 
 
 `[À venir dans la prochaine release]` Une fois installé, Girofle utilise les interfaces réseau dans le système sous-jacent, mais seule celles qui lui ont été attribuées.
 
-## Opérations standard d'exploitation
-
-* `[À VENIR DANS LA PROCHAINE RELEASE]` Comissioner une nouvelle instance gitlab, (en lui donnant éventuellement un nom, qui sera suffixé dans le nom du conteneur docker), et en retour on a l'url complète vers l'instance Gitlab comissionnée.
-* `[À VENIR DANS LA PROCHAINE RELEASE]` Dé-commissioner une instance gitlab (pas la détruire sauvagement).
-* Lister les instances gitlab
-* Pour une instance gitlab, faire un backup local (1,2)
-* Pour une instance gitlab, faire un backup remote(1,2,3)(vers un stockage de géolocalisation différente)
-* Pour une instance gitlab, faire un restore dans une autre VM, ou la même VM:
-  * à partir d'un backup retrouvé dans le stockage de mmême géolocalisation, mais machine différente
-  * à partir d'un backup retrouvé dans le stockage de géolocalisation différente
-  * Ces bakcups / Restore 
-* Pour une instance gitlab, à la comission, les backups (1,2) sont faits automatiquement (configurés comme une tâche réccurrente système crontab). Par défaut, toutes les 4 heures:
-  * une opération de backup vers le répertoire `/girofle/sauvegardes` est réalisée pour l'instance Gitlab Entière.
-  * par défaut, toutes les 4 heures, le répertoire `/girofle/sauvegardes` est backuppé dans le stockage de même géolocalistation, mais exploité par une machine différente
 
 À la provision, Girofle commisionne une première instance Gitlab, par défaut.
 La recette de provision Girofle permet de configurer les paramètres de commission de l'Instance Gitlab initiale.
 
 Girofle est testé pour les OS suivant:
 * CentOS 7
+
+
+## Opérations standard d'exploitation
+
+* `[À VENIR DANS LA PROCHAINE RELEASE]` Comissioner une nouvelle instance gitlab, (en lui donnant éventuellement un nom, qui sera suffixé dans le nom du conteneur docker), et en retour on a l'url complète vers l'instance Gitlab comissionnée.
+* `[À VENIR DANS LA PROCHAINE RELEASE]` Dé-commissioner une instance gitlab (pas la détruire sauvagement).
+* Lister les instances gitlab
+* Faire un backup local (1,2):
+  * de la configuration Girofle, 
+  * de l'état Girofle.
+* Faire un backup remote(1,2,3)(vers un stockage de géolocalisation différente):
+  * de la configuration Girofle, 
+  * de l'état Girofle.
+* Pour une instance gitlab, faire un backup local (1,2)
+* Pour une instance gitlab, faire un backup remote(1,2,3)(vers un stockage de géolocalisation différente)
+* Pour une instance gitlab, faire un restore dans une autre VM, ou la même VM:
+  * à partir d'un backup retrouvé dans le stockage de même géolocalisation, mais machine différente
+  * à partir d'un backup retrouvé dans le stockage de géolocalisation différente
+  * Ces bakcups / Restore 
+* Pour une instance gitlab, à la comission, les backups (1,2) sont faits automatiquement (configurés comme une tâche réccurrente système crontab). Par défaut, toutes les 4 heures:
+  * une opération de backup vers le répertoire `/girofle/sauvegardes` est réalisée pour l'instance Gitlab Entière.
+  * par défaut, toutes les 4 heures, le répertoire `/girofle/sauvegardes` est backuppé dans le stockage de même géolocalistation, mais exploité par une machine différente
+
+  
+L'état Girofle est défini par:
+* Quelles sont les instances gitlab up'n running? Quelles sont celles arrêtées?
+* Quelles sont les interfaces réseau utilisées (adresses  IP / noPort IP), et le mapping entre couples (adresse_ip, no_port_ip) et instances gitlab?
+* L'état de chaque instance gitlab, hormis le fait qu'elle soit ou non en service:
+  * La configuration de l'instance Gitlab (`GITLAB_CONFIG_DIR=/etc/gitlab`)
+  * Les logs de l'instance Gitlab (`GITLAB_LOG_DIR=/var/log/gitlab`)
+  * Pour chaque repository Git dans l'instance Gitlab, doivent être backuppées:
+    * - les données de repository (l'historique des commit et tags) (contenues dans `GITLAB_DATA_DIR=/var/opt/gitlab`)
+    * - les données de documentation du repository (les `README.md`, contenus dans `GITLAB_DATA_DIR=/var/opt/gitlab`, et les vérifier si le wiki de chaque repo est backuppé avec `GITLAB_DATA_DIR=/var/opt/gitlab`)
+	* -> Pour le backup des wikis, éventuellement créer un java qui exécute les opérations (récupération de la liste des wikis, de cahque page de cahque wiki, crféationd 'un wiki, etc...) de l'API REST Gitlab permettant de faire le backup / restore des wikis de chaque repo Git d'une instance Gitlab (l'instacne Gitlab définissant le endpoint de l'API).
+    * - la configuration de l'authentification et des autorisations des utilsateurs du repository (contenues où? configuration de l'authentification faite comment dans gitlab? À retrouver)
+
 
 # Installation
 
