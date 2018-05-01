@@ -353,8 +353,8 @@ Dixit [cette page](https://docs.gitlab.com/ce/api/projects.html#create-project) 
 
 ```
 
-[exemple d'appel de l'API qui fonctionne avec simple token](lienversimageversionnee):
-
+[exemple d'appel de l'API qui fonctionne avec simple token](https://github.com/Jean-Baptiste-Lasselle/girofle/raw/master/doc/invocation-API-REST-GITLAB-creation-token-sur-instance-gitlab.png):
+[le tokoen est généré ainsi](https://github.com/Jean-Baptiste-Lasselle/girofle/raw/master/doc/invocation-API-REST-GITLAB.png)
 
 Dans ce cas, il suffit de savoir générer, avec l'API, des tokens pour utiliser l'API, qui sont distribués aux
 pipelines pour chaque exécution, avec révocations à poteriori.
