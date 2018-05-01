@@ -320,103 +320,6 @@ sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "rm -f ./etc.gitlab.rb.
 sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "gitlab-ctl reconfigure"
 sudo rm -f ./etc.gitlab.rb.girofle
 
-
-##########################################################################################
-##########################################################################################
-#						 debug						   		   	 #
-##########################################################################################
-##########################################################################################
-# 
-# export REPERTOIRE_GIROFLE=/girofle
-# export GITLAB_INSTANCE_NUMBER=2
-# export REP_GIROFLE_INSTANCE_GITLAB=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
-
-# export NOMDEDOMAINE_INSTANCE_GITLAB=prj-pms.girofle.io
-# export ADRESSE_IP_SRV_GITLAB=192.168.1.32
-# export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=7786
-# export NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
-# export GITLAB_CONFIG_DIR=/etc/gitlab
-# export GITLAB_LOG_DIR=/var/log/gitlab
-# export GITLAB_DATA_DIR=/var/opt/gitlab
-# export CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
-# export CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
-# export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
-# export NOM_IMAGE_DOCKER_INSTANCES_GIROFLE=girolfe.io/image-gitlab:v1.0.0
-# sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE
-
-##########################################################################################
-##########################################################################################
-#						instance supplémentaire de test						   		   	 #
-##########################################################################################
-##########################################################################################
-# provisionInstanceSupplementaire
-
-##########################################################################################
-#			configuration du nom de domaine pour l'accès à l'instance gitlab   		   	 #
-#							supplémentaire pour les test		   		   	 			 #
-##########################################################################################
-
-sudo rm -f ./etc.gitlab.rb.girofle
-
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  Instance Gitlab supplémentaire de test provisionnée à l'installation Girofle - " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  - Contenu du répertoire [/etc/gitlab] dans le conteneur:" >> $NOMFICHIERLOG
-echo " provision-girofle-  - " >> $NOMFICHIERLOG
-sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "ls -all /etc/gitlab" >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  - Existence du fichier [/etc/gitlab/gitlab.rb] dans le conteneur:" >> $NOMFICHIERLOG
-echo " provision-girofle-  - " >> $NOMFICHIERLOG
-sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "ls -all /etc/gitlab/gitlab.rb" >> $NOMFICHIERLOG
-echo " provision-girofle-  - " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  - " >> $NOMFICHIERLOG
-echo " provision-girofle-  - " >> $NOMFICHIERLOG
-
-sudo rm -f ./etc.gitlab.rb.girofle
-
-sudo docker cp $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle
-
-# sed -i 's/external_url "*"/external_url "http://$HOSTNAME:$NO_PORT_IP_SRV_GITLAB"/g' ./etc.gitlab.rb.recup.jibl
-
-sudo sed -i "s/# external_url 'GENERATED_EXTERNAL_URL'/external_url \"http:\/\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST\"/g" ./etc.gitlab.rb.girofle
-
-echo " provision-girofle-  - " >> $NOMFICHIERLOG
-echo " provision-girofle-  - " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  Instance Gitlab supplémentaire de test provisionnée à l'installation Girofle - " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  - " >> $NOMFICHIERLOG
-echo " provision-girofle-  - " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  Contenu [./etc.gitlab.rb.girofle] APRES SUBSTITUTION : - " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  DEBUT fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION - " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-sudo cat ./etc.gitlab.rb.girofle >> $NOMFICHIERLOG
-echo " provision-girofle-  FIN   fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION - " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-echo " provision-girofle-  - " >> $NOMFICHIERLOG
-echo " provision-girofle-  - " >> $NOMFICHIERLOG
-echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
-
-sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST:./etc.gitlab.rb.girofle
-sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "rm -f /etc/gitlab/gitlab.rb"
-sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb"
-sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "rm -f ./etc.gitlab.rb.girofle"
-# sudo docker restart $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST
-# à la place d'un redémarrage complet du conteneur, j'utilise [gitlab-ctl]
-sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "gitlab-ctl reconfigure"
-sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "gitlab-ctl restart"
-sudo rm -f ./etc.gitlab.rb.girofle
-
-
-
 ##########################################################################################
 #								LOGS CONFIG INSTANCE GITLAB							   	 #
 ##########################################################################################
@@ -426,8 +329,90 @@ echo " provision-girofle-  DEBUT fichier config [/etc/gitlab/gitlab.rb] - " >> $
 sudo docker exec -it $NOM_DU_CONTENEUR_CREE /bin/bash -c "cat /etc/gitlab/gitlab.rb" >> $NOMFICHIERLOG
 echo " provision-girofle-  FIN fichier config [/etc/gitlab/gitlab.rb] - " >> $NOMFICHIERLOG
 echo " provision-girofle-  - " >> $NOMFICHIERLOG
+
+
 ##########################################################################################
-#			configuration du nom de domaine pou l'accès à l'instance gitlab   		   	 #  
+##########################################################################################
+#						instance supplémentaire de test						   		   	 #
+##########################################################################################
+##########################################################################################
+# provisionInstanceSupplementaire
+
+
+
+##########################################################################################
+#			configuration du nom de domaine pour l'accès à l'instance gitlab   		   	 #
+#							supplémentaire pour les test		   		   	 			 #
+##########################################################################################
+
+# sudo rm -f ./etc.gitlab.rb.girofle
+
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  Instance Gitlab supplémentaire de test provisionnée à l'installation Girofle - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  - Contenu du répertoire [/etc/gitlab] dans le conteneur:" >> $NOMFICHIERLOG
+# echo " provision-girofle-  - " >> $NOMFICHIERLOG
+# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "ls -all /etc/gitlab" >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  - Existence du fichier [/etc/gitlab/gitlab.rb] dans le conteneur:" >> $NOMFICHIERLOG
+# echo " provision-girofle-  - " >> $NOMFICHIERLOG
+# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "ls -all /etc/gitlab/gitlab.rb" >> $NOMFICHIERLOG
+# echo " provision-girofle-  - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  - " >> $NOMFICHIERLOG
+
+# sudo rm -f ./etc.gitlab.rb.girofle
+
+# sudo docker cp $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle
+
+# # sed -i 's/external_url "*"/external_url "http://$HOSTNAME:$NO_PORT_IP_SRV_GITLAB"/g' ./etc.gitlab.rb.recup.jibl
+
+# sudo sed -i "s/# external_url 'GENERATED_EXTERNAL_URL'/external_url \"http:\/\/$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST\"/g" ./etc.gitlab.rb.girofle
+
+# echo " provision-girofle-  - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  Instance Gitlab supplémentaire de test provisionnée à l'installation Girofle - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  Contenu [./etc.gitlab.rb.girofle] APRES SUBSTITUTION : - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  DEBUT fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# sudo cat ./etc.gitlab.rb.girofle >> $NOMFICHIERLOG
+# echo " provision-girofle-  FIN   fichier config [./etc.gitlab.rb.girofle] APRES SUBSTITUTION - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+# echo " provision-girofle-  - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  - " >> $NOMFICHIERLOG
+# echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
+
+# sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST:./etc.gitlab.rb.girofle
+# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "rm -f /etc/gitlab/gitlab.rb"
+# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb"
+# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "rm -f ./etc.gitlab.rb.girofle"
+# # 
+# # à la place d'un redémarrage complet du conteneur [sudo docker restart $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST],
+# # j'utilise [gitlab-ctl] :
+# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "gitlab-ctl reconfigure"
+# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "gitlab-ctl restart"
+# sudo rm -f ./etc.gitlab.rb.girofle
+
+
+
+
+##########################################################################################
+##########################################################################################
+#											ANNEXE:								   	   	 #  
+#			Configurations des noms de domaines pour l'accès à l'instance gitlab   	   	 #  
+##########################################################################################
 ##########################################################################################
 # ----------------------------------------------------------------------------------------
 #  - 4 adresses IP dans la VM hôte docker.
@@ -452,35 +437,26 @@ echo " provision-girofle-  - " >> $NOMFICHIERLOG
 # gitlab.$GITLAB_INSTANCE_NUMBER.bytes.com $ADRESSE_IP_SRV_GITLAB
 # ----------------------------------------------------------------------------------------
 
-
-# éditer dans le conteneur docker, le fichier "/etc/gitlab/gitlab.rb":
-# sudo docker exec -it gitlab vi /etc/gitlab/gitlab.rb
-# et donner la valeur suivante au paramètre "external_url":
-# external_url "http://gitlab.$GITLAB_INSTANCE_NUMBER.bytes.com:8080"
-# autre exemple avec une valeur exemple d'url
-# external_url "http://gitlab.example.com"
-
-
-
 ##########################################################################################
-#				DOC OFFICELLE POUR CONFIG GITLAB DANS CONTENEUR DOCKER 					 #
 ##########################################################################################
-# export AUTRE_OPTION= ce que vou voulez parmi els optiosn de config gitlab
-# --env GITLAB_OMNIBUS_CONFIG="external_url 'http://my.domain.com/'; $AUTRE_OPTION;"
-# Exemple valide:
-# --env GITLAB_OMNIBUS_CONFIG="external_url 'http://my.domain.com/';"
+#										  ANNEXE:								   	   	 #  
+#						 				Pour debug							   		   	 #
 ##########################################################################################
-# By adding the environment variable GITLAB_OMNIBUS_CONFIG to docker run command.
-# This variable can contain any gitlab.rb setting and will be evaluated before loading
-# the container's gitlab.rb file.
-##########################################################################################
-# HTTPS et GITLAB ==>> 
 ##########################################################################################
 # 
-# 
-# 
-# 
-# 
-# 
-
+# export REPERTOIRE_GIROFLE=/girofle
+# export GITLAB_INSTANCE_NUMBER=2
+# export REP_GIROFLE_INSTANCE_GITLAB=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER
+# export NOMDEDOMAINE_INSTANCE_GITLAB=prj-pms.girofle.io
+# export ADRESSE_IP_SRV_GITLAB=192.168.1.32
+# export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=7786
+# export NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
+# export GITLAB_CONFIG_DIR=/etc/gitlab
+# export GITLAB_LOG_DIR=/var/log/gitlab
+# export GITLAB_DATA_DIR=/var/opt/gitlab
+# export CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
+# export CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
+# export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
+# export NOM_IMAGE_DOCKER_INSTANCES_GIROFLE=girolfe.io/image-gitlab:v1.0.0
+# sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE
 
