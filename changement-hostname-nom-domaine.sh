@@ -94,7 +94,7 @@ echo " +girofle+[reconfigurer_interface_reseau()]+ -----------------------------
 echo " +girofle+[reconfigurer_interface_reseau()]+ [ls -all $FICHIERCONFRESEAUTEMP] donne sur le système hôte [AVANT la copie du fichier système] : " >> $NOMFICHIERLOG
 ls -all $FICHIERCONFRESEAUTEMP >> $NOMFICHIERLOG
 echo " +girofle+[reconfigurer_interface_reseau()]" >> $NOMFICHIERLOG
-sudo cp $FICHIER_CONF_INTERF_RESEAU $FICHIERCONFRESEAUTEMP
+sudo cp -f $FICHIER_CONF_INTERF_RESEAU $FICHIERCONFRESEAUTEMP
 echo " +girofle+[reconfigurer_interface_reseau()]+ [ls -all $FICHIERCONFRESEAUTEMP] donne sur le système hôte [APRES la copie du fichier système] : " >> $NOMFICHIERLOG
 ls -all $FICHIERCONFRESEAUTEMP >> $NOMFICHIERLOG
 echo " +girofle+[reconfigurer_interface_reseau()]" >> $NOMFICHIERLOG

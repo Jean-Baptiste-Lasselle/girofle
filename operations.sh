@@ -211,8 +211,8 @@ demander_noPortIP
 # demander_noPortIP_InstanceTest
 
 # update CentOS 7
-sudo yum clean all -y && sudo yum update -y
 
+sudo rm -rf /var/cache/yum && sudo yum clean all -y && sudo yum update -y
 # ---------------------------------------------------------------------------------------------------------------------------------------------
 # ------	RECONFIGURATION DU RESEAU
 # ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -225,7 +225,7 @@ sudo yum clean all -y && sudo yum update -y
 sudo systemctl stop NetworkManager
 sudo systemctl disable NetworkManager
 # on ira jsuqu'à le désinstaller:
-sudo yum remove -y NetworkManager
+sudo yum remove -y NetworkManager && sudo rm -rf /var/cache/yum && sudo yum clean all -y
 
 # On change config hostname/nomdomaine pour adopter girofle
 ./changement-hostname-nom-domaine.sh
