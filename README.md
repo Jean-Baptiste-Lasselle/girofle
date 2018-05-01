@@ -345,6 +345,20 @@ je fais les sous domaines (tous correspondent à des conteneurs de l'infrastruct
 * un robot exécute un build, commit et pousse sur le repository git utilisé par l'exécution du pipeline. À chaque push d'un conteneur-gitlab-runner, les ficheirs générés modifiés etc... sont ajoutés et poussés aussi, pour être présents au git clone suivant.
 * À chaque exécution d'un pipeline, correspond donc un nouveau repository gitcomplètemejnt neuf. Ce repossitory permet éventuellment de reprendre les oéprations là où elles s'étaient arrêtées parce que l'usine trop encombrée, ou a cessé de fonctionner anormalement.
 * Si je peux re-définir l'action exécutée lorsque l'évènement push sur un repo est déclenché, et le re-définir de manière à transmettre sur une queue, pour que l'opération soit reprise sur échec et exécutée en atteneant le temps nécessaire, que l'usine baisse de régime. Donc du message Anynchrone
+* faire des pipelines qui aient des exécutions paralèlles, l'île saint louis, donc ça donnerait un push qui déclenche deux gitlab-runner dans deux conteneurs séparés, ou deux services kubernetes.
+* voilà comment créer des repository git avec l'API REST Gitlab:
+Dixit [cette page](https://docs.gitlab.com/ce/api/projects.html#create-project) :
+```
+
+
+```
+
+[exemple d'appel de l'API qui fonctionne avec simple token](lienversimageversionnee):
+
+
+Dans ce cas, il suffit de savoir générer, avec l'API, des tokens pour utiliser l'API, qui sont distribués aux
+pipelines pour chaque exécution, avec révocations à poteriori.
+
 
 # ANNEXE: Authentification "SAML"](https://docs.gitlab.com/ee/integration/saml.html) pour chaque instance Gitlab
 
