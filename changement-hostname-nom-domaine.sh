@@ -187,8 +187,7 @@ ADRESSE_IP_LINUX_NET_INTERFACE_4=192.168.1.34
 
 reconfigurer_interfaces_reseau
 
-# on remet bien comme il faut les droits sur les fichiers dde conf réseau
-reinitialiser_droits_systeme_fichiers_conf_reseau
+
 
 # =============================================================================================================================================
 # 3./ Puis on configure le hostname principal /etc/hostname
