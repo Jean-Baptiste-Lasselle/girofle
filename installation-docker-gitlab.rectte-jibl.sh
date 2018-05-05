@@ -64,10 +64,10 @@ export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 #####		Je commence par tester la possibilité de binder deux mêmes conteneurs usdr la même adresse IP, mais avec des numéros de ports différents.
 #####		Je limiterai le nombre maximal au nombre maximal de hostnames/nomsdedomaines, ce nombre d'instances.
 ##############################################################################################################################################
-# - répertoire hôte dédié à l'instance Gitlab
-# export REP_GIROFLE_INSTANCE_GITLAB
 # - Nom du conteneur docker qui sera créé
 export NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST
+# - répertoire hôte dédié à l'instance Gitlab
+export REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST
 # - répertoires hôte associés
 export CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2
 export CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2
@@ -136,14 +136,22 @@ checkHealth () {
 # Le test, et la recherche d'informations, montrent que la cohabitation de plusieurs instances Gitlab, qu'elles
 # soient provisionnées dans des conteneurs docker ou non, nécesssite uen configuration supplémentaire pour chaque
 # instance participant à la cohabitation.
+# ---->>>>> Le problème de la multiplicité des noms de domaines subiste, aussi aucun nom 
+#           de domaine n'est configuiré pour le conenteneur docker de la seconde
+#           instance Gitalb provisionnée.
 provisionInstanceSupplementaire () {
 # - création des répertoires associés
-# sudo rm -rf $REPERTOIRE_GIROFLE
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2
-mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2
+# - répertoire hôte dédié à l'instance Gitlab
+REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2
+NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
+# - répertoires associés
+CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
+CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
+CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
+
+
 # changement des valeurs de tests.
-ADRESSE_IP_SRV_GITLAB=192.168.1.33
+ADRESSE_IP_SRV_GITLAB=192.168.1.34
 # NOMDEDOMAINE_INSTANCE_GITLAB=prj-pms.girofle.io
 # NOMDEDOMAINE_INSTANCE_GITLAB=test.girofle.io
 # sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB
@@ -200,13 +208,7 @@ mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 ##############################################################################################################################################
 #####		CONTENEUR 2 ===>>>> Pour tests du nombre maximal d'instances serveurs possibles sur une même machine...
 ##############################################################################################################################################
-# - répertoire hôte dédié à l'instance Gitlab
-REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2
-NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
-# - répertoires associés
-CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
-CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
-CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
+
 
 ##############################################################################################################################################
 
@@ -336,7 +338,7 @@ echo " provision-girofle-  - " >> $NOMFICHIERLOG
 #						instance supplémentaire de test						   		   	 #
 ##########################################################################################
 ##########################################################################################
-# provisionInstanceSupplementaire
+provisionInstanceSupplementaire
 
 
 
@@ -344,7 +346,15 @@ echo " provision-girofle-  - " >> $NOMFICHIERLOG
 #			configuration du nom de domaine pour l'accès à l'instance gitlab   		   	 #
 #							supplémentaire pour les test		   		   	 			 #
 ##########################################################################################
-
+# 
+# ---->>>>> Il faut encore résoudre la question de comment configurer
+#           plusieurs noms de domaines pour des cartes réseaux différentes, mais sur
+#           la même machine
+# ---->>>>> Le problème de la multiplicité des noms de domaines subiste, aussi aucun nom 
+#           de domaine n'est configuiré pour le conenteneur docker de la seconde
+#           instance Gitalb provisionnée.
+#           
+#           
 # sudo rm -f ./etc.gitlab.rb.girofle
 
 # echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
