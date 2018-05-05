@@ -149,6 +149,10 @@ CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITL
 CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
 CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
 
+mkdir -p CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2
+mkdir -p CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2
+mkdir -p CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2
+
 
 # changement des valeurs de tests.
 ADRESSE_IP_SRV_GITLAB=192.168.1.34
@@ -183,6 +187,7 @@ sudo chmod u+r+w $INVENTAIRE_GIROFLE
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # 
+touch $INVENTAIRE_GIROFLE
 calculerProchainGitlabInstanceNumber
 # demander_noPortIP_InstanceTest
 
