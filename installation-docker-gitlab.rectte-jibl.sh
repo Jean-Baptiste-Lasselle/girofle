@@ -140,7 +140,7 @@ checkHealth () {
 #           de domaine n'est configuiré pour le conenteneur docker de la seconde
 #           instance Gitalb provisionnée.
 provisionInstanceSupplementaire () {
-# - création des répertoires associés
+
 # - répertoire hôte dédié à l'instance Gitlab
 REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2
 NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
@@ -148,7 +148,7 @@ NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INST
 CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
 CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
 CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
-
+# - création des répertoires associés
 mkdir -p CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2
 mkdir -p CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2
 mkdir -p CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2
