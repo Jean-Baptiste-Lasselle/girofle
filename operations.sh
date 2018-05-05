@@ -209,7 +209,7 @@ echo " +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo "   "
 demander_noPortIP
 # demander_noPortIP_InstanceTest
-
+NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST_PAR_DEFAUT
 # update CentOS 7
 
 sudo rm -rf /var/cache/yum && sudo yum clean all -y && sudo yum update -y
