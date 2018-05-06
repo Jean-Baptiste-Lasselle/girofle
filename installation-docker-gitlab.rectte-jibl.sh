@@ -106,7 +106,7 @@ checkHealth () {
 	
 	while  $(echo "+provision+girofle+ $NOM_DU_CONTENEUR_INSPECTE - HEALTHCHECK: [$ETATCOURANTCONTENEUR]">> $NOMFICHIERLOG); do
 	
-	ETATCOURANTCONTENEUR=$(sudo docker inspect -f '{{json .State.Health.Status}}' $NOM_DU_CONTENEUR_INSPECTE)
+	ETATCOURANTCONTENEUR=$(sudo docker inspect -f '{{json.State.Health.Status}}' $NOM_DU_CONTENEUR_INSPECTE)
 	if [ $ETATCOURANTCONTENEUR == "\"healthy\"" ]
 	then
 		echo "+provision+girofle+ $NOM_DU_CONTENEUR_INSPECTE est prêt - HEALTHCHECK: [$ETATCOURANTCONTENEUR]">> $NOMFICHIERLOG
