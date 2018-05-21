@@ -428,7 +428,7 @@ Tout système Linux utilise son package manager qui permet d'installer des logic
 Tous ces packages managers utilisent l'authentification serveur par le protocole SSL/TLS, avec certifcats.
 
 Lorsque je créée des VMs Linux, bien souvent j'en fais des "snapshots" pour pouvoir revenir dans un état particulier (pour tests).
-À chaque fosi que je restaure cet état, l'heure système reste inchangée.
+À chaque fois que je restaure cet état, l'heure système reste inchangée.
 Aussi, si je conserve un snapshot assez longtemps, le décalage entre la date des certificats SSL des repos linux, et la date de ma VM dans son état restauré, est 
 si grand que le certificat devient inacceptable par le package manager, et toute installation devient impossible, y compris l'installation des utilitaires qui 
 permettrraitent de rétablir l'heure et la synchronisation à un serveur NTP.
@@ -465,6 +465,7 @@ sslverify=false
 ``` 
 Du fichier `/etc/yum.conf`, AVANT toute autre opération.
 Si cette réparation désespérée est faite en production, il serait sage de se polacer derrière un pare-feu voir s'isoler complètmeent dans un réseau avec l'univers de repos linux et un serveur NTP à l'heure, et privé.
+
 
 ## Morale 
 Et la morale de l'histoire, c'est qu'il fauit TOUJOURS provisionner un serveur destiné à l'exploitation, avec son package d'utilitaires de gestion de l'heure système en synchronisation avec un serveur NTP.
