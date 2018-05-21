@@ -107,78 +107,73 @@ L4ensemble de ces règles
 
 # TODOs
 
+## Image docker avec CHEKCKHEALTH custom
 
-## next
+Dans le dockerfile qui me permet de construire ma propre image docker de gitlab, je dois pouvoir paramétrer à l'exécution le nom de domaine et le numéor de port de l'instance:
+
+```
+# ===>>>> IL FAUT PERMETTRE DE RENDRE CONFIGURABLE A L'EXECUTION CES PARAMETRES DU GENRE [docker run .... -e NOMDEDOMAINE_INSTANCE_GITLAB=sopra.cardiff.scm -e NO_PORT_IP_SRV_GITLAB=8880]
+echo "HEALTHCHECK --interval=1s --timeout=300s --start-period=1s --retries=300 CMD curl --fail http://$ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB/ || exit 1" >> $DOCKERFILE_INSTANCES_GITLAB
+```
+
+De mémoire, je crois que j'ai utilisé la technique pour faire mes dockerfile `gogs.io`
+
+
+## TODO: ops std
 
 * Utiliser [ce nouveau repo](https://github.com/Jean-Baptiste-Lasselle/recette-conditionnment-java-windows) pour créer les repository nécesséaires au déploiement du client Girofle.
 * Il faut isntaller les scripts d'opérations standards dans le répertoire `/girofle/operations-std`
-* Il faut créer le repo Git du client Girofle dans l'instance Gitlab, et y mettre les fichiers du client girofle (les .sh, les .bat etc...)
-* Il faudra en fait créer dans l'instance Gitlab Intitiale, un repo Git pour la recette de provision du client girofle pour Windows, pour CentOS, pour Ubuntu, etc... Mais aussi un pourt la rectte ansible, et un autre pour la recette Chef.io. Il y a une boucle de dépendances à démêler ici.
 * re-tester les backup automatiques.
 
 
 
-## Top-TODO
-
-Mettre en oeuvre l'[authentification "SAML"](https://docs.gitlab.com/ee/integration/saml.html) pour chaque instance Gitlab, et vérifer les CRUD sur auth et autorisations.
-
-Lorsque l'on devra comissionner un conteneur gitlab, on devra "attendre", nécessairement, et en tout cas il est certain que l'on voudra pouvoir vérifier QUAND une instance gitlab est "prête":
-lorsqu'elle est dans l'état "healthy". J'utiliserai donc la nouvelle fonctionnalité "`HEALTH_CHECK`" de docker-compose, pour réaliser cela.
-
-La problématique s'est préserntée dans le cas suivant:
-
-Lorsque l'on comissionne le conteneur docker de l'instance Gitlab:
-* On démarre le conteneur docker, 
-* Le `daemon` Docker affiche alors un état "starting" pour le conteneur docker, 
-* Puis, on essaie immédiatement de la reconfigurer en allant chercher le fichier "/etc/gitlab/gitlab.rb" dans le conteneur
-* Mais ce fichier n'est pas trouvé dans le conteneur, tant que le conteneur Docker ne notifie pas un état "healthy"
-* D'autre part, en utilisant la commande `gitlab-ctl reconfigure`, on constate:
-  * qu'un client chef.io est utilisé pour réaliser la reconfiguration.
-  * que c'est probablement le cas aussi pendant la séquence d'amorçage du conteneur (à son démarrage)
-  * et donc en prenant un peu de distance par rapport à ces constations, on peut penser que d'un point de vue général, pour Gitlab, on a le cas d'une application dans un conteneur docker, qui doit notifier le `daemon` Docker que l'application est prête, suite àç quoi Docker fait passer l'état du conteneur de "starting" à "healthy"
-
-En conclusion:
-* Girofle provisionne des conteneurs dockers identiques, ne différant que par leur configuration (et la recette de provision, ex. pour la publication DNS d'un nouveau nom de domaine)
-* Donc Girofle intrinsèqumen, DOIT pouvoir effectuer (y compris intensément) des reconfiguration d 'instances en cours d'exécution. 
-* Il sera donc absolument nécessaire que Girofle puisse déterminer si un conteneur est (ou non) passé dans l'état "healthy".
-* pour ce faire, Girofle  utilisera la fonctionnalité `HEALTH_CHECK` des dockerfile, ce qui permettra à Girofle d'orchestrer ses opérations de re-configuration.
-
-D'un point de vue général, le principe est qu'une application déployée, doit pouvoir envoyer une notification à l'infrastructure dans laquelle elle est déployée:
-Avec cette notification, l'application informe l'infrastructure (et ses superviseurs) qu'elle est "prête à travailler".
-
-Notes perso: après avoir mis en oeuvre la fonctionnalité `HEALTH_CHECK` de docker, il faudra faire un `gitlab-ctl reconfigure`, car j'ai pu remarquer une amélioration significative des performances de mes noeuds gitlabs après une exécution de `gitlab-ctl reconfigure`.
-
-* Pour vérifier l'état du contenu (healthy, unhealthy, starting):
-`docker inspect --format='{{json .State.Health}}' your-container-name`
-* Faire le `HEALTH_CHECK` docker:
-  * il s'agit d'ajouter dans le docker file une instruction, par exemple: `HEALTHCHECK --interval=5m --timeout=3s --start-period=1 --retries=17 CMD curl --fail http://localhost:3000/ || exit 1`
-  * Cette instruction doit précéder la commande CMD finale du dockerfile.
-* À tester: `the new orchestration features in Docker Swarm mode services are utilizing a health check to manage zero-downtime deployments.` 
-* À tester:  `HEALTH_CHECK` docker et Kubernetes
-
-La gestion du `HEALTH_CHECK` docker peut être concernée par la définition des SLA. d'une appli cloud
-Et pour terminer, la gestion du `HEALTH_CHECK` docker ne peut être réalisé que pour les plateformes utilisant Docker en version supérieure ou égale à `Docker 1.12`
-
-Ressources :
-
-https://blog.newrelic.com/2016/08/24/docker-health-check-instruction/
-
-https://docs.docker.com/engine/reference/builder/#/healthcheck
+## TODO: Sécurisation
 
 
-### Possibilité
+### authentification OAuth2/SAML
 
-Utiliser:
+Mettre en oeuvre l'authentification "SAML"](https://docs.gitlab.com/ee/integration/saml.html) pour chaque instance Gitlab, et vérifer les CRUD sur auth et autorisations.
+
+
+Le script [`configuration-authentification-autorisations.sh`], configure authentification et autorisations SAML / OAuth2 , avec 
+l'intégration au serveur OAuth2 précisé dans la configuration Girofle, ou le serveur OAuth2 provisionné avec Girofle, si aucun n'est 
+précisé dans la configuration de (la provision) Girofle.
+
+
+### authentification TLS / PKI
+
+Type de menace parée: éviter à l'utilisateur de se faire sniffer ses mots de passe Girofle sur le réseau interne, quelque soit l'attaquant.
+
+
+Mettre en oeuvre la provision de l'instance Gitlab, en lui fournissant un certificat Let's Encrypt, là où Let's Encrypt est intégré au 
+serveur d'identité / enrôlement [Free IPA Server](#)
+
+De plus, je dois fournir une documentation d'intégration de l'instance Let's Encrypt dans une PKI (obtenir un certificat de la part d'une Autorité Racine, ce qui 
+suffit à propager l'identité dans la PKI)
+
+
+
 ```
- sudo docker inspect -f '{{json .State.Health.Status}}' $NOM_DU_CONTENEUR_CREE
+
+# Reste à appliquer les instructions de :
+# - https://docs.gitlab.com/ee/integration/saml.html  , qui a comme pré-requis:
+#   +  https://docs.gitlab.com/ee/install/installation.html#using-https
+# - et au cours de cette docuementation, il faudra exécuter aussi:
+#   +  https://docs.gitlab.com/ee/integration/omniauth.html#initial-omniauth-configuration
+# - et pour configurer un OAuth2 provider server, de mon choix: https://docs.gitlab.com/ee/integration/omniauth.html#configure-omniauth-providers-as-external
+#   + exemple dans le fichier "gitlab.yml": 
+# --------------------------------------------------------------
+#  omniauth:
+#    external_providers: ['twitter', 'google_oauth2'] 
+# --------------------------------------------------------------
+# L'idée serait d'utiliser mon propre serveur OAuth2 / SAML, déployé indépendamment et Free-Ipa-Server gère l'identité de l'ensemble Serveur OAuth2 / Girofle.
+# ---
+# Intégrer la provision d'éclipse dans une VM, et à la provision, toutes les authentifications fonctionnent
+# --- 
+# Le client Girofle en java, "pour l'utilisateur non-IT", devra s'authentifier lui aussi en SAML, avec JGit / JSch
+# 
 ```
-avec une boucle While dans un shell script, avec une instruction `sleep 10` dans la boucle, et la boucle st cassée au bout d'un certain nombre maximupm d'essai si le contneur n'entre jamais ni dans l'état "healthy, ni dans l'état "unhealthy". Si au contraire l'un de ces deux état est celui du conteneur, les opérations sont soient arrêtées, et les infos d'ereurs logguées, soit la procédure de déploiement se poursuiit avec le changement de configuration [/etc/gitlab/gitlab.rb]
 
-cf.nouveau fichierds rep `./etc.gitlab.gitlab.rb`
-
-## 0. Sécurité
-
-Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'éviter à l'utilisateur de se faire sniffer ses mots de passe Girofle sur le réseau interne, quelque soit l'attaquant.
 
 ## 1. Sur les opérations de backup/restore
 
@@ -222,6 +217,7 @@ Modifier la provision d'un certificat SSL pour le connecteur HTTPS, afin d'évit
 #    
 #    => les bckups devront être stockés dans [$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER/bckups]
 #    
+
 ```
 
 L'opération standard de backup, `./operations-std/serveur/restore.sh`, peut-être invoquée avec ou sans arguments en ligne de commande:
@@ -238,23 +234,24 @@ L'opération standard de backup sauvegarde:
 * Les répertoires gitlab: `data`, `config` & `log`
 * Pour chaque repo Git, le wiki n'est pas inclut,
 * Les fichiers README.md sont sauvegardés, parce qu'ils sont versionnés avec les autres fichiers versionnés par le dépôt Git
-  
+
+
 ### Utilisateurs Linux provision Girofle
 
 Modifier le provisionning Girofle, pour que le processus d'installation:
 * créée un utilisateur linux qui effectue le provisioning de Girofle
 * créée un utilisateur linux qui sera utilisé pour exécuter Girofle
+* créée un utilisateur linux qui sera utilisé pour administrer Girofle
 
 ### Conteneur Docker `girofle-provisioner`
 
-Modifier le provisionning Girofle, pour que le processus d'installation se fasse à l'itérieur d'un conteneur Docker, dans 
+Modifier le provisionning Girofle, pour que le processus de provision se fasse à l'intérieur d'un conteneur Docker, dans 
 lequel est fait tout ce qu'il y a à faire avec git. De cette manière, plus de git installé sur l'hôte, le conteneur de comissionning ainsi utilisé est 
-détruit à la fin du commissioning, ne laissant que les logs des opérations. Ce qui permet au passage de ne pas créer d'utilisateur dédié au 
-comissioning sur la machine hôte.
+détruit à la fin du commissioning, ne laissant que les logs des opérations.
 
 ### Persistance inventaire
 
-Il faudra remplacer `$INVENTAIRE_GIROFLE` par une BDD NoSQL pour régler le problème d'accès concurrent, plus essai avec /etcd
+Il faudra remplacer `$INVENTAIRE_GIROFLE` par une BDD NoSQL pour régler le problème d'accès concurrent, plus essai avec `/etcd` et `infinispan`
 
 ### Dépendances entre variables d'env.
 
@@ -290,24 +287,9 @@ Aux fonctionnalitrés [citées ci-dessus](#girofle), s'ajouteront celles du comp
 * de construire un ensemble de repo git, les configurer (provision)
 * d'exécuter une suite d'actions sur cet ensemblede repo git: Cet ensemble d'action est un test automatisé d'un "bout" de workflow.
 "`gravity`" Permet donc de développer des workflows, et produira en sortie un fichier BPMN 2.0 exécutable, pour s'intégrer à [Kytes](https://github.com/Jean-Baptiste-Lasselle/kytes)
-# POINT DE REPRISE
-Dernière erreur:
 
-```
-Error: No such container:path: conteneur-kytes.io.gitlab.1:/etc/gitlab/gitlab.rb
-sed: impossible de lire ./etc.gitlab.rb.girofle: Aucun fichier ou dossier de ce type
-cat: ./etc.gitlab.rb.girofle: Aucun fichier ou dossier de ce type
-lstat /home/jibl/doc-pms/etc.gitlab.rb.girofle: no such file or directory
-cp: cannot stat './etc.gitlab.rb.girofle': No such file or directory
-conteneur-kytes.io.gitlab.1
-d0024e1d7990969af10a964f662087930f8ac57a905d5611c38c4e302354b3d0
-Error: No such container:path: conteneur-kytes.io.gitlab.2:/etc/gitlab/gitlab.rb
-sed: impossible de lire ./etc.gitlab.rb.girofle: Aucun fichier ou dossier de ce type
-cat: ./etc.gitlab.rb.girofle: Aucun fichier ou dossier de ce type
-lstat /home/jibl/doc-pms/etc.gitlab.rb.girofle: no such file or directory
-cp: cannot stat './etc.gitlab.rb.girofle': No such file or directory
-conteneur-kytes.io.gitlab.2
-```
+# POINT DE REPRISE
+
 => tests inventory.girofle
 => tests restore/backup
 
@@ -319,6 +301,40 @@ Au cours du développement de Girofle, j'ai pu constater, que le `NetworkManager
 * Pour le cas où le lien vers [cette recommandation officielle Docker](https://success.docker.com/article/should-you-use-networkmanager), voici une impression écran de cette recommandation, au 02/04/2018:
 
 ![Recommandations Officelles Docker - Cent OS - NetworkManager](https://raw.githubusercontent.com/Jean-Baptiste-Lasselle/girofle/master/doc/recommandations-officielles-docker-rhel-network-manager.png "Recommandations Officelles Docker - Cent OS - NetworkManager")
+
+  
+# ANNEXE: Pipelines Kytes
+
+* un robot est constitué de 2 éléments:
+  * d' un repo Git 
+  * et d'un conteneur exécutant un build, avec un gitlab-runner déjà provisionné dedans, et connecté au serveur maître Gitlab, `HEALTH_CHECK` spécifique Kytes à à développer). À la place du gitlab runner, je peux aussi utiliser, dans le dockerfile de mon worker, une définition `CMD`de commande de démarrage du conteneur, qui permet de définir un build. Si ce build déclenché dans le conteneur est écrit en language de script, les buidls deveinnent dépendants de l'OS exécutant le buid. C'est peu gênant étant donné la facilité avec laquelle on change la distribution Linux dans un conteneur docker. Ceci étant, idéalement, il faudrait utiliser des recettes Ansible et Chef.io pour déclencher les builds... là où la question est intéresante, c'est que Ansible et Chef.io ne sont pas en soit pensés comme des orchestrateurs de pipeline, et il y aurait peut-être à faire quelque chose là, pour utilsier un language agnostique...
+* un robot exécute un build, commit et pousse sur le repository git utilisé par l'exécution du pipeline. À chaque push d'un conteneur-gitlab-runner, les ficheirs générés modifiés etc... sont ajoutés et poussés aussi, pour être présents au git clone suivant. Le repository d'exécution du pipeline devient donc une sorte de pilier central autour duquel "tournent" des conteneurs dockers sorte de "workers" du pipeline. La dernière version du repository d'exécution du pipeline, est le package déployé dans la cible de déploiement
+* À chaque exécution d'un pipeline, correspond donc un nouveau repository git complètemejnt neuf. Ce repossitory permet éventuellement de reprendre les oéprations là où elles s'étaient arrêtées parce que l'usine trop encombrée, ou a cessé de fonctionner anormalement.
+* Si je peux re-définir l'action exécutée lorsque l'évènement push sur un repo est déclenché (WEBHOOK, possibles avec [gogs.io](#) aussi), et le re-définir de manière à transmettre sur une queue, pour que l'opération soit reprise sur échec et exécutée en atteneant le temps nécessaire, que l'usine baisse de régime. Donc du message Anynchrone
+* faire des pipelines qui aient des exécutions paralèlles, donc ça donnerait un push qui déclenche deux gitlab-runner dans deux conteneurs séparés, ou deux services kubernetes.
+* voilà comment créer des repository git avec l'API REST Gitlab:
+Dixit [cette page](https://docs.gitlab.com/ce/api/projects.html#create-project) :
+```
+
+# curl --header "Private-Token: 9koXpg98eAheJpvBs5tK" https://gitlab.example.com/api/v4/projects
+# 
+curl --header "PRIVATE-TOKEN: is2sP8rMFUPXrWAsvy7b" -X POST "https://gitlab.com/api/v3/projects?name=kytes-pipeline-worker-1&issues_enabled=false"
+
+```
+
+[exemple d'appel de l'API qui fonctionne avec simple token]:
+
+![exemple d'appel de l'API qui fonctionne avec simple token](https://github.com/Jean-Baptiste-Lasselle/girofle/raw/master/doc/invocation-API-REST-GITLAB-creation-token-sur-instance-gitlab.png):
+
+[le token est généré ainsi]:
+
+![le token est généré ainsi](https://github.com/Jean-Baptiste-Lasselle/girofle/raw/master/doc/invocation-API-REST-GITLAB.png)
+
+Dans ce cas, il suffit de savoir générer, avec l'API, des tokens pour utiliser l'API, qui sont distribués aux
+pipelines pour chaque exécution, avec révocations à poteriori.
+
+
+
 
 # ANNEXE: noms de domaines pour l'accès aux repositories
 
@@ -342,67 +358,17 @@ je fais les sous domaines (tous correspondent à des conteneurs de l'infrastruct
   - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-3.kytes.io
   - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-4.kytes.io
   - $ID_DU_PROJET.$ID_DU_PIPELINE.build.nom-specifique-conteneur-exécutant-un-build-5.kytes.io
- 
-* un robot est constitué d' (un repo Git dans un conteneur instance gitlab) + (un conteneur exécutant un build, avec un gitlab-runner déjà provisionné dedans, et connecté au serveur maître Gitlab, `HEALTH_CHECK` spécifique Kytesà à développer). À la place du gitlab runner, je peux aussi utiliser, dans le dockerfile de mon worker, une définition `CMD`de commande de démarrage du conteneur, qui permet de définir un build. Si ce build déclenché dans le conteneur est écrit en language de script, les buidls deveinnent dépendants de l'OS exécutant le buid. C'est peu gênant étant donnéla facilité avec laquelle on change la distribution Linux dans un conteneur docker. Ceci étant, idéalement, il fatdrait utiliser des recettes Ansible et Chef.io pour déclencher les builds... là où la questione st intéresante, c'est que Ansible et Chef.io ne sont pas en soit pensés come des orchestrateurs de pipeline, et il y aurait peut-être à faire quelque chose là, pour utilsier un language agnostique...)
-* un robot exécute un build, commit et pousse sur le repository git utilisé par l'exécution du pipeline. À chaque push d'un conteneur-gitlab-runner, les ficheirs générés modifiés etc... sont ajoutés et poussés aussi, pour être présents au git clone suivant.
-* À chaque exécution d'un pipeline, correspond donc un nouveau repository gitcomplètemejnt neuf. Ce repossitory permet éventuellment de reprendre les oéprations là où elles s'étaient arrêtées parce que l'usine trop encombrée, ou a cessé de fonctionner anormalement.
-* Si je peux re-définir l'action exécutée lorsque l'évènement push sur un repo est déclenché, et le re-définir de manière à transmettre sur une queue, pour que l'opération soit reprise sur échec et exécutée en atteneant le temps nécessaire, que l'usine baisse de régime. Donc du message Anynchrone
-* faire des pipelines qui aient des exécutions paralèlles, l'île saint louis, donc ça donnerait un push qui déclenche deux gitlab-runner dans deux conteneurs séparés, ou deux services kubernetes.
-* voilà comment créer des repository git avec l'API REST Gitlab:
-Dixit [cette page](https://docs.gitlab.com/ce/api/projects.html#create-project) :
-```
-
-# curl --header "Private-Token: 9koXpg98eAheJpvBs5tK" https://gitlab.example.com/api/v4/projects
-# 
-curl --header "PRIVATE-TOKEN: is2sP8rMFUPXrWAsvy7b" -X POST "https://gitlab.com/api/v3/projects?name=kytes-pipeline-worker-1&issues_enabled=false"
-
-```
-
-[exemple d'appel de l'API qui fonctionne avec simple token]:
-
-![exemple d'appel de l'API qui fonctionne avec simple token](https://github.com/Jean-Baptiste-Lasselle/girofle/raw/master/doc/invocation-API-REST-GITLAB-creation-token-sur-instance-gitlab.png):
-
-[le token est généré ainsi]:
-
-![le token est généré ainsi](https://github.com/Jean-Baptiste-Lasselle/girofle/raw/master/doc/invocation-API-REST-GITLAB.png)
-
-Dans ce cas, il suffit de savoir générer, avec l'API, des tokens pour utiliser l'API, qui sont distribués aux
-pipelines pour chaque exécution, avec révocations à poteriori.
 
 
-# ANNEXE: Authentification "SAML"](https://docs.gitlab.com/ee/integration/saml.html) pour chaque instance Gitlab
 
-Le script [`configuration-authentification-autorisations.sh`], configure authentification et autorisations SAML / OAuth2 , avec 
-l'intégration au serveur OAuth2 précisé dans la configuration Girofle, ou le serveur OAuth2 provisionné avec Girofle, si aucun n'est 
-précisé dans la configuration de (la provision) Girofle.
+## Sur [Traefik.io](https://traefik.io)
 
-
-```
-
-# Reste à appliquer les instructions de :
-# - https://docs.gitlab.com/ee/integration/saml.html  , qui a comme pré-requis:
-#   +  https://docs.gitlab.com/ee/install/installation.html#using-https
-# - et au cours de cette docuementation, il faudra exécuter aussi:
-#   +  https://docs.gitlab.com/ee/integration/omniauth.html#initial-omniauth-configuration
-# - et pour configurer un OAuth2 provider server, de mon choix: https://docs.gitlab.com/ee/integration/omniauth.html#configure-omniauth-providers-as-external
-#   + exemple dans le fichier "gitlab.yml": 
-# --------------------------------------------------------------
-#  omniauth:
-#    external_providers: ['twitter', 'google_oauth2'] 
-# --------------------------------------------------------------
-# L'idée serait d'utiliser mon propre serveur OAuth2 / SAML, déployé indépendamment et Free-Ipa-Server gère l'identité de l'ensemble Serveur OAuth2 / Girofle.
-# ---
-# Intégrer la provision d'éclipse dans une VM, et à la provision, toutes les authentifications fonctionnent
-# --- 
-# Le client Girofle en java, "pour l'utilisateur non-IT", devra s'authentifier lui aussi en SAML, avec JGit / JSch
-# 
-```
-
-# Annexe: [Traefik.io](https://traefik.io)
-
+<!--
 Il s'agit bien d'infrastructure:
 
-![Les premiers mots qui sautent aux yeux]()
+![Les premiers mots qui sautent aux yeux](#)
+
+--!>
 
 [La documentation](https://docs.traefik.io/) indique:
 
@@ -454,5 +420,4 @@ curl -H Host:whoami.docker.localhost http://127.0.0.1
 # permettra de mettre au point un HEALTH_CHECK spécifique Girofle:
 # (healcheck spécifique à la platefome, pour la provision d'une nouvelle instance gitlab girofle) 
 ```
-`
-`
+

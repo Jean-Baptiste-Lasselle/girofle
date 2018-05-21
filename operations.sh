@@ -31,14 +31,19 @@ NOMDEDOMAINE_INSTANCE_GITLAB_PAR_DEFAUT=prj-pms.girofle.io
 export ADRESSE_IP_SRV_GITLAB
 export ADRESSE_IP_SRV_GITLAB_PAR_DEFAUT
 ADRESSE_IP_SRV_GITLAB_PAR_DEFAUT=0.0.0.0
+# l'adresse IP qui sera utilisée par les connecteurs HTTP/HTTPS de la seconde instance Gitlab
+export ADRESSE_IP_SRV_GITLAB2
+export ADRESSE_IP_SRV_GITLAB2_PAR_DEFAUT
+ADRESSE_IP_SRV_GITLAB2_PAR_DEFAUT=0.0.0.0
+
 # le numéro de port IP qui sera utilisé par le connecteur HTTP de l'instance Gitlab
 export NO_PORT_IP_SRV_GITLAB
 export NO_PORT_IP_SRV_GITLAB_PAR_DEFAUT
 NO_PORT_IP_SRV_GITLAB_PAR_DEFAUT=80
-# le numéro de port IP qui sera utilisé par le connecteur HTTP de l'instance Gitlab de test
-export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST
-export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST_PAR_DEFAUT
-NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST_PAR_DEFAUT=8880
+# le numéro de port IP qui sera utilisé par le connecteur HTTP de la seconde instance Gitlab
+export NO_PORT_IP_SRV_GITLAB2
+export NO_PORT_IP_SRV_GITLAB2_PAR_DEFAUT
+NO_PORT_IP_SRV_GITLAB2_PAR_DEFAUT=8880
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -46,8 +51,12 @@ NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST_PAR_DEFAUT=8880
 #########################################							FONCTIONS						##########################################
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------
 # Cette fonction permet de demander iteractivement à l'utilisateur du
 # script, quelle est l'adresse IP, dans l'hôte Docker, que l'instance Gitlab pourra utiliser
+#
 demander_addrIP () {
 
 	echo "Quelle adresse IP souhaitez-vous que l'instance gitlab utilise?"
@@ -64,6 +73,33 @@ demander_addrIP () {
 	ADRESSE_IP_SRV_GITLAB=$ADRESSE_IP_CHOISIE
 	echo " Binding Adresse IP choisit pour le serveur gitlab: $ADRESSE_IP_SRV_GITLAB" >> $NOMFICHIERLOG
 }
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# Cette fonction permet de demander iteractivement à l'utilisateur du
+# script, quelle est l'adresse IP, dans l'hôte Docker, que la seconde instance Gitlab pourra utiliser
+# -
+# Cette fonction doit TOUJOURS être appelée après la fonction [demander_addrIP ()]
+#
+demander_addrIP_SecondeInstance () {
+
+	echo "Quelle adresse IP souhaitez-vous que la seconde instance gitlab utilise?"
+	echo "Cette adresse est à  choisir parmi:"
+	echo " "
+	ip addr|grep "inet"|grep -v "inet6"|grep "enp\|wlan"
+	echo " "
+	echo " et doit être différente de $ADRESSE_IP_SRV_GITLAB"
+	echo " "
+	echo " (Par défaut, l'adresse IP utilisée sera [$ADRESSE_IP_SRV_GITLAB_PAR_DEFAUT]) "
+	read ADRESSE_IP_CHOISIE2
+	if [ "x$ADRESSE_IP_CHOISIE" = "x" ]; then
+       ADRESSE_IP_CHOISIE2=$ADRESSE_IP_SRV_GITLAB_PAR_DEFAUT
+	fi
+	
+	ADRESSE_IP_SRV_GITLAB2=$ADRESSE_IP_CHOISIE2
+	echo " Binding Adresse IP choisit pour le serveur gitlab: $ADRESSE_IP_SRV_GITLAB2" >> $NOMFICHIERLOG
+}
+
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Cette fonction permet de demander iteractivement à l'utilisateur du
@@ -86,23 +122,26 @@ demander_noPortIP () {
 	echo " Binding Adresse IP choisit pour le serveur gitlab: $NO_PORT_IP_CHOISIT" >> $NOMFICHIERLOG
 }
 
+
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Cette fonction permet de demander interactivement à l'utilisateur du
 # script, quel numéro de port IP, la seconde instance Gitlab de Test pourra utiliser dans l'hôte Docker
-demander_noPortIP_InstanceTest () {
+demander_noPortIP_SecondeInstance () {
 
 	echo "À l'adresse IP [$ADRESSE_IP_SRV_GITLAB], quel numéro de port IP souhaitez-vous que l'instance gitlab TEST utilise?"
 	echo "Vous devez choisir un numéro de port, par exemple entre 2000 et 60 000, différent du numéro "
 	echo "de port [$NO_PORT_IP_SRV_GITLAB], utilisé par l'instance Gitlab initiale provisionnée avec Girofle."
-	echo "(le numéro de port utilisé par défaut sera : [$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST_PAR_DEFAUT])"
+	echo "(le numéro de port utilisé par défaut sera : [$NO_PORT_IP_SRV_GITLAB2_PAR_DEFAUT])"
 	echo " "
 	read NO_PORT_IP_CHOISIT2
 	if [ "x$NO_PORT_IP_CHOISIT" = "x" ]; then
-       NO_PORT_IP_CHOISIT2=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST_PAR_DEFAUT
+       NO_PORT_IP_CHOISIT2=$NO_PORT_IP_SRV_GITLAB2_PAR_DEFAUT
 	fi
-	NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_CHOISIT2
-	echo " Binding Adresse IP choisit pour le serveur gitlab de tests: $NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST" >> $NOMFICHIERLOG
+	NO_PORT_IP_SRV_GITLAB2=$NO_PORT_IP_CHOISIT2
+	echo " Binding Adresse IP choisit pour le serveur gitlab de tests: $NO_PORT_IP_SRV_GITLAB2" >> $NOMFICHIERLOG
 }
+
+
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Cette fonction permet de demander interactivement à l'utilisateur du
 # script, quel nom de domaine il souhaite utilsier pour l'accès aux instances Gitlab de Girofle.
@@ -198,6 +237,7 @@ echo " +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo " ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ "
 echo "   "
 demander_addrIP
+demander_addrIP_SecondeInstance
 clear
 echo "   "
 echo " ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ "
@@ -208,8 +248,8 @@ echo " +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo " ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ "
 echo "   "
 demander_noPortIP
-# demander_noPortIP_InstanceTest
-NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST_PAR_DEFAUT
+demander_noPortIP_SecondeInstance
+NO_PORT_IP_SRV_GITLAB2=$NO_PORT_IP_SRV_GITLAB2_PAR_DEFAUT
 # update CentOS 7
 
 sudo rm -rf /var/cache/yum && sudo yum clean all -y && sudo yum update -y

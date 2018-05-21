@@ -77,6 +77,7 @@ echo "RUN apt-get update -y" >> $DOCKERFILE_INSTANCES_GITLAB
 # Les 2 HEALTH_CHECK distincts permettent de discriminer les échecs causés par
 # la configuration réseau / DNS  de la cible de déploiement. Ils devront être refactorisé en un unique agent
 # On ne fait donc pas de vérification de la configuration dNS? on passe uniquement par adresse IP pour le HEALTH_CHECK unique
+# ===>>>> IL FAUT PERMETTRE DE RENDRE CONFIGURABLE A L'EXECUTION CES PARAMETRES DU GENRE [docker run .... -e NOMDEDOMAINE_INSTANCE_GITLAB=sopra.cardiff.scm -e NO_PORT_IP_SRV_GITLAB=8880]
 echo "HEALTHCHECK --interval=1s --timeout=300s --start-period=1s --retries=300 CMD curl --fail http://$ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB/ || exit 1" >> $DOCKERFILE_INSTANCES_GITLAB
 # echo "HEALTHCHECK --interval=5m --timeout=3s --start-period=1 --retries=17 CMD curl --fail http://$NOMDEDOMAINE_INSTANCE_GITLAB:$NO_PORT_IP_SRV_GITLAB/ || exit 1" >> $DOCKERFILE_INSTANCES_GITLAB
 # echo "CMD [\"/usr/local/bin/wrapper\"]" >> $DOCKERFILE_INSTANCES_GITLAB
