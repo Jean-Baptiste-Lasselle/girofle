@@ -421,3 +421,51 @@ curl -H Host:whoami.docker.localhost http://127.0.0.1
 # (healcheck spécifique à la platefome, pour la provision d'une nouvelle instance gitlab girofle) 
 ```
 
+
+# ANNEXE Système Linux et NTP
+
+Tout système Linux utilise son package manager qui permet d'installer des logiciels et autres packages.
+Tous ces packages managers utilisent l'authentification serveur par le protocole SSL/TLS, avec certifcats.
+
+Lorsque je créée des VMs Linux, bien souvent j'en fais des "snapshots" pour pouvoir revenir dans un état particulier (pour tests).
+À chaque fosi que je restaure cet état, l'heure système reste inchangée.
+Aussi, si je conserve un snapshot assez longtemps, le décalage entre la date des certificats SSL des repos linux, et la date de ma VM dans son état restauré, est 
+si grand que le certificat devient inacceptable par le package manager, et toute installation devient impossible, y compris l'installation des utilitaires qui 
+permettrraitent de rétablir l'heure et la synchronisation à un serveur NTP.
+
+D'ailleurs, le cas se présente dans tous les cas où, pour une quelconque raison,  l'on "fait revenir dans le passé", l'horloge d'une instance d'OS.
+
+Une solution dans ce cas:
+Modifier le fichier `/etc/yum.conf`, pour lui ajouter en dernière ligne, la ligne:
+```
+sslverify=false 
+``` 
+Puis installer l'utilitaire qui pemettra de faire la mise à jour de l'heure système par synchroinistation sur un serveur NTP public:
+```
+sudo yum install -y ntp ntpdate
+
+# vérfication des chemins d'installation:
+sudo which ntp
+sudo which ntpdate
+```
+Enfin, synchroniser le système sur un serveur NTP public bien connu:
+```
+export NOMFICHIERLOG=sys-datetime-mgmt-ops.log
+sudo ntpdate 0.us.pool.ntp.org
+echo "date après la re-synchronisation [Serveur NTP=$SERVEUR_NTP :]" >> $NOMFICHIERLOG
+date >> $NOMFICHIERLOG
+# pour re-synchroniser l'horloge matérielle, et ainsi conserver l'heure après un reboot, et ce y compris après et pendant
+# une coupure réseau
+sudo hwclock --systohc
+```
+
+Enfin il ne fait surtout pas ouiblier de retirer la ligne :
+```
+sslverify=false 
+``` 
+Du fichier `/etc/yum.conf`, AVANT toute autre opération.
+Si cette réparation désespérée est faite en production, il serait sage de se polacer derrière un pare-feu voir s'isoler complètmeent dans un réseau avec l'univers de repos linux et un serveur NTP à l'heure, et privé.
+
+## Morale 
+Et la morale de l'histoire, c'est qu'il fauit TOUJOURS provisionner un serveur destiné à l'exploitation, avec son package d'utilitaires de gestion de l'heure système en synchronisation avec un serveur NTP.
+Sinon on a toujours un danger de se retrouver avec un système dont la date est altérée vers le passé, et les packages managers intulisables.
