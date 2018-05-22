@@ -13,7 +13,7 @@
 #                >>>   export NOMFICHIERLOG="$(pwd)/provision-girofle.log"
 # 
 # --------------------------------------------------------------------------------------------------------------------------------------------
-# http://$CENTRALIZED_ID_MGMT_USERNAME:$CENTRALIZED_ID_MGMT_PWD@manh.proxy.corp.sopra:8080/
+
 # ----------------------------------------------------------------------------------------------------------------------
 # 
 # 
@@ -46,27 +46,13 @@
 # 			[sudo ./bare-metal-docker-demo-BARE-METAL-SETUP.sh]
 # 
 
-
+# http://$CENTRALIZED_ID_MGMT_USERNAME:$CENTRALIZED_ID_MGMT_PWD@manh.proxy.corp.sopra:8080/
+# http://jlasselle:5Hm{X&7s4@manh.proxy.corp.sopra:8080/
 
 # -----------------------------------------------------------------------------------------------------------------------
-# installations bare-metal
+# Configuration du client docker pour le proxy spécificique à l'infrastruture cible de déploiement
 # -----------------------------------------------------------------------------------------------------------------------
 #
-# sudo yum clean all -y && sudo yum update -y
-sudo yum install -y wget
-sudo rm -f index.html
-sudo rm -f installation-docker-ce-not-production-env.sh
-sudo wget https://get.docker.com/
-sudo cp index.html installation-docker-ce-not-production-env.sh
-sudo rm -f index.html
-sudo yum --enablerepo=extras install -y epel-release
-sudo yum update -y && sudo yum clean all -y && sudo yum update -y
-sudo chmod +x installation-docker-ce-not-production-env.sh
-sudo ./installation-docker-ce-not-production-env.sh
-UTILISATEUR_LINUX_GIROFLE=$USER
-sudo usermod -aG docker $UTILISATEUR_LINUX_GIROFLE
-# 
-sudo systemctl enable docker
-sudo systemctl start docker
-
-# remarque :: La clé publique pour docker-ce-17.11.0.ce-1.el7.centos.x86_64.rpm n'est pas installée
+export OPERATEUR_DOCKER=$USER
+sudo su $OPERATEUR_DOCKER
+cd $HOME

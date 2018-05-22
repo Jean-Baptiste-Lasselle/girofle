@@ -321,6 +321,16 @@ ls: impossible d'accéder à ./confreseautemp.girofle: Aucun fichier ou dossier 
 
 ```
 
+```
+
+./installation-docker-gitlab.rectte-jibl.sh: line 111: [: ==: unary operator expected
+Error: No such object: conteneur-kytes.io.gitlab.1
+./installation-docker-gitlab.rectte-jibl.sh: line 111: [: ==: unary operator expected
+Error: No such object: conteneur-kytes.io.gitlab.1
+
+
+```
+
 
 => tests inventory.girofle
 => tests restore/backup
@@ -502,3 +512,39 @@ Si cette réparation désespérée est faite en production, il serait sage de se
 ## Morale 
 Et la morale de l'histoire, c'est qu'il fauit TOUJOURS provisionner un serveur destiné à l'exploitation, avec son package d'utilitaires de gestion de l'heure système en synchronisation avec un serveur NTP.
 Sinon on a toujours un danger de se retrouver avec un système dont la date est altérée vers le passé, et les packages managers intulisables.
+
+
+# Docker et Proxys
+
+Selon la doc officielle Docker:
+
+```
+Configure the Docker client
+
+    On the Docker client, create or edit the file ~/.docker/config.json in the home directory of the user which starts containers. Add JSON such as the following, substituting the type of proxy with httpsProxy or ftpProxy if necessary, and substituting the address and port of the proxy server. You can configure multiple proxy servers at the same time.
+
+    You can optionally exclude hosts or ranges from going through the proxy server by setting a noProxy key to one or more comma-separated IP addresses or hosts. Using the * character as a wildcard is supported, as shown in this example.
+
+    {
+     "proxies":
+     {
+       "default":
+       {
+         "httpProxy": "http://127.0.0.1:3001",
+         "noProxy": "*.test.example.com,.example2.com"
+       }
+     }
+    }
+
+    Save the file.
+
+    When you create or start new containers, the environment variables are set automatically within the container.
+```
+
+## Predator en Milieu Hostile
+
+Donc, j'ai pu constater que les opérations du client NTP , cf. `sudo yum install -y ntp ntpdate`, sont impactées par les proxys, et peut-être la configuration de routeurs de l'immeuble Manhattan.
+
+cf. [le repo du predator](https://github.com/Jean-Baptiste-Lasselle/predator-netboot-centos-7-host)
+
+
