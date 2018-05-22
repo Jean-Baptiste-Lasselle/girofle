@@ -107,7 +107,27 @@ L4ensemble de ces règles
 
 # TODOs
 
-## Image docker avec CHEKCKHEALTH custom
+## Réparation de la recette
+
+Puis immédiatiement faire le docker-compose qui va avec.
+Ajouter dans le `mon-apppli-docker-compose.yml`, le conteneur traefikk, avec la ocnfiguration indiquée, notamment pour l'écoute du socket réseau Docker.
+
+```
+version: '3'
+
+services:
+  reverse-proxy:
+    image: traefik #The official Traefik docker image
+    command: --api --docker # Enables the web UI and tells Træfik to listen to docker
+    ports:
+      - "80:80"     #The HTTP port
+      - "8080:8080" #The Web UI (enabled by --api)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+
+```
+
+## Image docker paramétrée
 
 Dans le dockerfile qui me permet de construire ma propre image docker de gitlab, je dois pouvoir paramétrer à l'exécution le nom de domaine et le numéor de port de l'instance:
 
@@ -289,6 +309,18 @@ Aux fonctionnalitrés [citées ci-dessus](#girofle), s'ajouteront celles du comp
 "`gravity`" Permet donc de développer des workflows, et produira en sortie un fichier BPMN 2.0 exécutable, pour s'intégrer à [Kytes](https://github.com/Jean-Baptiste-Lasselle/kytes)
 
 # POINT DE REPRISE
+
+Dernière erreur trouvée:
+```
+
+Maybe you want: rm -rf /var/cache/yum, to also free up space taken by orphaned data from disabled or removed repos
+ls: impossible d'accéder à ./confreseautemp.girofle: Aucun fichier ou dossier de ce type
+ls: impossible d'accéder à ./confreseautemp.girofle: Aucun fichier ou dossier de ce type
+ls: impossible d'accéder à ./confreseautemp.girofle: Aucun fichier ou dossier de ce type
+ls: impossible d'accéder à ./confreseautemp.girofle: Aucun fichier ou dossier de ce type
+
+```
+
 
 => tests inventory.girofle
 => tests restore/backup
