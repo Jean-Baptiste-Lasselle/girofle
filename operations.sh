@@ -299,9 +299,11 @@ sudo yum remove -y NetworkManager && sudo rm -rf /var/cache/yum && sudo yum clea
 # ---------------------------------------------------------------------------------------------------------------------------------------------
 echo "date avant la re-synchronisation [Serveur NTP=$SERVEUR_NTP :]" >> $NOMFICHIERLOG
 date >> $NOMFICHIERLOG
-sudo which ntpdate
-sudo yum install -y ntp
-sudo ntpdate 0.us.pool.ntp.org
+sudo yum install -y ntp ntpdate
+sudo which date >> $NOMFICHIERLOG
+sudo which ntpdate >> $NOMFICHIERLOG
+echo " ntpdate 0.us.pool.ntp.org " >> $NOMFICHIERLOG
+sudo ntpdate 0.us.pool.ntp.org >> $NOMFICHIERLOG
 echo "date après la re-synchronisation [Serveur NTP=$SERVEUR_NTP :]" >> $NOMFICHIERLOG
 date >> $NOMFICHIERLOG
 # pour re-synchroniser l'horloge matérielle, et ainsi conserver l'heure après un reboot, et ce y compris après et pendant

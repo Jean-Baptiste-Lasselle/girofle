@@ -66,7 +66,7 @@ export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 #####		Je limiterai le nombre maximal au nombre maximal de hostnames/nomsdedomaines, ce nombre d'instances.
 ##############################################################################################################################################
 # - Nom du conteneur docker qui sera créé
-export NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST
+export NOM_DU_CONTENEUR_INSTANCE_GITLAB2
 # - répertoire hôte dédié à l'instance Gitlab
 export REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST
 # - répertoires hôte associés
@@ -144,7 +144,7 @@ provisionInstanceSupplementaire () {
 
 # - répertoire hôte dédié à l'instance Gitlab
 REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2
-NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST="conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2"
+NOM_DU_CONTENEUR_INSTANCE_GITLAB2="conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2"
 # - répertoires associés
 CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/config
 CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
@@ -159,12 +159,12 @@ mkdir -p CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2
 # ADRESSE_IP_SRV_GITLAB2=192.168.1.34
 # NOMDEDOMAINE_INSTANCE_GITLAB=prj-pms.girofle.io
 # NOMDEDOMAINE_INSTANCE_GITLAB=test.girofle.io
-# sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB2:4433:443 --publish $ADRESSE_IP_SRV_GITLAB2:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB2:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB
-sudo docker run --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --detach --publish $ADRESSE_IP_SRV_GITLAB2:4433:443 --publish $ADRESSE_IP_SRV_GITLAB2:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB2:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB
-checkHealth $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST >> $NOMFICHIERLOG
+# sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB2:4433:443 --publish $ADRESSE_IP_SRV_GITLAB2:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB2:2277:22 --name $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB
+sudo docker run --name $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 --detach --publish $ADRESSE_IP_SRV_GITLAB2:4433:443 --publish $ADRESSE_IP_SRV_GITLAB2:$NO_PORT_IP_SRV_GITLAB2:80 --publish $ADRESSE_IP_SRV_GITLAB2:2277:22 --name $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB
+checkHealth $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 >> $NOMFICHIERLOG
 # persistance de la nouvelle entrée dans l'inventaire des instances gitlab
 # ENTREE_INVENTAIRE=$(" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER] + [ADRESSE_IP_SRV_GITLAB2=$ADRESSE_IP_SRV_GITLAB2] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_CREE]")
-ENTREE_INVENTAIRE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER2] + [ADRESSE_IP_SRV_GITLAB2=$ADRESSE_IP_SRV_GITLAB2] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST]"
+ENTREE_INVENTAIRE=" +girofle+ INSTANCE GITLAB no. [$GITLAB_INSTANCE_NUMBER2] + [ADRESSE_IP_SRV_GITLAB2=$ADRESSE_IP_SRV_GITLAB2] +[NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST] + [REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST=$REP_GIROFLE_INSTANCE_GITLAB_SUPPLEMENTAIRE_POUR_TEST] + [NOM_DU_CONTENEUR_CREE=$NOM_DU_CONTENEUR_INSTANCE_GITLAB2]"
 sudo rm -f $INVENTAIRE_GIROFLE.temp
 touch $INVENTAIRE_GIROFLE.temp
 sudo chown -R $UTILISATEUR_LINUX_GIROFLE:$UTILISATEUR_LINUX_GIROFLE $INVENTAIRE_GIROFLE.temp
@@ -235,13 +235,6 @@ mkdir -p $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR
 # Mais maintenant, j'utilise le nom d'hôte de l'OS, pour régler la question du nom de domaine ppour accéder à l'instance gitlab en mode Web.
 # export NOMDHOTE=archiveur-prj-pms.io
 
-# donc pour ce test, le numéro de port choisit ne peut êtrele même que pour le second conteneur de test
-if [ $NO_PORT_IP_SRV_GITLAB = "8880" ] 
-then
-echo "attention,  le numéro de port [$NO_PORT_IP_SRV_GITLAB] est celui qui sera utilisé par une seconde instance Gitlab pour ce test:"
-echo "Choisissez un autre numéro de port pour la seconde instance (de test)."
-demander_noPortIP_InstanceTest
-fi
 
 echo " +girofle+ Verification adresse IP: [HOSTNAME=$HOSTNAME] " >> $NOMFICHIERLOG
 echo " +girofle+ Verification adresse IP: [NOMDEDOMAINE_INSTANCE_GITLAB=$NOMDEDOMAINE_INSTANCE_GITLAB] " >> $NOMFICHIERLOG
@@ -370,11 +363,11 @@ provisionInstanceSupplementaire
 # echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 # echo " provision-girofle-  - Contenu du répertoire [/etc/gitlab] dans le conteneur:" >> $NOMFICHIERLOG
 # echo " provision-girofle-  - " >> $NOMFICHIERLOG
-# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "ls -all /etc/gitlab" >> $NOMFICHIERLOG
+# sudo docker exec -it $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 /bin/bash -c "ls -all /etc/gitlab" >> $NOMFICHIERLOG
 # echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 # echo " provision-girofle-  - Existence du fichier [/etc/gitlab/gitlab.rb] dans le conteneur:" >> $NOMFICHIERLOG
 # echo " provision-girofle-  - " >> $NOMFICHIERLOG
-# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "ls -all /etc/gitlab/gitlab.rb" >> $NOMFICHIERLOG
+# sudo docker exec -it $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 /bin/bash -c "ls -all /etc/gitlab/gitlab.rb" >> $NOMFICHIERLOG
 # echo " provision-girofle-  - " >> $NOMFICHIERLOG
 # echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 # echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
@@ -383,7 +376,7 @@ provisionInstanceSupplementaire
 
 # sudo rm -f ./etc.gitlab.rb.girofle
 
-# sudo docker cp $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle
+# sudo docker cp $NOM_DU_CONTENEUR_INSTANCE_GITLAB2:/etc/gitlab/gitlab.rb ./etc.gitlab.rb.girofle
 
 # # sed -i 's/external_url "*"/external_url "http://$HOSTNAME:$NO_PORT_IP_SRV_GITLAB"/g' ./etc.gitlab.rb.recup.jibl
 
@@ -410,15 +403,15 @@ provisionInstanceSupplementaire
 # echo " provision-girofle-  - " >> $NOMFICHIERLOG
 # echo " provision-girofle-  ------------------------------------------------------------------------------ " >> $NOMFICHIERLOG
 
-# sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST:./etc.gitlab.rb.girofle
-# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "rm -f /etc/gitlab/gitlab.rb"
-# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb"
-# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "rm -f ./etc.gitlab.rb.girofle"
+# sudo docker cp ./etc.gitlab.rb.girofle $NOM_DU_CONTENEUR_INSTANCE_GITLAB2:./etc.gitlab.rb.girofle
+# sudo docker exec -it $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 /bin/bash -c "rm -f /etc/gitlab/gitlab.rb"
+# sudo docker exec -it $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 /bin/bash -c "cp -f ./etc.gitlab.rb.girofle /etc/gitlab/gitlab.rb"
+# sudo docker exec -it $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 /bin/bash -c "rm -f ./etc.gitlab.rb.girofle"
 # # 
-# # à la place d'un redémarrage complet du conteneur [sudo docker restart $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST],
+# # à la place d'un redémarrage complet du conteneur [sudo docker restart $NOM_DU_CONTENEUR_INSTANCE_GITLAB2],
 # # j'utilise [gitlab-ctl] :
-# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "gitlab-ctl reconfigure"
-# sudo docker exec -it $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST /bin/bash -c "gitlab-ctl restart"
+# sudo docker exec -it $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 /bin/bash -c "gitlab-ctl reconfigure"
+# sudo docker exec -it $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 /bin/bash -c "gitlab-ctl restart"
 # sudo rm -f ./etc.gitlab.rb.girofle
 
 
@@ -466,7 +459,7 @@ provisionInstanceSupplementaire
 # export NOMDEDOMAINE_INSTANCE_GITLAB=prj-pms.girofle.io
 # export ADRESSE_IP_SRV_GITLAB=192.168.1.32
 # export NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST=7786
-# export NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
+# export NOM_DU_CONTENEUR_INSTANCE_GITLAB2=conteneur-kytes.io.gitlab.$GITLAB_INSTANCE_NUMBER2
 # export GITLAB_CONFIG_DIR=/etc/gitlab
 # export GITLAB_LOG_DIR=/var/log/gitlab
 # export GITLAB_DATA_DIR=/var/opt/gitlab
@@ -474,5 +467,5 @@ provisionInstanceSupplementaire
 # export CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/data
 # export CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2=$REPERTOIRE_GIROFLE/noeud-gitlab-$GITLAB_INSTANCE_NUMBER2/logs
 # export NOM_IMAGE_DOCKER_INSTANCES_GIROFLE=girolfe.io/image-gitlab:v1.0.0
-# sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_SUPPLEMENTAIRE_POUR_TEST --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE
+# sudo docker run --detach --hostname $NOMDEDOMAINE_INSTANCE_GITLAB --publish $ADRESSE_IP_SRV_GITLAB:4433:443 --publish $ADRESSE_IP_SRV_GITLAB:$NO_PORT_IP_SRV_GITLAB_INSTANCE_TEST:80 --publish $ADRESSE_IP_SRV_GITLAB:2277:22 --name $NOM_DU_CONTENEUR_INSTANCE_GITLAB2 --restart always --volume $CONTENEUR_GITLAB_MAPPING_HOTE_CONFIG_DIR2:$GITLAB_CONFIG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_LOG_DIR2:$GITLAB_LOG_DIR --volume $CONTENEUR_GITLAB_MAPPING_HOTE_DATA_DIR2:$GITLAB_DATA_DIR  $NOM_IMAGE_DOCKER_INSTANCES_GIROFLE
 
