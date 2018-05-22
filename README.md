@@ -435,7 +435,7 @@ permettrraitent de rétablir l'heure et la synchronisation à un serveur NTP.
 
 D'ailleurs, le cas se présente dans tous les cas où, pour une quelconque raison,  l'on "fait revenir dans le passé", l'horloge d'une instance d'OS.
 
-Une solution dans ce cas:
+Une solution dans ce cas (testé sous CentOS 7):
 Modifier le fichier `/etc/yum.conf`, pour lui ajouter en dernière ligne, la ligne:
 ```
 sslverify=false 
