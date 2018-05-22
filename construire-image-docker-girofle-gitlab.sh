@@ -61,11 +61,69 @@ sudo rm -f $DOCKERFILE_INSTANCES_GITLAB
 # Ce dockerfile est tesrté, fonctionnel.
 echo "FROM $VERSION_IMAGE_OFFICIELLE_DOCKER_GITLAB" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "LABEL name=\"gitlab.girofle.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
-echo "   vendor=\"kytes.io\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "   vendor=\"SOPRASTERIA\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
 echo "   license=\"GPLv2\" \\" >> $DOCKERFILE_INSTANCES_GITLAB
 DATEDEMONBUILD=`date +"%M/%d/%Y %Hh%Mmin%Ssec"`
 echo "   build-date=\"$DATEDEMONBUILD\" " >> $DOCKERFILE_INSTANCES_GITLAB
 # echo "RUN apt-get remove -y libappstream3 && apt-get update -y" >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# Configuration Proxy de l' infrastructure dans laquelle j'opère " >> $DOCKERFILE_INSTANCES_GITLAB
+
+
+######################################################################################################
+######################################################################################################
+##########							OPERATIONS CHIRURGICALES								########## ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+######################################################################################################
+######################################################################################################
+
+echo "# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "#  " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "#  " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "export PROXY_HOST=w.x.y.z " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "export PROXY_NO_PORT_IP=8380 " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "export OPERATEUR_SOLUTION=$USER " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "export OPERATEUR_SOLUTION_MDP=jailairdeversionnermesmotsdepassesfranchement " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "#  " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# Dans le fichier [/etc/apt/apt.conf.d/80proxy], ajouter le contenu exact : " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# Acquire::http::proxy \"http://<username>:<password>@<proxy>:<port>/\"; " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# Acquire::ftp::proxy \"ftp://<username>:<password>@<proxy>:<port>/\"; " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# Acquire::https::proxy \"https://<username>:<password>@<proxy>:<port>/\"; " >> $DOCKERFILE_INSTANCES_GITLAB
+
+echo "export FICHIER_TEMPORAIRE=./apt.conf.d.80proxy " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "export FICHIER_CONF_PAKG_MNGR=/etc/apt/apt.conf.d/80proxy " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# I'll just assume $FICHIER_CONF_PAKG_MNGR doesn't exist yet. " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# Yes I can. Because I build my own system from scratch, in a docker image " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# ============================================================================================================================================= " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# 1./ On génère $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# ============================================================================================================================================= " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "touch $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "echo 'Acquire::http::proxy \"http://$OPERATEUR_SOLUTION:$OPERATEUR_SOLUTION_MDP@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "echo 'Acquire::ftp::proxy \"ftp://$OPERATEUR_SOLUTION:$OPERATEUR_SOLUTION_MDP@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "echo 'Acquire::https::proxy \"https://$OPERATEUR_SOLUTION:$OPERATEUR_SOLUTION_MDP@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+
+echo "# Hand oui installe heat on ze système, quoi " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "sudo cp -f $FICHIER_TEMPORAIRE $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
+
+echo "# ============================================================================================================================================= " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# 2./ On redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7 " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# ============================================================================================================================================= " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "#  " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "sudo chown -R root:root $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# on enlève tous les droits à tout le monde " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "sudo chmod a-r-w-x   $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "# pour ne mette que les exacts droits tels qu'ils sont au commissionning d'un CentOS 7 " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "sudo chmod u+r+w   $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "sudo chmod g+r   $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
+
+
+######################################################################################################
+######################################################################################################
+##########							FIN OPERATIONS CHIRURGICALES							########## ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+######################################################################################################
+######################################################################################################
+
+
 echo "RUN apt-get update -y" >> $DOCKERFILE_INSTANCES_GITLAB
 
 # HEALTH_CHECK
