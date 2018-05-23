@@ -360,7 +360,12 @@ echo " +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo "   "
 demander_noPortIP
 demander_noPortIP_SecondeInstance
-NO_PORT_IP_SRV_GITLAB2=$NO_PORT_IP_SRV_GITLAB2_PAR_DEFAUT
+
+
+
+demander_infosProxy
+
+# NO_PORT_IP_SRV_GITLAB2=$NO_PORT_IP_SRV_GITLAB2_PAR_DEFAUT
 # update CentOS 7
 
 sudo rm -rf /var/cache/yum && sudo yum clean all -y && sudo yum update -y

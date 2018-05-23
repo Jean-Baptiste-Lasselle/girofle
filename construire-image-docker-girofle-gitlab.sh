@@ -75,13 +75,33 @@ echo "# Configuration Proxy de l' infrastructure dans laquelle j'opère " >> $DO
 ######################################################################################################
 ######################################################################################################
 
+# --------------------------------------------------------------------------------------------------------------------------------------------
+##############################################################################################################################################
+#########################################							PROXies						##########################################
+##############################################################################################################################################
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# 
+# export PROXY_HOST=rumpfelschtilsche
+# export PROXY_HOST_PAR_DEFAUT=127.0.0.1
+# export PROXY_NO_PORT_IP=1238569
+# export PROXY_NO_PORT_IP_PAR_DEFAUT=8080
+# export PROXY_AUTH_USERNAME_CREDENTIAL=jlasselle
+# export PROXY_AUTH_USERNAME_CREDENTIAL_PAR_DEFAUT=maisbonsangmaiscbiensur
+# export PROXY_AUTH_PWD_CREDENTIAL=jailairdeversionnermesmotsdepassesfranchement
+# - Sert au moins pour récupérer le nom de l'utilisateur linux qui effecuera les opérations sur l'hôte Docker.
+# export OPERATEUR_SOLUTION=$USER
+# export OPERATEUR_SOLUTION_MDP=jailairdeversionnermesmotsdepassesfranchement
+
+
+
+
 echo "# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "#  " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "#  " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "export PROXY_HOST=w.x.y.z " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "export PROXY_NO_PORT_IP=8380 " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "export OPERATEUR_SOLUTION=$USER " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "export OPERATEUR_SOLUTION_MDP=jailairdeversionnermesmotsdepassesfranchement " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "export PROXY_AUTH_USERNAME_CREDENTIAL=$PROXY_AUTH_USERNAME_CREDENTIAL " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "export PROXY_AUTH_PWD_CREDENTIAL=$PROXY_AUTH_PWD_CREDENTIAL " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "#  " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# Dans le fichier [/etc/apt/apt.conf.d/80proxy], ajouter le contenu exact : " >> $DOCKERFILE_INSTANCES_GITLAB
@@ -98,9 +118,9 @@ echo "# ========================================================================
 echo "# 1./ On génère $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# ============================================================================================================================================= " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "touch $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "echo 'Acquire::http::proxy \"http://$OPERATEUR_SOLUTION:$OPERATEUR_SOLUTION_MDP@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "echo 'Acquire::ftp::proxy \"ftp://$OPERATEUR_SOLUTION:$OPERATEUR_SOLUTION_MDP@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "echo 'Acquire::https::proxy \"https://$OPERATEUR_SOLUTION:$OPERATEUR_SOLUTION_MDP@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "echo 'Acquire::http::proxy \"http://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "echo 'Acquire::ftp::proxy \"ftp://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "echo 'Acquire::https::proxy \"https://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
 
 echo "# Hand oui installe heat on ze système, quoi " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "sudo cp -f $FICHIER_TEMPORAIRE $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
