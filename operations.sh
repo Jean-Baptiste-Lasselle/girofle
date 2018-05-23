@@ -389,7 +389,7 @@ sudo yum remove -y NetworkManager && sudo rm -rf /var/cache/yum && sudo yum clea
 # echo "PAUSE DEBUG - CONFIG RESEAU - AVANT RELANCE RESEAU "
 # read DEBUG
 
-./relancer-reseau.sh
+# ./relancer-reseau.sh
 
 # echo "PAUSE DEBUG - CONFIG RESEAU - APRES RELANCE RESEAU "
 # read DEBUG
