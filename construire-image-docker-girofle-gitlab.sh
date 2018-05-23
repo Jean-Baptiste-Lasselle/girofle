@@ -98,10 +98,10 @@ echo "# Configuration Proxy de l' infrastructure dans laquelle j'opère " >> $DO
 echo "# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "#  " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "#  " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "export PROXY_HOST=w.x.y.z " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "export PROXY_NO_PORT_IP=8380 " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "export PROXY_AUTH_USERNAME_CREDENTIAL=$PROXY_AUTH_USERNAME_CREDENTIAL " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "export PROXY_AUTH_PWD_CREDENTIAL=$PROXY_AUTH_PWD_CREDENTIAL " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "ENV PROXY_HOST=w.x.y.z " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "ENV PROXY_NO_PORT_IP=8380 " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "ENV PROXY_AUTH_USERNAME_CREDENTIAL=$PROXY_AUTH_USERNAME_CREDENTIAL " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "ENV PROXY_AUTH_PWD_CREDENTIAL=$PROXY_AUTH_PWD_CREDENTIAL " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "#  " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# Dans le fichier [/etc/apt/apt.conf.d/80proxy], ajouter le contenu exact : " >> $DOCKERFILE_INSTANCES_GITLAB
@@ -109,8 +109,8 @@ echo "# Acquire::http::proxy \"http://<username>:<password>@<proxy>:<port>/\"; "
 echo "# Acquire::ftp::proxy \"ftp://<username>:<password>@<proxy>:<port>/\"; " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# Acquire::https::proxy \"https://<username>:<password>@<proxy>:<port>/\"; " >> $DOCKERFILE_INSTANCES_GITLAB
 
-echo "export FICHIER_TEMPORAIRE=./apt.conf.d.80proxy " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "export FICHIER_CONF_PAKG_MNGR=/etc/apt/apt.conf.d/80proxy " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "ENV FICHIER_TEMPORAIRE=./apt.conf.d.80proxy " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "ENV FICHIER_CONF_PAKG_MNGR=/etc/apt/apt.conf.d/80proxy " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# I'll just assume $FICHIER_CONF_PAKG_MNGR doesn't exist yet. " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# Yes I can. Because I build my own system from scratch, in a docker image " >> $DOCKERFILE_INSTANCES_GITLAB
