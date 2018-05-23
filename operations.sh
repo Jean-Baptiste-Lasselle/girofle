@@ -88,7 +88,7 @@ demander_infosProxy () {
 	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
 	echo "# ---------------				PROXY_NO_PORT_IP			"
 	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
-	echo "Quelle est l'adresse IP / le nom d'hôte (nom de domaine par exemple), du proxy qui devra être utilisé?"
+	echo "Quelle est le numro de port IP du proxy qui devra être utilisé?"
 	echo "Ce proxy sera tuilisé par les systèmes s'exécutant à l'intérieur des conteneurs Docker, et par Docker pour faire des oéperations comme [docker pull $NOMDUNEIMAGESURUN_DOCKERHUB]."
 	echo " "
 	ip addr|grep "inet"|grep -v "inet6"|grep "enp\|wlan"
@@ -113,8 +113,9 @@ demander_infosProxy () {
 	echo " "
 	echo " (Par défaut, l'adresse IP utilisée sera [$PROXY_NO_PORT_IP_PAR_DEFAUT]) "
 	read PROXY_AUTH_USERNAME_CREDENTIAL_CHOISIT
-	if [ "x$PROXY_HOST_CHOISIT" = "x" ]; then
-       PROXY_AUTH_USERNAME_CREDENTIAL_CHOISIT=$PROXY_AUTH_USERNAME_CREDENTIAL_PAR_DEFAUT
+	if [ "x$PROXY_AUTH_USERNAME_CREDENTIAL_CHOISIT" = "x" ]; then
+       echo "Aucun nom d'utilisateur n'a été saisit par $USER  pour l'authentification yum, docker, process docker, auprès du Proxy  "
+	   exit 1
 	fi
 	PROXY_AUTH_USERNAME_CREDENTIAL=$PROXY_AUTH_USERNAME_CREDENTIAL_CHOISIT
 	echo " Le numéro de port utilisé par le serveur PROXY est: $PROXY_AUTH_USERNAME_CREDENTIAL" >> $NOMFICHIERLOG
@@ -123,12 +124,12 @@ demander_infosProxy () {
 	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
 	echo "# ---------------				PROXY_AUTH_PWD_CREDENTIAL			"
 	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
-	echo "Quelle est le mot de passe de [$PROXY_AUTH_USERNAME_CREDENTIAL] pour s'authentifier auprès du serveur Proxy [PROXY_HOST=$PROXY_HOST]?"
+	echo "Quelle est le mot de passe de [$PROXY_AUTH_USERNAME_CREDENTIAL], pour s'authentifier auprès du serveur Proxy [PROXY_HOST=$PROXY_HOST]?"
 	echo "Ce proxy sera donc utilisé par les systèmes s'exécutant à l'intérieur des conteneurs Docker, et "
 	echo "par Docker pour faire des opérations comme [docker pull $NOMDUNEIMAGESURUN_DOCKERHUB]. "
 	echo " "
 	read PROXY_AUTH_PWD_CREDENTIAL_CHOISIT
-	if [ "x$PROXY_HOST_CHOISIT" = "x" ]; then
+	if [ "x$PROXY_AUTH_PWD_CREDENTIAL_CHOISIT" = "x" ]; then
        echo "Aucun mot de passe n'a été saisit par $USER  pour s'authentifier auprès du Proxy [PROXY_HOST=$PROXY_HOST] avec l'utilisateur [$PROXY_AUTH_PWD_CREDENTIAL] "
 	   exit 1
 	fi
