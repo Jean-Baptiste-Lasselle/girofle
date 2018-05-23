@@ -89,7 +89,7 @@ demander_infosProxy () {
 	echo "# ---------------				PROXY_NO_PORT_IP			"
 	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
 	echo "Quelle est le numro de port IP du proxy qui devra être utilisé?"
-	echo "Ce proxy sera tuilisé par les systèmes s'exécutant à l'intérieur des conteneurs Docker, et par Docker pour faire des oéperations comme [docker pull $NOMDUNEIMAGESURUN_DOCKERHUB]."
+	echo "Ce proxy sera utilisé par les systèmes s'exécutant à l'intérieur des conteneurs Docker, et par Docker pour faire des oéperations comme [docker pull $NOMDUNEIMAGESURUN_DOCKERHUB]."
 	echo " "
 	ip addr|grep "inet"|grep -v "inet6"|grep "enp\|wlan"
 	echo " "
@@ -110,15 +110,13 @@ demander_infosProxy () {
 	echo "Ce proxy sera donc utilisé par les systèmes s'exécutant à l'intérieur des conteneurs Docker, et "
 	echo "par Docker pour faire des opérations comme [docker pull $NOMDUNEIMAGESURUN_DOCKERHUB]. "
 	echo " "
-	echo " "
-	echo " (Par défaut, l'adresse IP utilisée sera [$PROXY_NO_PORT_IP_PAR_DEFAUT]) "
 	read PROXY_AUTH_USERNAME_CREDENTIAL_CHOISIT
 	if [ "x$PROXY_AUTH_USERNAME_CREDENTIAL_CHOISIT" = "x" ]; then
        echo "Aucun nom d'utilisateur n'a été saisit par $USER  pour l'authentification yum, docker, process docker, auprès du Proxy  "
 	   exit 1
 	fi
 	PROXY_AUTH_USERNAME_CREDENTIAL=$PROXY_AUTH_USERNAME_CREDENTIAL_CHOISIT
-	echo " Le numéro de port utilisé par le serveur PROXY est: $PROXY_AUTH_USERNAME_CREDENTIAL" >> $NOMFICHIERLOG
+	echo " Le nom d'utilisateur à utiliser pour s'authentifier auprès du serveur Proxy [PROXY_HOST=$PROXY_HOST] est: $PROXY_AUTH_USERNAME_CREDENTIAL" >> $NOMFICHIERLOG
 	
 	clear
 	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
@@ -385,7 +383,8 @@ sudo systemctl disable NetworkManager
 sudo yum remove -y NetworkManager && sudo rm -rf /var/cache/yum && sudo yum clean all -y
 
 # On change config hostname/nomdomaine pour adopter girofle
-./changement-hostname-nom-domaine.sh
+# --->> Chez SOPRA, cette configuration BEAUCOUP TROP PSECIFIQUE cible de déploiement
+# ./changement-hostname-nom-domaine.sh
 
 # echo "PAUSE DEBUG - CONFIG RESEAU - AVANT RELANCE RESEAU "
 # read DEBUG
