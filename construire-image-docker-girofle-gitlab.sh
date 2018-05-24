@@ -117,24 +117,24 @@ echo "# Yes I can. Because I build my own system from scratch, in a docker image
 echo "# ============================================================================================================================================= " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# 1./ On génère $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# ============================================================================================================================================= " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "touch $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "echo 'Acquire::http::proxy \"http://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "echo 'Acquire::ftp::proxy \"ftp://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "echo 'Acquire::https::proxy \"https://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN touch $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN echo 'Acquire::http::proxy \"http://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN echo 'Acquire::ftp::proxy \"ftp://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN echo 'Acquire::https::proxy \"https://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
 
 echo "# Hand oui installe heat on ze système, quoi " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "sudo cp -f $FICHIER_TEMPORAIRE $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN sudo cp -f $FICHIER_TEMPORAIRE $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
 
 echo "# ============================================================================================================================================= " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# 2./ On redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7 " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# ============================================================================================================================================= " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "#  " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "sudo chown -R root:root $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "# on enlève tous les droits à tout le monde " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "sudo chmod a-r-w-x   $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "# pour ne mette que les exacts droits tels qu'ils sont au commissionning d'un CentOS 7 " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "sudo chmod u+r+w   $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "sudo chmod g+r   $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN sudo chown -R root:root $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN # on enlève tous les droits à tout le monde " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN sudo chmod a-r-w-x   $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN # pour ne mette que les exacts droits tels qu'ils sont au commissionning d'un CentOS 7 " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN sudo chmod u+r+w   $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN sudo chmod g+r   $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
 
 
 ######################################################################################################
