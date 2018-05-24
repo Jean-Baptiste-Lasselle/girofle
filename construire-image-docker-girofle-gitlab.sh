@@ -117,7 +117,8 @@ echo "# Yes I can. Because I build my own system from scratch, in a docker image
 echo "# ============================================================================================================================================= " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# 1./ On génère $FICHIER_CONF_PAKG_MNGR " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "# ============================================================================================================================================= " >> $DOCKERFILE_INSTANCES_GITLAB
-echo "RUN touch $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+# echo "RUN touch $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
+echo "RUN echo '# Configuration package-manager / PROXY SOPRA' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN echo 'Acquire::http::proxy \"http://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN echo 'Acquire::ftp::proxy \"ftp://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
 echo "RUN echo 'Acquire::https::proxy \"https://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/\";' >> $FICHIER_TEMPORAIRE " >> $DOCKERFILE_INSTANCES_GITLAB
