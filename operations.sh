@@ -48,6 +48,116 @@ NO_PORT_IP_SRV_GITLAB2_PAR_DEFAUT=8880
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
+#########################################							PROXies						##########################################
+##############################################################################################################################################
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# 
+export PROXY_HOST=rumpfelschtilsche
+export PROXY_HOST_PAR_DEFAUT=127.0.0.1
+export PROXY_NO_PORT_IP=1238569
+export PROXY_NO_PORT_IP_PAR_DEFAUT=8080
+export PROXY_AUTH_USERNAME_CREDENTIAL=jlasselle
+export PROXY_AUTH_USERNAME_CREDENTIAL_PAR_DEFAUT=maisbonsangmaiscbiensur
+export PROXY_AUTH_PWD_CREDENTIAL=jailairdeversionnermesmotsdepassesfranchement
+# - Sert au moins pour récupérer le nom de l'utilisateur linux qui effecuera les opérations sur l'hôte Docker.
+export OPERATEUR_SOLUTION=$USER
+# export OPERATEUR_SOLUTION_MDP=jailairdeversionnermesmotsdepassesfranchement
+
+
+demander_infosProxy () {
+
+	clear
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "# ---------------				PROXY_HOST			"
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "Quelle est l'adresse IP / le nom d'hôte (nom de domaine par exemple), du proxy qui devra être utilisé?"
+	echo "Ce proxy sera tuilisé par les systèmes s'exécutant à l'intérieur des conteneurs Docker, et par Docker pour faire des oéperations comme [docker pull $NOMDUNEIMAGESURUN_DOCKERHUB]."
+	echo " "
+	ip addr|grep "inet"|grep -v "inet6"|grep "enp\|wlan"
+	echo " "
+	echo " (Par défaut, l'adresse IP utilisée sera [$PROXY_HOST_PAR_DEFAUT]) "
+	read PROXY_HOST_CHOISIT
+	if [ "x$PROXY_HOST_CHOISIT" = "x" ]; then
+       PROXY_HOST_CHOISIT=$PROXY_HOST_PAR_DEFAUT
+	fi
+	
+	PROXY_HOST=$PROXY_HOST_CHOISIT
+	echo " L'hôte réseau hébergeant le serveur PROXY est: $PROXY_HOST" >> $NOMFICHIERLOG
+	
+	clear
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "# ---------------				PROXY_NO_PORT_IP			"
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "Quelle est le numro de port IP du proxy qui devra être utilisé?"
+	echo "Ce proxy sera utilisé par les systèmes s'exécutant à l'intérieur des conteneurs Docker, et par Docker pour faire des oéperations comme [docker pull $NOMDUNEIMAGESURUN_DOCKERHUB]."
+	echo " "
+	ip addr|grep "inet"|grep -v "inet6"|grep "enp\|wlan"
+	echo " "
+	echo " (Par défaut, l'adresse IP utilisée sera [$PROXY_NO_PORT_IP_PAR_DEFAUT]) "
+	read PROXY_NO_PORT_IP_CHOISIT
+	if [ "x$PROXY_HOST_CHOISIT" = "x" ]; then
+       PROXY_NO_PORT_IP_CHOISIT=$PROXY_NO_PORT_IP_PAR_DEFAUT
+	fi
+	
+	PROXY_NO_PORT_IP=$PROXY_NO_PORT_IP_CHOISIT
+	echo " Le numéro de port utilisé par le serveur PROXY est: $PROXY_NO_PORT_IP" >> $NOMFICHIERLOG
+	
+	clear
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "# ---------------				PROXY_AUTH_USERNAME_CREDENTIAL			"
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "Quelle est le nom d'utilisateur à utiliser pour s'authentifier auprès du serveur Proxy [PROXY_HOST=$PROXY_HOST]?"
+	echo "Ce proxy sera donc utilisé par les systèmes s'exécutant à l'intérieur des conteneurs Docker, et "
+	echo "par Docker pour faire des opérations comme [docker pull $NOMDUNEIMAGESURUN_DOCKERHUB]. "
+	echo " "
+	read PROXY_AUTH_USERNAME_CREDENTIAL_CHOISIT
+	if [ "x$PROXY_AUTH_USERNAME_CREDENTIAL_CHOISIT" = "x" ]; then
+       echo "Aucun nom d'utilisateur n'a été saisit par $USER  pour l'authentification yum, docker, process docker, auprès du Proxy  "
+	   exit 1
+	fi
+	PROXY_AUTH_USERNAME_CREDENTIAL=$PROXY_AUTH_USERNAME_CREDENTIAL_CHOISIT
+	echo " Le nom d'utilisateur à utiliser pour s'authentifier auprès du serveur Proxy [PROXY_HOST=$PROXY_HOST] est: $PROXY_AUTH_USERNAME_CREDENTIAL" >> $NOMFICHIERLOG
+	
+	clear
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "# ---------------				PROXY_AUTH_PWD_CREDENTIAL			"
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "Quelle est le mot de passe de [$PROXY_AUTH_USERNAME_CREDENTIAL], pour s'authentifier auprès du serveur Proxy [PROXY_HOST=$PROXY_HOST]?"
+	echo "Ce proxy sera donc utilisé par les systèmes s'exécutant à l'intérieur des conteneurs Docker, et "
+	echo "par Docker pour faire des opérations comme [docker pull $NOMDUNEIMAGESURUN_DOCKERHUB]. "
+	echo " "
+	read PROXY_AUTH_PWD_CREDENTIAL_CHOISIT
+	if [ "x$PROXY_AUTH_PWD_CREDENTIAL_CHOISIT" = "x" ]; then
+       echo "Aucun mot de passe n'a été saisit par $USER  pour s'authentifier auprès du Proxy [PROXY_HOST=$PROXY_HOST] avec l'utilisateur [$PROXY_AUTH_PWD_CREDENTIAL] "
+	   exit 1
+	fi
+	PROXY_AUTH_PWD_CREDENTIAL=$PROXY_AUTH_PWD_CREDENTIAL_CHOISIT
+	echo " Le mot de passe utilisé par [$PROXY_AUTH_USERNAME_CREDENTIAL] pour s'authentifier auprès du Proxy [PROXY_HOST=$PROXY_HOST] avec l'utilisateur [$PROXY_AUTH_PWD_CREDENTIAL], est : $PROXY_AUTH_PWD_CREDENTIAL" >> $NOMFICHIERLOG
+	
+	# ATTENTION, CET AFFICHAGE NE DOIT JAMAIS PARTIR EN PROD!!!!!
+	# ATTENTION, CET AFFICHAGE NE DOIT JAMAIS PARTIR EN PROD!!!!!
+	clear
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "# ---------------				Résumé CONFIG AUTH PROXY			"
+	echo "# ---------------				"
+	echo "# ---------------				+ ATTENTION, CET AFFICHAGE NE DOIT JAMAIS PARTIR EN PROD!!!!!"
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "# ------------			[PROXY_HOST=$PROXY_HOST]		"
+	echo "# ------------			[PROXY_NO_PORT_IP=$PROXY_NO_PORT_IP]		"
+	echo "# ------------			[PROXY_AUTH_USERNAME_CREDENTIAL=$PROXY_AUTH_USERNAME_CREDENTIAL]		"
+	echo "# ------------			[PROXY_AUTH_PWD_CREDENTIAL=$PROXY_AUTH_PWD_CREDENTIAL]		"
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo "# --------------------------------------------------------------------------------------------------------------------------------------------"
+	echo " "
+	read DEBOGGAGECONFIGPROXY
+}
+
+# --------------------------------------------------------------------------------------------------------------------------------------------
+##############################################################################################################################################
 #########################################							FONCTIONS						##########################################
 ##############################################################################################################################################
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -249,7 +359,12 @@ echo " +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo "   "
 demander_noPortIP
 demander_noPortIP_SecondeInstance
-NO_PORT_IP_SRV_GITLAB2=$NO_PORT_IP_SRV_GITLAB2_PAR_DEFAUT
+
+
+
+demander_infosProxy
+
+# NO_PORT_IP_SRV_GITLAB2=$NO_PORT_IP_SRV_GITLAB2_PAR_DEFAUT
 # update CentOS 7
 
 sudo rm -rf /var/cache/yum && sudo yum clean all -y && sudo yum update -y
@@ -268,12 +383,13 @@ sudo systemctl disable NetworkManager
 sudo yum remove -y NetworkManager && sudo rm -rf /var/cache/yum && sudo yum clean all -y
 
 # On change config hostname/nomdomaine pour adopter girofle
-./changement-hostname-nom-domaine.sh
+# --->> Chez SOPRA, cette configuration BEAUCOUP TROP PSECIFIQUE cible de déploiement
+# ./changement-hostname-nom-domaine.sh
 
 # echo "PAUSE DEBUG - CONFIG RESEAU - AVANT RELANCE RESEAU "
 # read DEBUG
 
-./relancer-reseau.sh
+# ./relancer-reseau.sh
 
 # echo "PAUSE DEBUG - CONFIG RESEAU - APRES RELANCE RESEAU "
 # read DEBUG

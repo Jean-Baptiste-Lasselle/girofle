@@ -321,6 +321,16 @@ ls: impossible d'accéder à ./confreseautemp.girofle: Aucun fichier ou dossier 
 
 ```
 
+```
+
+./installation-docker-gitlab.rectte-jibl.sh: line 111: [: ==: unary operator expected
+Error: No such object: conteneur-kytes.io.gitlab.1
+./installation-docker-gitlab.rectte-jibl.sh: line 111: [: ==: unary operator expected
+Error: No such object: conteneur-kytes.io.gitlab.1
+
+
+```
+
 
 => tests inventory.girofle
 => tests restore/backup
@@ -502,3 +512,232 @@ Si cette réparation désespérée est faite en production, il serait sage de se
 ## Morale 
 Et la morale de l'histoire, c'est qu'il fauit TOUJOURS provisionner un serveur destiné à l'exploitation, avec son package d'utilitaires de gestion de l'heure système en synchronisation avec un serveur NTP.
 Sinon on a toujours un danger de se retrouver avec un système dont la date est altérée vers le passé, et les packages managers intulisables.
+
+
+# Docker et Proxys
+
+[Selon](https://docs.docker.com/network/proxy/) la doc officielle Docker:
+
+```
+Configure the Docker client
+
+    On the Docker client, create or edit the file ~/.docker/config.json in the home directory of the user which starts containers. Add JSON such as the following, substituting the type of proxy with httpsProxy or ftpProxy if necessary, and substituting the address and port of the proxy server. You can configure multiple proxy servers at the same time.
+
+    You can optionally exclude hosts or ranges from going through the proxy server by setting a noProxy key to one or more comma-separated IP addresses or hosts. Using the * character as a wildcard is supported, as shown in this example.
+
+    {
+     "proxies":
+     {
+       "default":
+       {
+         "httpProxy": "http://127.0.0.1:3001",
+         "httpsProxy": "http://127.0.0.1:3001",
+         "ftpProxy": "http://127.0.0.1:3001",
+         "noProxy": "*.test.example.com,.example2.com"
+       }
+     }
+    }
+
+    Save the file.
+
+    When you create or start new containers, the environment variables are set automatically within the container.
+```
+
+J'ai donc appliqué cette configuration. Notons donc que cette configuration doit s'appliquer à l'opérateur Docker, i.e. l'exploitant de la solution Produite.
+Aussi, si `$OPERATEUR_SOLUTION` est le nom de l'utilisateur linux opérant Docker pour l'exploitation de la solution produite, alors le fichier de configuration à créer est:
+
+
+```
+# Ou autre exemple
+# export PROXY_HOST=com.mybig-company.proxy.manhattan
+export PROXY_HOST=w.x.y.z
+export PROXY_NO_PORT_IP=8380
+export PROXY_AUTH_USERNAME_CREDENTIAL=jlasselle
+export PROXY_AUTH_PWD_CREDENTIAL=jailairdeversionnermesmotsdepassesfranchement
+export OPERATEUR_SOLUTION=$USER
+
+su $OPERATEUR_SOLUTION
+cd $HOME 
+mkdir $HOME/.docker/
+touch $HOME/.docker/config.json
+echo '{' >> $HOME/.docker/config.json
+echo ' "proxies":' >> $HOME/.docker/config.json
+echo ' {' >> $HOME/.docker/config.json
+echo '   "default":' >> $HOME/.docker/config.json
+echo '   {' >> $HOME/.docker/config.json
+echo '     "httpProxy": "http://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP",' >> $HOME/.docker/config.json
+echo '     "httpsProxy": "http://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP",' >> $HOME/.docker/config.json
+echo '     "ftpProxy": "http://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP",' >> $HOME/.docker/config.json
+echo '     "noProxy": "*.test.example.com,.example2.com"' >> $HOME/.docker/config.json
+echo '   }' >> $HOME/.docker/config.json
+echo ' }' >> $HOME/.docker/config.json
+echo '}' >> $HOME/.docker/config.json
+```
+
+
+Dernière Remarque quant à cette configuration:
+
+Il serait légitime de vouloir faire cela pour chaque utilisateur linux appartenant au groupe `docker`
+
+
+Avec cette nouvelle configuration Docker, et le même message d'erreur persiste:
+
+
+```
+Status: Downloaded newer image for gitlab/gitlab-ce:latest
+ ---> e420c3fac3e3
+Step 2/4 : LABEL name="gitlab.girofle.io"    vendor="kytes.io"    license="GPLv2"    build-date="29/21/2018 13h29min36sec"
+ ---> Running in 5ca6958dc85e
+Removing intermediate container 5ca6958dc85e
+ ---> d17a16492984
+Step 3/4 : RUN apt-get update -y
+ ---> Running in 72d617f55d17
+Err:1 http://archive.ubuntu.com/ubuntu xenial InRelease
+  Could not connect to archive.ubuntu.com:80 (91.189.88.152), connection timed out [IP: 91.189.88.152 80]
+Err:2 http://archive.ubuntu.com/ubuntu xenial-updates InRelease
+  Unable to connect to archive.ubuntu.com:http: [IP: 91.189.88.152 80]
+Err:3 http://archive.ubuntu.com/ubuntu xenial-backports InRelease
+  Unable to connect to archive.ubuntu.com:http: [IP: 91.189.88.152 80]
+Err:4 http://security.ubuntu.com/ubuntu xenial-security InRelease
+  Could not connect to security.ubuntu.com:80 (91.189.88.152), connection timed out [IP: 91.189.88.152 80]
+Reading package lists...
+W: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial/InRelease  Could not connect to archive.ubuntu.com:80 (91.189.88.152), connection timed out [IP: 91.189.88.152 80]
+W: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial-updates/InRelease  Unable to connect to archive.ubuntu.com:http: [IP: 91.189.88.152 80]
+W: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial-backports/InRelease  Unable to connect to archive.ubuntu.com:http: [IP: 91.189.88.152 80]
+W: Failed to fetch http://security.ubuntu.com/ubuntu/dists/xenial-security/InRelease  Could not connect to security.ubuntu.com:80 (91.189.88.152), connection timed out [IP: 91.189.88.152 80]
+W: Some index files failed to download. They have been ignored, or old ones used instead.
+Removing intermediate container 72d617f55d17
+ ---> 233fb1913efe
+Step 4/4 : HEALTHCHECK --interval=1s --timeout=300s --start-period=1s --retries=300 CMD curl --fail http://172.21.168.75:80/ || exit 1
+Note: overriding previous HEALTHCHECK: [CMD-SHELL /opt/gitlab/bin/gitlab-healthcheck --fail]
+ ---> Running in f46e74903a45
+Removing intermediate container f46e74903a45
+ ---> 3c6e27b22687
+Successfully built 3c6e27b22687
+Successfully tagged girolfe.io/image-gitlab:v1.0.0
+[sudo] password for xxx:
+```
+
+Et ce message nous confirme que c'est l'hôte Docker Ubuntu qui génère cette erreur, car son package manager `apt-get` n'est pas configuré pour utiliser le proxy voulue
+
+
+
+
+En effet, je peux vérifier dans la sortie standard de Docker, l'affichage suivant:
+
+
+```
+proxy = http://$PROXY_HOST:$PROXY_NO_PORT_IP
+proxy_dict = {'ftp': 'http://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP', 'http': 'http://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP', 'https': 'http://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP'}
+proxy_password = $PROXY_AUTH_PWD_CREDENTIAL
+proxy_username = $PROXY_AUTH_USERNAME_CREDENTIAL
+repo_gpgcheck = False
+```
+
+Qui confirme que le client Docker est configuré pour utiliser un proxy (notamment pour les docker pull).
+
+N.B.: ci-dessus, j'ai remplacé l'affichage:
+* de la valeur du nom utilisateur linux, pour l'authentification Docker au proxy, par : `$PROXY_AUTH_USERNAME_CREDENTIAL`
+* de la valeur du mot de passe de l'utilisateur linux, pour l'authentification Docker au proxy, par :  `$PROXY_AUTH_PWD_CREDENTIAL`
+* de la valeur du nom d'hôte réseau (IP ou DNS), du serveur proxy agissant dans l'infrastructure, par :  `$PROXY_HOST`
+* de la valeur du numéro de port IP, du serveur proxy agissant dans l'infrastructure, par :  `$PROXY_NO_PORT_IP`
+
+
+En conclusion, le build de l'image docker, avec base Ubuntu, doit comporter la configuration PROXY pour le package manager spécifique à gitlab:
+
+
+```
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# 
+# 
+export PROXY_HOST=w.x.y.z
+export PROXY_NO_PORT_IP=8380
+export PROXY_AUTH_USERNAME_CREDENTIAL=jlasselle
+export PROXY_AUTH_PWD_CREDENTIAL=jailairdeversionnermesmotsdepassesfranchement
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# 
+# Dans le fichier [/etc/apt/apt.conf.d/80proxy], ajouter le contenu exact :
+# Acquire::http::proxy "http://<username>:<password>@<proxy>:<port>/";
+# Acquire::ftp::proxy "ftp://<username>:<password>@<proxy>:<port>/";
+# Acquire::https::proxy "https://<username>:<password>@<proxy>:<port>/";
+
+export FICHIER_TEMPORAIRE=./apt.conf.d.80proxy
+export FICHIER_CONF_PAKG_MNGR=/etc/apt/apt.conf.d/80proxy
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# I'll just assume $FICHIER_CONF_PAKG_MNGR doesn't exist yet.
+# Yes I can. Because I build my own system from scratch, in a docker image
+# =============================================================================================================================================
+# 1./ On génère $FICHIER_CONF_PAKG_MNGR
+# =============================================================================================================================================
+touch $FICHIER_TEMPORAIRE
+echo 'Acquire::http::proxy "http://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/";' >> $FICHIER_TEMPORAIRE
+echo 'Acquire::ftp::proxy "ftp://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/";' >> $FICHIER_TEMPORAIRE
+echo 'Acquire::https::proxy "https://$PROXY_AUTH_USERNAME_CREDENTIAL:$PROXY_AUTH_PWD_CREDENTIAL@$PROXY_HOST:$PROXY_NO_PORT_IP/";' >> $FICHIER_TEMPORAIRE
+
+# Hand oui installe heat on ze système, quoi
+sudo cp -f $FICHIER_TEMPORAIRE $FICHIER_CONF_PAKG_MNGR
+
+# =============================================================================================================================================
+# 2./ On redonne les mêmes attributs SGF / PAM que dans tous les systèmes CentOS 7
+# =============================================================================================================================================
+# 
+sudo chown -R root:root $FICHIER_CONF_PAKG_MNGR
+# on enlève tous les droits à tout le monde
+sudo chmod a-r-w-x   $FICHIER_CONF_PAKG_MNGR
+# pour ne mette que les exacts droits tels qu'ils sont au commissionning d'un CentOS 7
+sudo chmod u+r+w   $FICHIER_CONF_PAKG_MNGR
+sudo chmod g+r   $FICHIER_CONF_PAKG_MNGR
+
+```
+
+
+
+## Predator en Milieu Hostile
+
+Donc, j'ai pu constater que les opérations du client NTP , cf. `sudo yum install -y ntp ntpdate`, sont impactées par les proxys, et peut-être la configuration de routeurs de l'immeuble Manhattan.
+
+cf. [le repo du predator](https://github.com/Jean-Baptiste-Lasselle/predator-netboot-centos-7-host)
+
+
+
+## Quelsques erreurs inédites
+
+Dans un milieu encadré par un proxy, j'arrive à faire des "yum update" etc..., et puis, au bout d'un certain nombre d'opérations:
+
+```
+Essai d'un autre miroir.
+(14/15): epel/x86_64/other_db                                                                                                                                               | 3.1 MB  00:00:07
+
+
+ One of the configured repositories failed (Inconnu),
+ and yum doesn't have enough cached data to continue. At this point the only
+ safe thing yum can do is fail. There are a few ways to work "fix" this:
+
+     1. Contact the upstream for the repository and get them to fix the problem.
+
+     2. Reconfigure the baseurl/etc. for the repository, to point to a working
+        upstream. This is most often useful if you are using a newer
+        distribution release than is supported by the repository (and the
+        packages for the previous distribution release still work).
+
+     3. Run the command with the repository temporarily disabled
+            yum --disablerepo=<repoid> ...
+
+     4. Disable the repository permanently, so yum won't use it by default. Yum
+        will then just ignore the repository until you permanently enable it
+        again or use --enablerepo for temporary usage:
+
+            yum-config-manager --disable <repoid>
+        or
+            subscription-manager repos --disable=<repoid>
+
+     5. Configure the failing repository to be skipped, if it is unavailable.
+        Note that yum will try to contact the repo. when it runs most commands,
+        so will have to try and fail each time (and thus. yum will be be much
+        slower). If it is a very temporary problem though, this is often a nice
+        compromise:
+
+            yum-config-manager --save --setopt=<repoid>.skip_if_unavailable=true
+
+```
